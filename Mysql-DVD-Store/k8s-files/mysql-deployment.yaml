@@ -1,0 +1,46 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: {mysql}
+    type: dvd-store
+  name: {mysql}
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: {mysql}
+        type: dvd-store
+      name: {mysql}
+    spec:
+      containers:
+        - name: mysql
+          image: 10.21.236.86:5000/mysql:5.7-custom
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: root
+            - name: MYSQL_USER
+              value: root
+            - name: MYSQL_PASSWORD
+              value: root
+            - name: MYSQL_DATABASE
+              value: DS3
+          ports:
+            - containerPort: 3306
+              name: mysql
+          resources:
+            requests:
+              memory: 500Mi
+          volumeMounts:
+            - name: mysql-home
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: mysql-home
+          persistentVolumeClaim:
+            claimName: fb-mysql-pv2
+#      nodeSelector:
+#        kubernetes.io/hostname: {hostname}
+      imagePullSecrets:
+      - name: myregistrykey
+

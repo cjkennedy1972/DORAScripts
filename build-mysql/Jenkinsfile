@@ -1,0 +1,43 @@
+def label = "mypod-${UUID.randomUUID().toString()}"
+// Create pod template using desired image.
+podTemplate(label: label, containers: [
+    containerTemplate(name: 'jnlp', image: '10.21.236.86:5000/jnlp-slave-sudo', alwaysPullImage: true, args: '${computer.jnlpmac} ${computer.name}', workingDir: '/home/jenkins/dev-jenkins/'+env.BUILD_NUMBER),
+    containerTemplate(name: 'mysql', image: 'shirishk/mysql:v6', alwaysPullImage: true, resourceRequestCpu: '4000m', resourceLimitCpu: '4000m', resourceRequestMemory: '2048Mi', resourceLimitMemory: '2048Mi', workingDir: '/home/jenkins/dev-jenkins/'+env.BUILD_NUMBER,  ttyEnabled: true, command: 'cat')],
+    volumes: [
+    persistentVolumeClaim(mountPath: '/home/jenkins/dev-jenkins', claimName: 'dev-jenkins', readOnly: false)
+    ],
+    imagePullSecrets: [ 'myregistrykey' ])
+   
+    {
+    node(label) {
+        container('mysql'){
+            
+            stage('Clone Repository') {
+                git branch: '5.7', credentialsId: '4063a731-7121-487c-918c-93c2f103d1c7', url: 'http://10.21.236.87:8080/root/mysql-server.git'
+            }
+            
+            stage('Build Project') {                
+                sh '''
+                    cmake \
+                      -DWITH_BOOST=${WORKSPACE}/boost_1_59_0.tar.gz \
+                      -DCMAKE_INSTALL_PREFIX=${WORKSPACE}/mysql/install \
+                      -DWITH_INNOBASE_STORAGE_ENGINE=1 \
+                      -DMYSQL_DATADIR=${WORKSPACE}/mysql/install/data \
+                      -DCPACK_MONOLITHIC_INSTALL=1 \
+                      -DMYSQL_UNIX_ADDR=${WORKSPACE}/mysql/install/tmp/mysql.sock
+                    '''
+            }
+            
+            // Create tar.gz package
+            stage('Create Package') {
+                sh 'make package'
+                sh 'make install'
+            }
+            
+            // Upload to nexus
+            stage('Add to Nexus artifacts') {
+                nexusArtifactUploader artifacts: [[artifactId: 'mysql-server_artId1', classifier: 'mysql-server-package', file: 'mysql-5.7.23-linux-x86_64.tar.gz', type: 'tar.gz']], credentialsId: 'd47d3a3d-83dc-440d-9bca-31e14062ae40', groupId: 'mysql-server', nexusUrl: '10.21.236.86', nexusVersion: 'nexus3', protocol: 'http', repository: 'mysql-server', version: '1.0.0.'+env.BUILD_NUMBER
+            }
+        }
+    }
+}

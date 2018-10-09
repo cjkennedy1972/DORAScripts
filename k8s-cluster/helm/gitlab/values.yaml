@@ -1,0 +1,85 @@
+## GitLab CE image
+## ref: https://hub.docker.com/r/gitlab/gitlab-ce/tags/
+##
+image: gitlab/gitlab-ce:10.7.3-ce.0
+gitlabRootPassword: "admin123"
+externalUrl: http://git.purestorage.com/
+
+## For minikube, set this to NodePort, elsewhere use LoadBalancer
+## ref: http://kubernetes.io/docs/user-guide/services/#publishing-services---service-types
+##
+serviceType: ClusterIP
+externalIP: 10.21.236.87
+
+## Configure external service ports
+## ref: http://kubernetes.io/docs/user-guide/services/
+sshPort: 8022
+httpPort: 8080
+httpsPort: 8443
+## livenessPort Port of liveness probe endpoint
+livenessPort: http
+## readinessPort Port of readiness probe endpoint
+readinessPort: http
+
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources:
+  ## GitLab requires a good deal of resources. We have split out Postgres and
+  ## redis, which helps some. Refer to the guidelines for larger installs.
+  ## ref: https://docs.gitlab.com/ce/install/requirements.html#hardware-requirements
+  requests:
+    memory: 40Gi
+    cpu: 4000m
+  limits:
+    memory: 60Gi
+    cpu: 6
+
+## Enable persistence using Persistent Volume Claims
+## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+## ref: https://docs.gitlab.com/ce/install/requirements.html#storage
+##
+persistence:
+  ## This volume persists generated configuration files, keys, and certs.
+  ##
+  gitlabEtc:
+    enabled: true
+    claimName: fb-gitlab-etc
+
+  ## This volume is used to store git data and other project files.
+  ## ref: https://docs.gitlab.com/omnibus/settings/configuration.html#storing-git-data-in-an-alternative-directory
+  ##
+  gitlabData:
+    enabled: true
+    claimName: fb-gitlab-data
+
+## Configuration values for the postgresql dependency.
+## ref: https://github.com/kubernetes/charts/blob/master/stable/postgresql/README.md
+##
+postgresql:
+  # 9.6 is the newest supported version for the GitLab container
+  imageTag: "9.6"
+  cpu: 2000m
+  memory: 20Gi
+
+  postgresUser: gitlab
+  postgresPassword: gitlab
+  postgresDatabase: gitlab
+
+  persistence:
+    enabled: true
+    existingClaim: fb-gitlab-postgres
+
+## Configuration values for the redis dependency.
+## ref: https://github.com/kubernetes/charts/blob/master/stable/redis/README.md
+##
+redis:
+  redisPassword: "gitlab"
+
+  resources:
+    requests:
+      memory: 20Gi
+
+  persistence:
+    enabled: true
+    existingClaim: fb-gitlab-redis

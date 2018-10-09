@@ -1,0 +1,32 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: nexus-ingress
+  annotations:
+    ingress.kubernetes.io/proxy-body-size: 1000m
+    kubernetes.io/tls-acme: "true"
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  tls:
+  - hosts:
+    # CHANGE ME
+    - docker.purestorage.com
+    - nexus.purestorage.com
+    secretName: nexus-tls
+  rules:
+  # CHANGE ME
+  - host: nexus.purestorage.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: nexus-service
+          servicePort: 80
+  # CHANGE ME
+  - host: docker.purestorage.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: nexus-service
+          servicePort: 5000

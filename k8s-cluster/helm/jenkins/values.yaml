@@ -1,0 +1,49 @@
+Master:
+  Name: jenkins-master
+  Image: "jenkins/jenkins"
+  ImageTag: "lts"
+  ImagePullPolicy: "Always"
+# ImagePullSecret: jenkins
+  Component: "jenkins-master"
+  UseSecurity: true
+  AdminUser: admin
+  AdminPassword: admin123
+  Cpu: "8000m"
+  Memory: "51200Mi"
+  ServicePort: 8081
+  ServiceType: ClusterIP
+  ExternalIP: 10.21.236.86
+  ContainerPort: 8080
+  # List of plugins to be install during Jenkins master start
+  InstallPlugins:
+    - kubernetes:1.1
+    - workflow-aggregator:2.5
+    - workflow-job:2.15
+    - credentials-binding:1.13
+    - git:3.6.4
+
+Agent:
+  Enabled: true
+  Image: jenkins/jnlp-slave
+  ImageTag: 3.10-1
+# ImagePullSecret: jenkins
+  Component: "jenkins-slave"
+  Privileged: false
+  Cpu: "2000m"
+  Memory: "10240Mi"
+
+Persistence:
+  Enabled: true
+  ## A manually managed Persistent Volume and Claim
+  ## Requires Persistence.Enabled: true
+  ## If defined, PVC must be created manually before volume will be bound
+  ExistingClaim: fb-jenkins
+
+## Install Default RBAC roles and bindings
+rbac:
+  install: true
+  serviceAccountName: jenkins-sa
+  # RBAC api version (currently either v1beta1 or v1alpha1)
+  apiVersion: v1beta1
+  # Cluster role reference
+  roleRef: cluster-admin

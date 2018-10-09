@@ -1,0 +1,38 @@
+def label = "mypod-${UUID.randomUUID().toString()}"
+// Create pod template using desired image.
+podTemplate(label: label, containers: [
+    containerTemplate(name: 'jnlp', image: '10.21.236.86:5000/jnlp-slave-sudo', alwaysPullImage: true, args: '${computer.jnlpmac} ${computer.name}', workingDir: '/home/jenkins/dev-jenkins/'+env.BUILD_NUMBER),
+    containerTemplate(name: 'tensor-flow', image: 'zanakabhijit/tensor-flow:v1', alwaysPullImage: true, workingDir: '/home/jenkins/dev-jenkins/'+env.BUILD_NUMBER,  ttyEnabled: true, command: 'cat')],
+    volumes: [
+    persistentVolumeClaim(mountPath: '/home/jenkins/dev-jenkins', claimName: 'dev-jenkins', readOnly: false)
+    ],
+    imagePullSecrets: [ 'myregistrykey' ])
+   
+    {
+    node(label) {
+        container('tensor-flow')    {
+            
+            stage('Clone Repository') {
+                git branch: 'master', credentialsId: '4063a731-7121-487c-918c-93c2f103d1c7', url: 'http://10.21.236.87:8080/root/tensorflow.git'
+            }
+            
+            stage('Build Project') {
+                
+                sh 'pip install keras' 
+                sh 'pip install mock'
+                sh 'yes "" | ./configure'
+                sh 'bazel build --config=opt //tensorflow/tools/pip_package:build_pip_package'
+              
+            }
+            
+            // Create tar.gz package
+            stage('Create Package') {
+                sh 'bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg'
+                sh 'pip install /tmp/tensorflow_pkg/tensorflow-1.10.0-cp27-cp27mu-linux_x86_64.whl'
+                
+            }
+            
+
+        }
+    }
+  }
