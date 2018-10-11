@@ -16,11 +16,16 @@ Master:
   ContainerPort: 8080
   # List of plugins to be install during Jenkins master start
   InstallPlugins:
-    - kubernetes:1.1
+    - kubernetes:1.12.6
     - workflow-aggregator:2.5
-    - workflow-job:2.15
-    - credentials-binding:1.13
-    - git:3.6.4
+    - workflow-job:2.25
+    - credentials-binding:1.16
+    - git:3.9.1
+    - gitlab-plugin:1.5.9
+    - gitlab-oauth:1.4
+    - gitlab-hook:1.4.2
+    - gitlab-merge-request-jenkins:2.0.0
+    - nexus-artifact-uploader:2.10
 
 Agent:
   Enabled: true
