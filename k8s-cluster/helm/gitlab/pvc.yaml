@@ -1,0 +1,48 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: fb-gitlab-data-test
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 300Gi
+  storageClassName: pure-file
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: fb-gitlab-etc-test
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 300Gi
+  storageClassName: pure-file
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: fb-gitlab-redis-test
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 300Gi
+  storageClassName: pure-file
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: fb-gitlab-postgres-test
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 300Gi
+  storageClassName: pure-file
+
