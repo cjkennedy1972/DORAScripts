@@ -1,7 +1,7 @@
 def label = "mypod-${UUID.randomUUID().toString()}"
 // Create pod template using desired image.
 podTemplate(label: label, containers: [
-    containerTemplate(name: 'jnlp', image: '10.21.236.86:5000/jnlp-slave', alwaysPullImage: true, args: '${computer.jnlpmac} ${computer.name}', workingDir: '/home/jenkins/dev-jenkins/'+env.BUILD_NUMBER),
+    containerTemplate(name: 'jnlp', image: '10.21.236.86:5000/jnlp-slave-sudo', alwaysPullImage: true, args: '${computer.jnlpmac} ${computer.name}', workingDir: '/home/jenkins/dev-jenkins/'+env.BUILD_NUMBER),
     containerTemplate(name: 'buildubuntu', image: '10.21.236.86:5000/build-kernel', alwaysPullImage: true, resourceRequestCpu: '600m', resourceLimitCpu: '6000m', resourceRequestMemory: '1024Mi', resourceLimitMemory: '10240Mi', workingDir: '/home/jenkins/dev-jenkins/'+env.BUILD_NUMBER,  ttyEnabled: true, command: 'cat')
     ], 
     volumes: [
