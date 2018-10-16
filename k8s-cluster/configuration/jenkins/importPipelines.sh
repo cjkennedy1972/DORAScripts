@@ -6,3 +6,4 @@ JENKINS_API_TOKEN=$1
 JENKINS_SERVER_URL=$2
 
 java -jar jenkins-cli.jar -s $JENKINS_SERVER_URL -auth admin:$JENKINS_API_TOKEN create-job build-kernel_Stage1 < build-kernel_Stage1.xml
+java -jar jenkins-cli.jar -s $JENKINS_SERVER_URL -auth admin:$JENKINS_API_TOKEN create-job build-kernel_Stage2_Stage3 < build-kernel_Stage2_Stage3.xml
