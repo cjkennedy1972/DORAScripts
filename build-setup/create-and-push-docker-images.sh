@@ -2,7 +2,7 @@
 
 if [ $# -lt 1 ] 
 then
-  echo "Please pass 'Nexus server IP' as argument Ex.: ./create-and-push-docker-images.sh 10.21.236.86"
+  echo "Missing Nexus Server IP address. Please specify the IP address of your Nexus server as an argument Ex.: ./create-and-push-docker-images.sh 10.21.236.86"
   exit
 fi
 
