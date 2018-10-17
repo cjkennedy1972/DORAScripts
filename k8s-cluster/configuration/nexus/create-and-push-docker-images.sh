@@ -2,9 +2,7 @@
 
 if [ $# -lt 1 ] 
 then
-  echo "Missing parameters. Please specify Docker repository (IPAddress:port) and Docker repository user credentials (login/password) as command-line arguments.  
-  
-        Ex.: sh create-and-push-docker-images.sh 10.21.236.86:5000 admin admin123"       
+  echo "Please pass Docker repository and Docker repo user, pass as arguments  Ex.: sh create-and-push-docker-images.sh 10.21.236.86:5000 admin admin123"
   exit
 fi
 

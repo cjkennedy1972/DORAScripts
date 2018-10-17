@@ -1,0 +1,19 @@
+#!/usr/bin/env ansible-playbook
+- name: Add Docker Insecure Registry
+  hosts: kube-cluster:children'
+  become: yes
+  become_user: root
+  become_method: sudo
+  tasks:
+    - name: Include vars of all.yaml
+      include_vars: '../group_vars/all.yml'
+    - name: Create daemon.json file if it doesn't exist
+      file:
+        path: "/etc/docker/daemon.json"
+        state: touch
+    - name: Add Nexus insecure registry entry
+      copy:
+        content: '{"insecure-registries": ["{{ docker_insecure_registry }}"]}'
+        dest: "/etc/docker/daemon.json"
+    - name: Restart docker
+      service: name=docker state=restarted
