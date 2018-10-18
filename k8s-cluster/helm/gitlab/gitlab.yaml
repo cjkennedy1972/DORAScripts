@@ -9,7 +9,7 @@ externalUrl: http://git.purestorage.com/
 ## ref: http://kubernetes.io/docs/user-guide/services/#publishing-services---service-types
 ##
 serviceType: ClusterIP
-externalIP: 10.21.236.87
+externalIP: {{GITLAB_IP_ADDRESS}}
 
 ## Configure external service ports
 ## ref: http://kubernetes.io/docs/user-guide/services/

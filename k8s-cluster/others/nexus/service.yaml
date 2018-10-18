@@ -16,4 +16,4 @@ spec:
   selector:
     app: nexus
   externalIPs:
-  - 10.21.236.86
+  - {{NEXUS_IP_ADDRESS}}

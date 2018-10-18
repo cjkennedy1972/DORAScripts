@@ -12,7 +12,7 @@ Master:
   Memory: "51200Mi"
   ServicePort: 8081
   ServiceType: ClusterIP
-  ExternalIP: 10.21.236.86
+  ExternalIP: {{JENKINS_IP_ADDRESS}}
   ContainerPort: 8080
   # List of plugins to be install during Jenkins master start
   InstallPlugins:
@@ -26,6 +26,7 @@ Master:
     - gitlab-hook:1.4.2
     - gitlab-merge-request-jenkins:2.0.0
     - nexus-artifact-uploader:2.10
+    - blueocean
 
 Agent:
   Enabled: true
