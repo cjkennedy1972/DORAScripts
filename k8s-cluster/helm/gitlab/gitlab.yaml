@@ -14,7 +14,7 @@ externalIP: {{GITLAB_IP_ADDRESS}}
 ## Configure external service ports
 ## ref: http://kubernetes.io/docs/user-guide/services/
 sshPort: 8022
-httpPort: 8080
+httpPort: {{GITLAB_PORT}}
 httpsPort: 8443
 ## livenessPort Port of liveness probe endpoint
 livenessPort: http

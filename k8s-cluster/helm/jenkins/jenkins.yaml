@@ -10,7 +10,7 @@ Master:
   AdminPassword: admin123
   Cpu: "8000m"
   Memory: "51200Mi"
-  ServicePort: 8081
+  ServicePort: {{JENKINS_PORT}}
   ServiceType: ClusterIP
   ExternalIP: {{JENKINS_IP_ADDRESS}}
   ContainerPort: 8080

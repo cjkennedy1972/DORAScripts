@@ -24,3 +24,5 @@ kubectl delete ns ${NS}
 #kubectl -n ${NS} delete secret jenkins-pull
 
 #kubectl delete ns ${NS}
+
+#kubectl -n pure --force --grace-period=0 delete pod <POD_NAME>

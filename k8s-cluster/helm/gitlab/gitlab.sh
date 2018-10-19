@@ -2,6 +2,7 @@
 #Set the default namespace to which we'll deploy our Kubernetes resources
 NS="pure"
 GITLAB_IP="1.1.1.1"
+GITLAB_PORT="8080"
 SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 
 if [ ! -z $1 ]
@@ -15,12 +16,17 @@ fi
 
 if [ ! -z $2 ]
 then
-    NS=$2
+    GITLAB_PORT=$2
+fi
+
+if [ ! -z $3 ]
+then
+    NS=$3
 fi
 
 # read the yml template from a file and substitute the string 
 # {{GITLAB_IP_ADDRESS}} with the value of the NEXUS_IP variable
-template=`cat "$SCRIPTPATH/gitlab.yaml" | sed "s/{{GITLAB_IP_ADDRESS}}/$GITLAB_IP/g"`
+template=`cat "$SCRIPTPATH/gitlab.yaml" | sed "s/{{GITLAB_IP_ADDRESS}}/$GITLAB_IP/g" | sed "s/{{GITLAB_PORT}}/$GITLAB_PORT/g"`
 # Install GitLab component 
 # Create persistent value claims for PostgreSQL, Redis, ETC and GitLab Data
 kubectl create -f "$SCRIPTPATH/pvc.yaml" -n ${NS}

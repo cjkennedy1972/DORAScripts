@@ -11,20 +11,20 @@
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
           <name>DOCKER_REPO_URL</name>
-          <description>Private Docker Repository URL. For e.g. {{NEXUS_IP_ADDRESS}}:5000</description>
-          <defaultValue>{{NEXUS_IP_ADDRESS}}:5000</defaultValue>
+          <description>Private Docker Repository URL. For e.g. {{NEXUS_IP_ADDRESS}}:{{DOCKER_REGISTRY_PORT}}</description>
+          <defaultValue>{{NEXUS_IP_ADDRESS}}:{{DOCKER_REGISTRY_PORT}}</defaultValue>
           <trim>true</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>GITLAB_URL</name>
           <description>Please enter Gitlab URL in the format like this http://{{GITLAB_IP_ADDRESS}}:8080</description>
-          <defaultValue>http://{{GITLAB_IP_ADDRESS}}:8080</defaultValue>
+          <defaultValue>http://{{GITLAB_IP_ADDRESS}}:{{GITLAB_PORT}}</defaultValue>
           <trim>true</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>NEXUS_URL</name>
-          <description>Please enter Nexus URL. For e.g. {{NEXUS_IP_ADDRESS}}</description>
-          <defaultValue>{{NEXUS_IP_ADDRESS}}</defaultValue>
+          <description>Please enter Nexus URL. For e.g. {{NEXUS_IP_ADDRESS}}:{{NEXUS_PORT}}</description>
+          <defaultValue>{{NEXUS_IP_ADDRESS}}:{{NEXUS_PORT}}</defaultValue>
           <trim>true</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>

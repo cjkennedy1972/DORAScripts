@@ -8,10 +8,11 @@ fi
 
 . environment.sh
 
-bash ./configuration/nexus/config-docker-registry.sh ${NEXUS_IP}
+#bash ./configuration/nexus/config-docker-registry.sh ${NEXUS_IP}
 
-bash ./configuration/nexus/create-and-push-docker-images.sh ${NS} ${NEXUS_IP}:5000 admin admin123
+#bash ./configuration/gitlab/createProjects.sh ${GITLAB_TOKEN} "http://${GITLAB_IP}:${GITLAB_PORT}"
 
-bash ./configuration/gitlab/createProjects.sh ${GITLAB_TOKEN} "http://${GITLAB_IP}:8080"
+#bash ./configuration/nexus/create-and-push-docker-images.sh ${NS} ${NEXUS_IP}:${DOCKER_REGISTRY_PORT} admin admin123
 
-bash ./configuration/jenkins/importPipelines.sh ${JENKINS_TOKEN} "${JENKINS_IP}:8081" ${NEXUS_IP} ${GITLAB_IP}
+bash ./configuration/jenkins/importPipelines.sh ${JENKINS_TOKEN} 
+#${JENKINS_IP} ${JENKINS_PORT} ${NEXUS_IP} ${NEXUS_PORT} ${GITLAB_IP} ${GITLAB_PORT} ${DOCKER_REGISTRY_PORT}
