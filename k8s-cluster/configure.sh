@@ -6,14 +6,7 @@ then
     NS=$1
 fi
 
-#Set environment variables
-NEXUS_IP="10.21.236.87"
-JENKINS_IP="10.21.236.88"
-GITLAB_IP="10.21.236.89"
-
-#Set API Access Token in GitLab and Jenkins
-GITLAB_TOKEN="MxU74j2qCCo5BQ-EvrBr"
-JENKINS_TOKEN="11320965f153e505cf1edee79c7aa0ad20"
+. environment.sh
 
 bash ./configuration/nexus/config-docker-registry.sh ${NEXUS_IP}
 
