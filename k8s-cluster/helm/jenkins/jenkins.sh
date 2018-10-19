@@ -19,7 +19,7 @@ then
 fi
 
 # read the yml template from a file and substitute the string 
-# {{JENKINS_IP_ADDRESS}} with the value of the NEXUS_IP variable
+# {{JENKINS_IP_ADDRESS}} with the value of the JENKINS_IP variable
 template=`cat "$SCRIPTPATH/jenkins.yaml" | sed "s/{{JENKINS_IP_ADDRESS}}/$JENKINS_IP/g"`
 # Install jenkins component 
 kubectl create -f "$SCRIPTPATH/jenkins-claim.yaml" -n ${NS}

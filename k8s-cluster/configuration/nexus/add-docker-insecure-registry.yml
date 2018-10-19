@@ -6,7 +6,7 @@
   become_method: sudo
   tasks:
     - name: Include vars of all.yaml
-      include_vars: '../group_vars/all.yml'
+      include_vars: 'docker-insecure-registries.yml'
     - name: Create daemon.json file if it doesn't exist
       file:
         path: "/etc/docker/daemon.json"

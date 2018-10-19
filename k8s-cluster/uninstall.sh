@@ -19,3 +19,5 @@ kubectl -n ${NS} delete -f ./helm/jenkins/jenkins-claim.yaml
 #Uninstall GitLab
 helm delete pure-gitlab --purge
 kubectl -n ${NS} delete -f ./helm/gitlab/pvc.yaml 
+
+kubectl delete ns ${NS}
