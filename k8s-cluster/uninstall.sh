@@ -20,4 +20,7 @@ kubectl -n ${NS} delete -f ./helm/jenkins/jenkins-claim.yaml
 helm delete pure-gitlab --purge
 kubectl -n ${NS} delete -f ./helm/gitlab/pvc.yaml 
 
+#delete Docker registry secret
+kubectl -n ${NS} delete secret jenkins-pull
+
 kubectl delete ns ${NS}

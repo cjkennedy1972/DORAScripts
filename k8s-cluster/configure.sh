@@ -17,8 +17,8 @@ JENKINS_TOKEN="11320965f153e505cf1edee79c7aa0ad20"
 
 bash ./configuration/nexus/config-docker-registry.sh ${NEXUS_IP}
 
-bash ./configuration/nexus/create-and-push-docker-images.sh ${NEXUS_IP}:5000 admin admin123
+bash ./configuration/nexus/create-and-push-docker-images.sh ${NS} ${NEXUS_IP}:5000 admin admin123
 
 bash ./configuration/gitlab/createProjects.sh ${GITLAB_TOKEN} "http://${GITLAB_IP}:8080"
 
-bash ./configuration/jenkins/importPipelines.sh ${JENKINS_TOKEN} "http://${JENKINS_IP}:8081" ${NEXUS_IP} ${GITLAB_IP}
+bash ./configuration/jenkins/importPipelines.sh ${JENKINS_TOKEN} "${JENKINS_IP}:8081" ${NEXUS_IP} ${GITLAB_IP}

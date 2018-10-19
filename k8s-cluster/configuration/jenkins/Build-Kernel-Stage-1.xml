@@ -27,18 +27,6 @@
           <defaultValue>{{NEXUS_IP_ADDRESS}}</defaultValue>
           <trim>true</trim>
         </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>GIT_CREDENTIALS_ID</name>
-          <description>Please enter Git Credentials ID which you have configured in Jenkins. For e.g. 4063a731-7121-487c-918c-93c2f103d1c7</description>
-          <defaultValue>4063a731-7121-487c-918c-93c2f103d1c7</defaultValue>
-          <trim>true</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>NEXUS_CREDENTIALS_ID</name>
-          <description>Please enter Nexus Credentials ID which you have earlier configured in Jenkins. For e.g. d47d3a3d-83dc-440d-9bca-31e14062ae40</description>
-          <defaultValue>d47d3a3d-83dc-440d-9bca-31e14062ae40</defaultValue>
-          <trim>true</trim>
-        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
     <org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
@@ -72,8 +60,6 @@
     <script>def label = &quot;purepod-${UUID.randomUUID().toString()}&quot;
 def DOCKER_URL = &quot;${params.DOCKER_REPO_URL}&quot;
 def GITLAB_URL = &quot;${params.GITLAB_URL}&quot;
-def GIT_CREDENTIALS_ID = &quot;${params.GIT_CREDENTIALS_ID}&quot;
-def NEXUS_CREDENTIALS_ID = &quot;${params.NEXUS_CREDENTIALS_ID}&quot;
 def NEXUS_URL = &quot;${params.NEXUS_URL}&quot;
 
 // Create pod template using desired image.
@@ -82,16 +68,16 @@ podTemplate(label: label, containers: [
     containerTemplate(name: &apos;buildubuntu&apos;, image: DOCKER_URL + &apos;/build-kernel&apos;, alwaysPullImage: true,privileged: true, workingDir: &apos;/home/jenkins/dev-jenkins&apos;,  ttyEnabled: true, command: &apos;cat&apos;)
     ], 
     volumes: [
-    persistentVolumeClaim(mountPath: &apos;/home/jenkins/dev-jenkins/workspace/&apos; + env.JOB_NAME, claimName: &apos;pso-fb&apos;, readOnly: false)
+    persistentVolumeClaim(mountPath: &apos;/home/jenkins/dev-jenkins/workspace/&apos; + env.JOB_NAME, claimName: &apos;fb-jenkins-slave&apos;, readOnly: false)
     ],
-    imagePullSecrets: [ &apos;myregistrykey&apos; ])
+    imagePullSecrets: [ &apos;jenkins-pull&apos; ])
    
     {
     node(label) {
         stage(&apos;Clone Repository&apos;) {
             container(&apos;buildubuntu&apos;) {
                 dir(env.BUILD_NUMBER + &apos;/build&apos;) {
-                    git branch: &apos;master&apos;, credentialsId: GIT_CREDENTIALS_ID, url: GITLAB_URL + &apos;/root/ubuntu-xenial.git&apos;
+                    git branch: &apos;master&apos;, credentialsId: 'gitlab', url: GITLAB_URL + &apos;/root/ubuntu-xenial.git&apos;
                 }
             }
         }
@@ -118,7 +104,7 @@ podTemplate(label: label, containers: [
         stage(&apos;Add to Nexus artifacts&apos;) {
             container(&apos;buildubuntu&apos;) {
                 dir(env.BUILD_NUMBER + &apos;/build&apos;) {
-                    nexusArtifactUploader artifacts: [[artifactId: &apos;kl_artId1&apos;, classifier: &apos;kern-package&apos;, file: &apos;kern-package.tar.gz&apos;, type: &apos;tar.gz&apos;]], credentialsId: NEXUS_CREDENTIALS_ID, groupId: &apos;Kernel&apos;, nexusUrl: NEXUS_URL, nexusVersion: &apos;nexus3&apos;, protocol: &apos;http&apos;, repository: &apos;kernel&apos;, version: &apos;1.0.0.&apos;+env.BUILD_NUMBER
+                    nexusArtifactUploader artifacts: [[artifactId: &apos;kl_artId1&apos;, classifier: &apos;kern-package&apos;, file: &apos;kern-package.tar.gz&apos;, type: &apos;tar.gz&apos;]], credentialsId: 'nexus', groupId: &apos;Kernel&apos;, nexusUrl: NEXUS_URL, nexusVersion: &apos;nexus3&apos;, protocol: &apos;http&apos;, repository: &apos;kernel&apos;, version: &apos;1.0.0.&apos;+env.BUILD_NUMBER
                 }
             }
         }
