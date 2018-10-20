@@ -2,7 +2,7 @@
 # Shell script to create pull request.
 # -----------------------------------------------
 #
-# Usage: ./create-pr.sh arg1 arg2
+# Usage: bash create-pr.sh arg1 arg2
 # arg1 = Number of instance to be run in parallel
 # arg2 = Number of PR per instance
 #
