@@ -114,5 +114,6 @@ podTemplate(label: label, containers: [
     <sandbox>true</sandbox>
   </definition>
   <triggers/>
+  <authToken>115424d811ca142053b10c17707fd1e60d</authToken>
   <disabled>false</disabled>
 </flow-definition>

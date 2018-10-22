@@ -25,7 +25,7 @@ sed -i '' "s/{{DOCKER_REGISTRY_PORT}}/${DOCKER_REGISTRY_PORT}/g" "$SCRIPTPATH/te
 #sed "s/{{NEXUS_IP_ADDRESS}}/${NEXUS_IP}/g" "$SCRIPTPATH/temp.xml" > "$SCRIPTPATH/temp2.xml"
 #sed "s/{{GITLAB_IP_ADDRESS}}/$GITLAB_IP/g" "$SCRIPTPATH/temp2.xml" > "$SCRIPTPATH/temp.xml"
 
-java -jar "$SCRIPTPATH/jenkins-cli.jar" -s http://$JENKINS_IP:$JENKINS_PORT -auth admin:$JENKINS_API_TOKEN create-job Build-Kernel_Stage1 < "$SCRIPTPATH/temp.xml"
+java -jar "$SCRIPTPATH/jenkins-cli.jar" -s http://$JENKINS_IP:$JENKINS_PORT -auth admin:$JENKINS_API_TOKEN create-job Build-Kernel-Stage1 < "$SCRIPTPATH/temp.xml"
 #java -jar jenkins-cli.jar -s $JENKINS_SERVER_URL -auth admin:$JENKINS_API_TOKEN create-job build-kernel_Stage2_Stage3 < build-kernel_Stage2_Stage3.xml
 
 rm "$SCRIPTPATH/temp.xml"
