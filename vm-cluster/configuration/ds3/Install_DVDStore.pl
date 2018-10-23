@@ -50,17 +50,17 @@ my $str_is_Large_DB = "";
 my $str_file_name = "";				#Store name of file to be created from template 
 
 
-#print "Please enter following parameters: \n";
-print "***********************************\n";
-#print "Please enter database size (integer expected) : ";
-chomp($database_size = 50);
-#print "Please enter whether above database size is in (MB / GB) : ";
-chomp($database_size_str = "MB");
-#print "Please enter database type (MSSQL / MYSQL / PGSQL / ORACLE) : ";
+#print "Please enter following parameters: \n";^M
+#print "***********************************\n";^M
+#print "Please enter database size (integer expected) : "; ^M
+chomp($database_size = 1);
+#print "Please enter whether above database size is in (MB / GB) : ";^M
+chomp($database_size_str = "GB");
+#print "Please enter database type (MSSQL / MYSQL / PGSQL / ORACLE) : ";^M
 chomp($database_type = "MYSQL");
-#print "Please enter system type on which DB Server is installed (WIN / LINUX) : ";
+#print "Please enter system type on which DB Server is installed (WIN / LINUX) : ";^M
 chomp($db_sys_type = "LINUX");
-print "***********************************\n";
+#print "***********************************\n";^M
 #***************************************************************************************
 
 #Set the flags according to parameters passed. These flags will be used further

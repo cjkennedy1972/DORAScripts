@@ -1,0 +1,226 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@2.25">
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <com.dabsquared.gitlabjenkins.connection.GitLabConnectionProperty plugin="gitlab-plugin@1.5.10">
+      <gitLabConnection></gitLabConnection>
+    </com.dabsquared.gitlabjenkins.connection.GitLabConnectionProperty>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>KERNEL_BUILD</name>
+          <description>Linux kernel build from stage-1</description>
+          <defaultValue>2</defaultValue>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>NO_OF_VMS</name>
+          <description>Number of VMs</description>
+          <defaultValue>2</defaultValue>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>NEXUS_URL</name>
+          <description>Please enter Nexus URL. For e.g. {{NEXUS_IP_ADDRESS}}</description>
+          <defaultValue>{{NEXUS_IP_ADDRESS}}</defaultValue>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>DOCKER_REPO_URL</name>
+          <description>Private Docker Repository URL. For e.g. {{NEXUS_IP_ADDRESS}}:5000</description>
+          <defaultValue>{{NEXUS_IP_ADDRESS}}:5000</defaultValue>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+      <triggers>
+        <jenkins.triggers.ReverseBuildTrigger>
+          <spec></spec>
+          <upstreamProjects>Build-Kernel_Stage1, </upstreamProjects>
+          <threshold>
+            <name>SUCCESS</name>
+            <ordinal>0</ordinal>
+            <color>BLUE</color>
+            <completeBuild>true</completeBuild>
+          </threshold>
+        </jenkins.triggers.ReverseBuildTrigger>
+      </triggers>
+    </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.59">
+    <script>def label = &quot;mypod-${UUID.randomUUID().toString()}&quot;
+def DOCKER_URL = &quot;${params.DOCKER_REPO_URL}&quot;
+def NEXUS_URL = &quot;${params.NEXUS_URL}&quot;
+def VM_COUNT = &quot;${params.NO_OF_VMS}&quot;
+def KERNEL_BUILD = &quot;${params.KERNEL_BUILD}&quot;
+
+// Create pod template using desired image.
+podTemplate(label: label, containers: [
+    containerTemplate(name: &apos;jnlp&apos;, image: DOCKER_URL + &apos;/jnlp-slave-sudo&apos;, alwaysPullImage: true, args: &apos;${computer.jnlpmac} ${computer.name}&apos;, workingDir: &apos;/home/jenkins/dev-jenkins/&apos;+env.BUILD_NUMBER),
+    containerTemplate(name: &apos;stage-cd&apos;, image: DOCKER_URL + &apos;/purestorage/vagrant:latest&apos;, alwaysPullImage: true, workingDir: &apos;/home/jenkins/dev-jenkins/&apos;+env.BUILD_NUMBER,  ttyEnabled: true, command: &apos;cat&apos;)
+    ], 
+    
+    //mounting the flashblade volume on pod
+    volumes: [
+    persistentVolumeClaim(mountPath: &apos;/home/jenkins/dev-jenkins&apos;, claimName: &apos;fb-jenkins-slave&apos;, readOnly: false)
+    ],
+    imagePullSecrets: [ &apos;jenkins-pull&apos; ])
+   
+    {
+    node(label) {
+        //Installing the vagrant plugin on container
+        container(&apos;stage-cd&apos;){
+            println &apos;Stage 2 - CD&apos;
+
+            if ((env.BUILD_ID.toInteger() % {{MASTER_BUILD_NO}}) == 0) {
+                // create vagrant file - stage 2
+                def vagrantContent = &apos;&apos;&apos;
+VAGRANT_INSTANCE_NAME   = &quot;pure-perf-vm-@@BUILD_NUMBER@@&quot;
+
+Vagrant.configure(&quot;2&quot;) do |config|
+  
+    config.vm.box = &quot;atlas_shrugged/vsphere_dummy&quot;
+    config.vm.box_version = &quot;1.0.0&quot;
+    config.ssh.username = &quot;root&quot;
+    config.ssh.private_key_path = &quot;./pkey&quot;
+    config.vm.provision :shell, path: &quot;bootstrap.sh&quot;
+    config.vm.hostname = VAGRANT_INSTANCE_NAME
+    config.vm.define VAGRANT_INSTANCE_NAME do |d|
+        
+    end
+    
+    config.vm.provider :vsphere do |vsphere|
+        vsphere.host                  = &apos;{{VSPHERE_HOST}}&apos;
+        vsphere.name                  = VAGRANT_INSTANCE_NAME
+        vsphere.compute_resource_name = &apos;DevOps-Cluster&apos;
+        vsphere.template_name         = &apos;{{VM_TEMPLATE}}&apos;
+        vsphere.vm_base_path          = &quot;kernel&quot;
+        vsphere.user     = &apos;{{VSPHERE_USER}}&apos;
+        vsphere.password = &apos;{{VSPHERE_PASSWORD}}&apos;
+        vsphere.insecure = true
+    
+    end
+end
+                &apos;&apos;&apos;
+                writeFile file: &apos;Vagrantfile&apos;, text: vagrantContent
+
+                // create boostrap.sh
+                def bootstrapContent = &apos;&apos;&apos;
+#!/bin/bash
+uname -r
+wget -q http://@@NEXUS_URL@@/repository/kernel/Kernel/kl_artId1/1.0.0.@@KERNEL_BUILD@@/kl_artId1-1.0.0.@@KERNEL_BUILD@@-kern-package.tar.gz
+tar -xvf kl_artId1-1.0.0.@@KERNEL_BUILD@@-kern-package.tar.gz
+dpkg -i *.deb
+uname -r
+# shutdown -r
+                &apos;&apos;&apos;
+                writeFile file: &apos;bootstrap.sh&apos;, text: bootstrapContent
+
+                // create keyfile
+                def pkeyContent = &apos;&apos;&apos;
+-----BEGIN RSA PRIVATE KEY-----
+MIIEowIBAAKCAQEAthn+WbmjnqEmkkdOJTpoOaBsOqfO4K0m3G1kWThc9q+Wp10n
+vcOTjorZyBbwA8bu2BpiQP5FbxIVvUIu32ATdePCt+pwcZUJ7pLRHDA+Ym6+uK8p
+E+rPzUNpthHq2pCbq48/az6CwhqOg6FyADNX7uhFNp9cR7Yy7EfubseqROWxbsxI
+MLSSMT1qPRnRPWCiel1YyQu73LsljGA4rowv+LpCmqHT3R9UcumvpZGmFEBlxqFi
+9QhCdetOyBahsgxPjbC/hkn2kFZ5z3GkS4vwt0lLnSJ99PAtf+4dTKRkKkjkJNeM
+cxCCHepwhW9IGn2hbIq3mc/uC/Xv1Te2lpJmsQIDAQABAoIBAB6gNITGkdwF4kTL
+tTrRneHDNzCONF7ZACYmR7AxqIDcewvewOZLVC+u7n2WTft0o4q4tTmVCfxqIDna
+PaPXtq4nBgKEbTDNDgSPsJd7DaLkWTMaUmBFJ3mwEsFKNiNYGrY5u0LAGqGmcb11
+k4SxHeLSMYHEP3LYE6xlVJZRAjPf3Mz7/WiS7wM+oUBNfoEb6aM9RGnVgtQLEIYc
+aJR6gUwTRtGXrB0OSHzCBcc7j6H2Dc0FyGLKfcCn7AJUf4LiBXwnPVUM/KfF3lk5
+suh0whM0J0h6Xp5lDrSPhHSmIcWdUIa8BiD4eDSlzLGpzddyxC0EK8SwWRa7eQH2
+S97PlAECgYEA4S3JINuyfEUrn67earOtGLk9Hql/9nNbU9neuHJIA5s9q79VdZNq
+4ETi4vFbQGaeEzf5JBlT9jE2diznyK8jhRSOZE4H406vA/j1cMF3YQ0HENVwZarn
+RKG4JQkyHiiQOoiA023eN23v0YUBxoF0oDLG2434/9L7S/OQKYISANECgYEAzwbJ
+9iAvA80v1aLW843HirQBWBsifokOsyaRsmIxXX+dsG6Knx5m44Cbe1Ydbpu17lWH
+vhQTyq+CJqP/SLKajmfuEA2DrEzKY8nxHooKp4rl3uHbRddlviP6NUxaA/UDugHf
+CnmXt3/yag7ozYTEit6d+4VnN6OTGnzqQsbYf+ECgYEA0Z/gBxi/NfTmwYb3Q3n1
+AHkhrvO4TmPhd1PxhN/OrpzMcqByHDyaWCGI3iA2BOQC8H1BEBwMD7qMqsLvG+H/
+PRp/3FzP9wn+38HaK5fPXKfWFhO8yMiq9zddyAyhfXXhnrwIwcsb/Zn4kaIynutQ
++PmMKkQms3Fjw7cAU8PkoqECgYAan5jhWgoxxvVb1/EkqRr8L2Hs3rB07VNCnrcl
+5ZLLn1m8Erso81Pv9d4I4m4uhz/CQqWOQC67Zg6qwXRW+QD/R0ZKMjK4ubddVd74
+OnBcU3R0UT9NoAGpjh7jM8pvr9am2Q7B3hkws/eMxBYUN/q+kRpn+iPn99U3FtFZ
+fRDigQKBgAoI9kBS5pa4jUzSXoEDutBJTqr7OdNbthELoxkEoKPAf7Y4AA8OQ+Sb
+gQPm/vSAD5wJnuigBW9+NOeXwkpokYr/QNjfqo3EBU39oL/wYgAqO9k5/nDpAOGX
++9KH/lvRML6nwWISFHEJjQKx0dTAH/COiUNRYScci8GzoME9m/rh
+-----END RSA PRIVATE KEY-----
+                &apos;&apos;&apos;
+                writeFile file: &apos;pkey&apos;, text: pkeyContent
+
+                sh &apos;vagrant plugin install vagrant-vsphere &gt; /dev/null&apos;
+
+                stage(&apos;Stage 2 - Launch VM&apos;) {
+
+                    sh &quot;sed -i &apos;s/@@BUILD_NUMBER@@/${BUILD_NUMBER}/g&apos; Vagrantfile&quot;
+                    sh &quot;sed -i &apos;s/@@NEXUS_URL@@/${NEXUS_URL}/g&apos; bootstrap.sh&quot;
+                    sh &quot;sed -i &apos;s/@@KERNEL_BUILD@@/${KERNEL_BUILD}/g&apos; bootstrap.sh&quot;
+                    sh &apos;vagrant up --provider=vsphere&apos;
+                }
+
+
+                stage(&apos;Launch &apos; + VM_COUNT + &apos; clones &amp; Execute Queries&apos;) {
+                    sh &apos;mv Vagrantfile Vagrant.backup&apos;
+                    // create vagrant file - stage 3
+                vagrantContent = &apos;&apos;&apos;
+VAGRANT_INSTANCE_NAME = &quot;pure-perf-vm-clone-@@BUILD_NUMBER@@&quot;
+NODE_COUNT = @@VM_COUNT@@
+
+Vagrant.configure(&quot;2&quot;) do |config|
+    
+    config.vm.box               = &quot;atlas_shrugged/vsphere_dummy&quot;
+    config.vm.box_version       = &quot;1.0.0&quot;
+    config.ssh.username         = &quot;root&quot;
+    config.ssh.private_key_path = &quot;./pkey&quot;
+    
+    $script = &lt;&lt;-SCRIPT
+    echo Running performance scripts
+    mysqlslap --user=root --password=root --concurrency=100 --iterations=1000 --number-int-cols=10 --number-char-cols=50 --auto-generate-sql --verbose &amp;
+    SCRIPT
+
+    config.vm.provision :shell, inline: $script
+    
+    (1..NODE_COUNT).each do |i|
+        config.vm.define VAGRANT_INSTANCE_NAME+&quot;#{i}&quot; do |d|
+            d.vm.hostname = VAGRANT_INSTANCE_NAME+&quot;#{i}&quot;
+        end
+    end
+ 
+    config.vm.provider :vsphere do |vsphere|
+        vsphere.host                  = &apos;{{VSPHERE_HOST}}&apos;
+        vsphere.compute_resource_name = &apos;DevOps-Cluster&apos;
+        vsphere.clone_from_vm         = true
+        vsphere.template_name         = &apos;kernel/pure-perf-vm-@@BUILD_NUMBER@@&apos;
+        vsphere.vm_base_path          = &quot;kernel&quot;
+        vsphere.user                  = &apos;{{VSPHERE_USER}}&apos;
+        vsphere.password              = &apos;{{VSPHERE_PASSWORD}}&apos;
+        vsphere.insecure              = true
+        vsphere.memory_mb             = 512
+        vsphere.cpu_count             =  1
+    end
+    
+end
+                    &apos;&apos;&apos;
+                    writeFile file: &apos;Vagrantfile&apos;, text: vagrantContent
+
+                    sh &quot;sed -i &apos;s/@@BUILD_NUMBER@@/${BUILD_NUMBER}/g&apos; Vagrantfile&quot;
+                    sh &quot;sed -i &apos;s/@@VM_COUNT@@/${VM_COUNT}/g&apos; Vagrantfile&quot;
+                    sh &quot;cat Vagrantfile&quot;
+                    sh &apos;vagrant up --provider=vsphere&apos;
+                }
+
+            } else {
+                echo &quot;Stage CD won&apos;t be trigged as this is not a GOLD build&quot;
+            }
+        }
+    }
+  }
+</script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>

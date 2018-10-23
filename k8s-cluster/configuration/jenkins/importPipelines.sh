@@ -15,13 +15,13 @@ JENKINS_API_TOKEN=$1
 #GITLAB_PORT=$7
 #DOCKER_REGISTRY_PORT=$7
 
-
+## Stage 1 Import
 cp "$SCRIPTPATH/Build-Kernel-Stage-1.xml" "$SCRIPTPATH/temp.xml"
-sed -i '' "s/{{NEXUS_IP_ADDRESS}}/${NEXUS_IP}/g" "$SCRIPTPATH/temp.xml"
-sed -i '' "s/{{NEXUS_PORT}}/${NEXUS_PORT}/g" "$SCRIPTPATH/temp.xml"
-sed -i '' "s/{{GITLAB_IP_ADDRESS}}/${GITLAB_IP}/g" "$SCRIPTPATH/temp.xml"
-sed -i '' "s/{{GITLAB_PORT}}/${GITLAB_PORT}/g" "$SCRIPTPATH/temp.xml"
-sed -i '' "s/{{DOCKER_REGISTRY_PORT}}/${DOCKER_REGISTRY_PORT}/g" "$SCRIPTPATH/temp.xml"
+sed -i "s/{{NEXUS_IP_ADDRESS}}/${NEXUS_IP}/g" "$SCRIPTPATH/temp.xml"
+sed -i "s/{{NEXUS_PORT}}/${NEXUS_PORT}/g" "$SCRIPTPATH/temp.xml"
+sed -i "s/{{GITLAB_IP_ADDRESS}}/${GITLAB_IP}/g" "$SCRIPTPATH/temp.xml"
+sed -i "s/{{GITLAB_PORT}}/${GITLAB_PORT}/g" "$SCRIPTPATH/temp.xml"
+sed -i "s/{{DOCKER_REGISTRY_PORT}}/${DOCKER_REGISTRY_PORT}/g" "$SCRIPTPATH/temp.xml"
 #sed "s/{{NEXUS_IP_ADDRESS}}/${NEXUS_IP}/g" "$SCRIPTPATH/temp.xml" > "$SCRIPTPATH/temp2.xml"
 #sed "s/{{GITLAB_IP_ADDRESS}}/$GITLAB_IP/g" "$SCRIPTPATH/temp2.xml" > "$SCRIPTPATH/temp.xml"
 
@@ -57,3 +57,16 @@ curl -H $CRUMB -X POST 'http://admin:'${JENKINS_API_TOKEN}'@'${JENKINS_IP}':'${J
     "$class": "com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl"
   }
 }'
+
+## Stage 2 Import
+cp "$SCRIPTPATH/Build-Kernel-Stage2-Stage3.xml" "$SCRIPTPATH/temp.xml"
+sed -i "s/{{NEXUS_IP_ADDRESS}}/${NEXUS_IP}/g" "$SCRIPTPATH/temp.xml"
+sed -i "s/{{VM_TEMPLATE}}/${VM_TEMPLATE}/g" "$SCRIPTPATH/temp.xml"
+sed -i "s/{{MASTER_BUILD_NO}}/${MASTER_BUILD_NO}/g" "$SCRIPTPATH/temp.xml"
+sed -i "s/{{VSPHERE_HOST}}/${VSPHERE_HOST}/g" "$SCRIPTPATH/temp.xml"
+sed -i "s/{{VSPHERE_USER}}/${VSPHERE_USER}/g" "$SCRIPTPATH/temp.xml"
+sed -i "s/{{VSPHERE_PASSWORD}}/${VSPHERE_PASSWORD}/g" "$SCRIPTPATH/temp.xml"
+
+java -jar "$SCRIPTPATH/jenkins-cli.jar" -s http://$JENKINS_SERVER_IP -auth admin:$JENKINS_API_TOKEN create-job Build-Kernel_Stage2-Stage3 < "$SCRIPTPATH/temp.xml"
+
+rm "$SCRIPTPATH/temp.xml"

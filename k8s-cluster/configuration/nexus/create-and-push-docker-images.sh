@@ -31,7 +31,7 @@ docker build -f "$SCRIPTPATH/dockerfile-build-kernel" -t "$docker_repo_url"/buil
 docker push "$docker_repo_url"/build-kernel
 
 #Create and push the base image for dockerfile-purestorage-vagrant
-docker build -f "$SCRIPTPATH/dockerfile-build-kernel" -t "$docker_repo_url"/purestorage/vagrant .
+docker build -f "$SCRIPTPATH/dockerfile-purestorage-vagrant" -t "$docker_repo_url"/purestorage/vagrant .
 docker push "$docker_repo_url"/purestorage/vagrant
 
-kubectl create -n $NS secret docker-registry jenkins-pull --docker-server=http://$docker_repo_url --docker-username=admin --docker-password=admin123
+kubectl create -n $NS secret docker-registry jenkins-pull --docker-server=$docker_repo_url --docker-username=admin --docker-password=admin123 --docker-email=pure@pure.pure

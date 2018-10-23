@@ -37,18 +37,18 @@ my $line = "";
 my $end_line = "";						#End of line character
 
 
-#print "Please enter following parameters: \n";
+print "Please enter following parameters: \n";
 print "***********************************\n";
-#print "Please enter target host(s) (database/web server hostname or IP Address) : "; 
-chomp($target_host = "fb-mysql-service");
-#print "Please enter database size (e.g. Input can be like 30MB, 80GB ,etc) : "; 
-chomp($database_size = "50MB");
-#print "Please enter target hostname for perfmon CPU% display (windows only) : "; 
-#chomp($windows_perf_host = <STDIN>);
-#print "Please enter <username>:<password>:<IP Address> for linux machines for CPU % display (linux only) : ";
-chomp($linux_perf_host = "root:root:fb-mysql-service");
-#print "Please enter if you want detailed view of runtime statistics of each target machine ( Y / N): ";
-chomp($detailed_view = "Y");
+print "Please enter target host(s) (database/web server hostname or IP Address) : "; 
+chomp($target_host = <STDIN>);
+print "Please enter database size (e.g. Input can be like 30MB, 80GB ,etc) : "; 
+chomp($database_size = <STDIN>);
+print "Please enter target hostname for perfmon CPU% display (windows only) : "; 
+chomp($windows_perf_host = <STDIN>);
+print "Please enter <username>:<password>:<IP Address> for linux machines for CPU % display (linux only) : ";
+chomp($linux_perf_host = <STDIN>);
+print "Please enter if you want detailed view of runtime statistics of each target machine ( Y / N): ";
+chomp($detailed_view = <STDIN>);
 
 print "***********************************\n";
 
