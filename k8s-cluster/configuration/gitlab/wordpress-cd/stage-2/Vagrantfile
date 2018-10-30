@@ -1,0 +1,26 @@
+VAGRANT_INSTANCE_NAME   = "pure-wp-vm-@@BUILD_NUMBER@@"
+
+Vagrant.configure("2") do |config|
+  
+    config.vm.box = "atlas_shrugged/vsphere_dummy"
+    config.vm.box_version = "1.0.0"
+    config.ssh.username = "root"
+    config.ssh.private_key_path = "../sshkey"
+    config.vm.provision :shell, path: "upgrade-wp.sh"
+    config.vm.hostname = VAGRANT_INSTANCE_NAME
+    config.vm.define VAGRANT_INSTANCE_NAME do |d|
+        
+    end
+    
+    config.vm.provider :vsphere do |vsphere|
+        vsphere.host                  = '@@VSPHERE_HOST@@'
+        vsphere.name                  = VAGRANT_INSTANCE_NAME
+        vsphere.compute_resource_name = '@@VSPHERE_RESOURCE@@'
+        vsphere.template_name         = '@@VM_TEMPLATE@@'
+        vsphere.vm_base_path          = "wordpress"
+        vsphere.user     = '@@VSPHERE_USER@@'
+        vsphere.password = '@@VSPHERE_PASSWORD@@'
+        vsphere.insecure = true
+    
+    end
+end

@@ -42,7 +42,7 @@ add_registry:
 # - "gcr.io"
 
 insecure_registrys:
-# - "172.16.35.9:5000"
+ - "10.21.236.86:5000"
 
 docker_opts:
 # - "HTTP_PROXY=http://proxy.example.com:80/"
@@ -70,11 +70,11 @@ kube_proxy_mode: iptables # support: iptables, userspace or ipvs(alpha).
 kube_proxy_ipvs_scheduler: rr # depend on ipvs mode.
 
 # Extra addons
-kube_dashboard: false
+kube_dashboard: true
 kube_logging: false
-kube_monitoring: false
+kube_monitoring: true
 
-ingress: false
+ingress: true
 ingress_type: nginx # support: nginx or traefik.
 
 # Enable docker registry

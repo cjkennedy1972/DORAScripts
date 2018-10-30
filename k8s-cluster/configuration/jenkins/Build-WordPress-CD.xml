@@ -1,0 +1,152 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@2.25">
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <com.dabsquared.gitlabjenkins.connection.GitLabConnectionProperty plugin="gitlab-plugin@1.5.9">
+      <gitLabConnection>gitlab</gitLabConnection>
+    </com.dabsquared.gitlabjenkins.connection.GitLabConnectionProperty>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>WP_BUILD_NUMBER</name>
+          <description>Wordpress build number from CI stage</description>
+          <defaultValue>1</defaultValue>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>NO_OF_VMS</name>
+          <description>Number of VMs</description>
+          <defaultValue>2</defaultValue>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>GITLAB_URL</name>
+          <description>Please enter Gitlab URL in the format like this http://{{GITLAB_IP_ADDRESS}}:{{GITLAB_PORT}}</description>
+          <defaultValue>http://{{GITLAB_IP_ADDRESS}}:{{GITLAB_PORT}}</defaultValue>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>NEXUS_URL</name>
+          <description>Please enter Nexus URL. For e.g. {{NEXUS_IP_ADDRESS}}</description>
+          <defaultValue>{{NEXUS_IP_ADDRESS}}</defaultValue>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>DOCKER_REPO_URL</name>
+          <description>Private Docker Repository URL. For e.g. {{NEXUS_IP_ADDRESS}}:5000</description>
+          <defaultValue>{{NEXUS_IP_ADDRESS}}:5000</defaultValue>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+      <triggers>
+        <jenkins.triggers.ReverseBuildTrigger>
+          <spec></spec>
+          <upstreamProjects>Build-Wordpress-Job,</upstreamProjects>
+          <threshold>
+            <name>SUCCESS</name>
+            <ordinal>0</ordinal>
+            <color>BLUE</color>
+            <completeBuild>true</completeBuild>
+          </threshold>
+        </jenkins.triggers.ReverseBuildTrigger>
+      </triggers>
+    </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.57">
+    <script>def label = &quot;mypod-${UUID.randomUUID().toString()}&quot;
+def DOCKER_URL = &quot;${params.DOCKER_REPO_URL}&quot;
+def GITLAB_URL = &quot;${params.GITLAB_URL}&quot;
+def NEXUS_URL = &quot;${params.NEXUS_URL}&quot;
+def WP_BUILD_NUMBER = &quot;${params.WP_BUILD_NUMBER}&quot;
+
+def VSPHERE_HOST = &apos;{{VSPHERE_HOST}}&apos;
+def VSPHERE_RESOURCE = &apos;{{VSPHERE_RESOURCE}}&apos;
+def VM_TEMPLATE = &apos;{{VM_TEMPLATE}}&apos;
+def VSPHERE_USER = &apos;{{VSPHERE_USER}}&apos;
+def VSPHERE_PASSWORD = &apos;{{VSPHERE_PASSWORD}}&apos;
+def VM_MEMORY = {{VM_MEMORY}}
+def VM_CPU = {{VM_CPU}}
+def VM_COUNT = &quot;${params.NO_OF_VMS}&quot;
+
+// Create pod template using desired image.
+podTemplate(label: label, containers: [
+    containerTemplate(name: &apos;jnlp&apos;, image: DOCKER_URL + &apos;/jnlp-slave-sudo&apos;, alwaysPullImage: true, args: &apos;${computer.jnlpmac} ${computer.name}&apos;, workingDir: &apos;/home/jenkins/dev-jenkins&apos;),
+    containerTemplate(name: &apos;wordpress-cd&apos;, image: DOCKER_URL + &apos;/purestorage/vagrant:latest&apos;, alwaysPullImage: true, workingDir: &apos;/home/jenkins/dev-jenkins&apos;,  ttyEnabled: true, command: &apos;cat&apos;)
+    ], 
+    
+    //mounting the flashblade volume on pod
+    volumes: [
+    persistentVolumeClaim(mountPath: &apos;/home/jenkins/dev-jenkins/workspace/&apos; + env.JOB_NAME, claimName: &apos;fb-jenkins-slave&apos;, readOnly: false)
+    ],
+    imagePullSecrets: [ &apos;jenkins-pull&apos; ]) {
+    node(label) {
+        //Installing the vagrant plugin on container
+        container(&apos;wordpress-cd&apos;){
+            println &apos;Stage 2 - CD&apos;
+            dir(env.BUILD_NUMBER + &apos;/build&apos;) {
+
+                if ((env.BUILD_ID.toInteger() % {{MASTER_BUILD_NO}}) == 0) {
+                    //cloning the stage-cd repo having vagrantfile and bootstrap script                
+                    stage(&apos;Clone Repository&apos;) {
+                       git branch: &apos;master&apos;, credentialsId: &apos;gitlab&apos; , url: GITLAB_URL + &apos;/root/wordpress-cd.git&apos;
+                    }
+                    
+                   
+                    sh &apos;vagrant plugin install vagrant-vsphere &gt; /dev/null&apos;
+                    
+                    dir(&apos;stage-2&apos;){
+                         stage(&apos;Launch VM&apos;) {
+                            sh &quot;sed -i &apos;s/@@BUILD_NUMBER@@/${BUILD_NUMBER}/g&apos; Vagrantfile&quot;
+                            sh &quot;sed -i &apos;s/@@VSPHERE_HOST@@/${VSPHERE_HOST}/g&apos; Vagrantfile&quot;
+                            sh &quot;sed -i &apos;s/@@VSPHERE_RESOURCE@@/${VSPHERE_RESOURCE}/g&apos; Vagrantfile&quot;
+                            sh &quot;sed -i &apos;s/@@VM_TEMPLATE@@/${VM_TEMPLATE}/g&apos; Vagrantfile&quot;
+                            sh &quot;sed -i &apos;s/@@VSPHERE_USER@@/${VSPHERE_USER}/g&apos; Vagrantfile&quot;
+                            sh &quot;sed -i &apos;s/@@VSPHERE_PASSWORD@@/${VSPHERE_PASSWORD}/g&apos; Vagrantfile&quot;
+
+                            sh &quot;sed -i &apos;s/@@NEXUS_URL@@/${NEXUS_URL}/g&apos; upgrade-wp.sh&quot;
+                            sh &quot;sed -i &apos;s/@@WP_BUILD_NUMBER@@/${WP_BUILD_NUMBER}/g&apos; upgrade-wp.sh&quot;
+
+                            //sh &apos;cat Vagrantfile&apos;
+                            //sh &apos;cat upgrade-wp.sh&apos;    
+
+                            sh &apos;vagrant up --provider=vsphere&apos;
+                        }
+                    }
+
+                    
+                    dir(&apos;stage-3&apos;) {
+                        stage(&apos;Clone Stage 2 VM and Execute Queries&apos;) {
+                            sh &quot;sed -i &apos;s/@@BUILD_NUMBER@@/${BUILD_NUMBER}/g&apos; Vagrantfile&quot;
+                            sh &quot;sed -i &apos;s/@@VSPHERE_HOST@@/${VSPHERE_HOST}/g&apos; Vagrantfile&quot;
+                            sh &quot;sed -i &apos;s/@@VSPHERE_RESOURCE@@/${VSPHERE_RESOURCE}/g&apos; Vagrantfile&quot;
+                            sh &quot;sed -i &apos;s/@@VM_TEMPLATE@@/${VM_TEMPLATE}/g&apos; Vagrantfile&quot;
+                            sh &quot;sed -i &apos;s/@@VSPHERE_USER@@/${VSPHERE_USER}/g&apos; Vagrantfile&quot;
+                            sh &quot;sed -i &apos;s/@@VSPHERE_PASSWORD@@/${VSPHERE_PASSWORD}/g&apos; Vagrantfile&quot;
+                            sh &quot;sed -i &apos;s/@@VM_MEMORY@@/${VM_MEMORY}/g&apos; Vagrantfile&quot;
+                            sh &quot;sed -i &apos;s/@@VM_CPU@@/${VM_CPU}/g&apos; Vagrantfile&quot;
+                            sh &quot;sed -i &apos;s/@@VM_COUNT@@/${VM_COUNT}/g&apos; Vagrantfile&quot;
+
+                            sh &apos;cat Vagrantfile&apos;
+
+                            sh &apos;vagrant up --provider=vsphere&apos;
+                        }
+                    }
+                    
+        
+                } else {
+                    echo &apos;Wordpress CD Stage will not be trigged as this is not a GOLD build&apos;
+                }
+            }
+        }
+    }
+}
+</script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>

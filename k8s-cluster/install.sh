@@ -4,9 +4,6 @@
 
 kubectl create ns ${NS}
 
-# Install Tiller for Helm
-bash ./helm/tiller/install-tiller.sh
-
 #Install Sonatype Nexus
 bash ./others/nexus/nexus.sh ${NEXUS_IP} ${NEXUS_PORT} ${NS}
 bash wait-for.sh pod -lapp=nexus -n ${NS}

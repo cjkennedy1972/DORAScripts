@@ -68,7 +68,7 @@ podTemplate(label: label, containers: [
         containerTemplate(name: &apos;buildwordpress&apos;, image: DOCKER_REPO_URL + &apos;/build-wordpress&apos;, workingDir: &apos;/home/jenkins/dev-jenkins&apos;, ttyEnabled: true, command: &apos;cat&apos;)],
     volumes: [
         //persistentVolumeClaim(mountPath: &apos;/home/jenkins/dev-jenkins/workspace/&apos; + env.JOB_NAME, claimName: &apos;fb-jenkins-slave&apos;, readOnly: false)],
-        persistentVolumeClaim(mountPath: &apos;/home/jenkins/dev-jenkins&apos;, claimName: &apos;dev-jenkins&apos;, readOnly: false)],
+        persistentVolumeClaim(mountPath: &apos;/home/jenkins/dev-jenkins&apos;  + env.JOB_NAME, claimName: &apos;fb-jenkins-slave&apos;, readOnly: false)],
     imagePullSecrets: [ &apos;jenkins-pull&apos; ]) 
     
     {
@@ -77,7 +77,7 @@ podTemplate(label: label, containers: [
             // Git clone source code.
             stage(&apos;Clone Repository&apos;) {
                 dir(env.BUILD_NUMBER + &apos;/build&apos;) {
-                git branch: &apos;develop&apos;, credentialsId: &apos;gitlab&apos;, url: GITLAB_URL + &apos;/root/wordpress-develop.git&apos;
+                git branch: &apos;master&apos;, credentialsId: &apos;gitlab&apos;, url: GITLAB_URL + &apos;/root/wordpress-develop.git&apos;
                 }
                     
             }
@@ -85,6 +85,7 @@ podTemplate(label: label, containers: [
             stage(&apos;Build project&apos;) {
                 dir(env.BUILD_NUMBER + &apos;/build&apos;) {
                     sh &quot;npm install&quot;
+                    sh &quot;grunt build&quot;
                 }
             }
             // Run QUnit test cases
@@ -103,7 +104,7 @@ podTemplate(label: label, containers: [
             }
             stage(&apos;Add to Nexus artifacts&apos;) {
                 dir(env.BUILD_NUMBER + &apos;/build&apos;) {
-                    nexusArtifactUploader artifacts: [[artifactId: &apos;wordpress-artifacts&apos;, classifier: &apos;wordpress-artifacts&apos;, file: &apos;Wordpress.tar.gz&apos;, type: &apos;tar.gz&apos;]], credentialsId: &apos;nexus&apos;, groupId: &apos;wp_gid&apos;, nexusUrl: NEXUS_URL, nexusVersion: &apos;nexus3&apos;, protocol: &apos;http&apos;, repository: &apos;wordpress-artifacts&apos;, version: &apos;1.0.0.&apos;+env.BUILD_NUMBER
+                    nexusArtifactUploader artifacts: [[artifactId: &apos;wordpress-artifacts&apos;, classifier: &apos;wordpress-artifacts&apos;, file: &apos;Wordpress.tar.gz&apos;, type: &apos;tar.gz&apos;]], credentialsId: &apos;nexus&apos;, groupId: &apos;wp_gid&apos;, nexusUrl: NEXUS_URL, nexusVersion: &apos;nexus3&apos;, protocol: &apos;http&apos;, repository: &apos;builds-store&apos;, version: &apos;1.0.0.&apos;+env.BUILD_NUMBER
                 }
             }
         }

@@ -104,7 +104,7 @@ podTemplate(label: label, containers: [
         stage(&apos;Add to Nexus artifacts&apos;) {
             container(&apos;buildubuntu&apos;) {
                 dir(env.BUILD_NUMBER + &apos;/build&apos;) {
-                    nexusArtifactUploader artifacts: [[artifactId: &apos;kl_artId1&apos;, classifier: &apos;kern-package&apos;, file: &apos;kern-package.tar.gz&apos;, type: &apos;tar.gz&apos;]], credentialsId: 'nexus', groupId: &apos;Kernel&apos;, nexusUrl: NEXUS_URL, nexusVersion: &apos;nexus3&apos;, protocol: &apos;http&apos;, repository: &apos;kernel&apos;, version: &apos;1.0.0.&apos;+env.BUILD_NUMBER
+                    nexusArtifactUploader artifacts: [[artifactId: &apos;kl_artId1&apos;, classifier: &apos;kern-package&apos;, file: &apos;kern-package.tar.gz&apos;, type: &apos;tar.gz&apos;]], credentialsId: 'nexus', groupId: &apos;Kernel&apos;, nexusUrl: NEXUS_URL, nexusVersion: &apos;nexus3&apos;, protocol: &apos;http&apos;, repository: &apos;builds-store&apos;, version: &apos;1.0.0.&apos;+env.BUILD_NUMBER
                 }
             }
         }
