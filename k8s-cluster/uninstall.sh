@@ -1,10 +1,27 @@
 #!/bin/bash
+
+UNINSTALL_ALL="no"
+if [ ! -z $2 ]
+then
+    UNINSTALL_ALL=$2
+fi
+echo $UNINSTALL_ALL
+
 . environment.sh
 
 helm delete pure-jenkins --purge
 helm delete pure-gitlab --purge
-kubectl -n ${NS} delete deployment,svc,pod,secret,pvc --all
-kubectl delete ns ${NS}
+kubectl -n ${NS} delete deployment,svc,pod,secret --all
+
+#only delete the persistent volumes if we specify "all" as a parameter
+if [ $UNINSTALL_ALL=="all" ]
+then
+    echo "Deleting persistent volumes from namespace " ${NS}
+    kubectl -n ${NS} delete pvc --all
+    kubectl delete ns ${NS}
+fi
+
+
 
 #Uninstall Sonatype Nexus
 #template=`cat "./others/nexus/service.yaml" | sed "s/{{NEXUS_IP_ADDRESS}}/1.1.1.1/g"`

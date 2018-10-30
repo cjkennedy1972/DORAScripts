@@ -10,6 +10,7 @@ spec:
       storage: 500Gi
   storageClassName: pure-file
 ---
+#used in Jenkins pipelines as the persistent storage for the build containers
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
