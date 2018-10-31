@@ -5,7 +5,6 @@ if [ ! -z $2 ]
 then
     UNINSTALL_ALL=$2
 fi
-echo $UNINSTALL_ALL
 
 . environment.sh
 
@@ -16,7 +15,6 @@ kubectl -n ${NS} delete deployment,svc,pod,secret --all
 #only delete the persistent volumes if we specify "all" as a parameter
 if [[ $UNINSTALL_ALL == "all" ]]
 then
-    echo $UNINSTALL_ALL
     echo "Deleting persistent storage volumes from namespace" ${NS}
     kubectl -n ${NS} delete pvc --all
     kubectl delete ns ${NS}
