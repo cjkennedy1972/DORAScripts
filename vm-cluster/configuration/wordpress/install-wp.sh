@@ -3,17 +3,17 @@ SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 echo $SCRIPTPATH
 
 # Create and Import DB
-echo 'Restoring Wordpress DB'
+echo 'Restoring WordPress DB'
 mysql -u root --password=root < db/create-db.sql
 mysql -u root --password=root wordpress < db/wordpress.sql
 
-#download wordpress
-echo 'Downloading Wordpress'
+#download WordPress
+echo 'Downloading WordPress'
 curl -O https://wordpress.org/latest.tar.gz
-#unzip wordpress
+#unzip WordPress
 tar -zxvf latest.tar.gz
 
-## Add WP config
+## Add WordPress config
 echo 'Copying WP config files'
 cp files/wp-config.php wordpress
 cp files/.htaccess wordpress

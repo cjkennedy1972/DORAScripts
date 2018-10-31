@@ -111,8 +111,8 @@ end
                 def bootstrapContent = &apos;&apos;&apos;
 #!/bin/bash
 uname -r
-wget -q http://@@NEXUS_URL@@/repository/builds-store/Kernel/kl_artId1/1.0.0.@@KERNEL_BUILD@@/kl_artId1-1.0.0.@@KERNEL_BUILD@@-kern-package.tar.gz
-tar -xvf kl_artId1-1.0.0.@@KERNEL_BUILD@@-kern-package.tar.gz
+wget -q http://@@NEXUS_URL@@/repository/builds-store/linux-kernel-package/1.0.0.@@KERNEL_BUILD@@/linux-kernel-package-1.0.0.@@KERNEL_BUILD@@.tar.gz
+tar -xvf linux-kernel-package-1.0.0.@@KERNEL_BUILD@@.tar.gz
 dpkg -i *.deb
 uname -r
 # shutdown -r

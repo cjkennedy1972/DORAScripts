@@ -2,11 +2,11 @@
 SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 echo $SCRIPTPATH
 
-#download wordpress
-echo 'Downloading Wordpress'
-curl -O http://@@NEXUS_URL@@/repository/builds-store/wp_gid/wordpress-artifacts/1.0.0.@@WP_BUILD_NUMBER@@/wordpress-artifacts-1.0.0.@@WP_BUILD_NUMBER@@-wordpress-artifacts.tar.gz
-#unzip wordpress
-tar -zxvf wordpress-*.tar.gz
+#download WordPress
+echo 'Downloading WordPress'
+curl -O http://@@NEXUS_URL@@/repository/builds-store/wordpress-package/1.0.0.@@WP_BUILD_NUMBER@@/wordpress-package-1.0.0.@@WP_BUILD_NUMBER@@.tar.gz
+#unzip WordPress
+tar -zxvf wordpress-package-1.0.0.@@WP_BUILD_NUMBER@@.tar.gz
 
 #change dir to wordpress
 cd wordpress
