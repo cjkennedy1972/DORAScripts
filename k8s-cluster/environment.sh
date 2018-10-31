@@ -17,9 +17,13 @@ GITLAB_PORT="8083"
 
 DOCKER_REGISTRY_PORT="5000"
 
-#Set API Access Token in GitLab and Jenkins
-GITLAB_TOKEN="yBVW7G_F54BXRsCRazZi"
-JENKINS_TOKEN="115359d190ac7603bd5c1f800450733283"
+#Create and paste below your GitLab API Access Token (with 'api' scope) generated from http://<GITLAB_IP>:<GITLAB_PORT>/profile/personal_access_tokens
+GITLAB_TOKEN="7uJHVHETcNnuM6nsKQE9"
+
+#Create and paste below your Jenkins API  Token generated from http://<JENKINS_IP>:<JENKINS_PORT>/user/admin/configure
+JENKINS_TOKEN="11241e9d140c949f33f7d1727c2e2bcf52"
+
+#
 SECRET_TOKEN="{AQAAABAAAAAQockYoJutL7ZGpK6oePv79oGf7TaXymyHJ6CrQJLYBrk=}"
 
 ## Environment variables/ Params for CD jobs - Build No, vSphere creds
@@ -34,3 +38,7 @@ VSPHERE_RESOURCE="DevOps-Cluster"
 VM_TEMPLATE="pure-wp-vm"
 VM_MEMORY="512"
 VM_CPU="1"
+
+NEXUS_IP="10.21.236.86"
+JENKINS_IP="10.21.236.89"
+GITLAB_IP="10.21.236.87"

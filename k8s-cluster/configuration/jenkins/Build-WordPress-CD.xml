@@ -11,7 +11,7 @@
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
           <name>WP_BUILD_NUMBER</name>
-          <description>Wordpress build number from CI stage</description>
+          <description>WordPress build number from CI stage</description>
           <defaultValue>1</defaultValue>
           <trim>true</trim>
         </hudson.model.StringParameterDefinition>
@@ -45,7 +45,7 @@
       <triggers>
         <jenkins.triggers.ReverseBuildTrigger>
           <spec></spec>
-          <upstreamProjects>Build-Wordpress-Job,</upstreamProjects>
+          <upstreamProjects>Build-WordPress-Job,</upstreamProjects>
           <threshold>
             <name>SUCCESS</name>
             <ordinal>0</ordinal>
@@ -138,7 +138,7 @@ podTemplate(label: label, containers: [
                     
         
                 } else {
-                    echo &apos;Wordpress CD Stage will not be trigged as this is not a GOLD build&apos;
+                    echo &apos;WordPress CD Stage will not be trigged as this is not a GOLD build&apos;
                 }
             }
         }

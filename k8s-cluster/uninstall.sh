@@ -14,14 +14,15 @@ helm delete pure-gitlab --purge
 kubectl -n ${NS} delete deployment,svc,pod,secret --all
 
 #only delete the persistent volumes if we specify "all" as a parameter
-if [ $UNINSTALL_ALL=="all" ]
+if [[ $UNINSTALL_ALL == "all" ]]
 then
-    echo "Deleting persistent volumes from namespace " ${NS}
+    echo $UNINSTALL_ALL
+    echo "Deleting persistent storage volumes from namespace" ${NS}
     kubectl -n ${NS} delete pvc --all
     kubectl delete ns ${NS}
+else
+    echo "Leaving persistent storage volumes alive in namespace" ${NS}
 fi
-
-
 
 #Uninstall Sonatype Nexus
 #template=`cat "./others/nexus/service.yaml" | sed "s/{{NEXUS_IP_ADDRESS}}/1.1.1.1/g"`
