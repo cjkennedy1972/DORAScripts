@@ -16,5 +16,5 @@ curl -X POST -u $ADMIN_USERNAME:$ADMIN_PWD --header "Content-Type: text/plain" '
 
 curl -X POST -u $ADMIN_USERNAME:$ADMIN_PWD --header 'Content-Type: application/json' \
     http://$NEXUS_IP:$NEXUS_PORT/service/rest/v1/script \
-    -d '{"name":"docker-pure'$RANDOM_NUMBER'","type":"groovy","content":"repository.createDockerHosted('\''docker'\'', 5000, 5001, '\''default'\'', true, true);"}'
+    -d '{"name":"docker-pure'$RANDOM_NUMBER'","type":"groovy","content":"repository.createDockerHosted('\''docker'\'', '$DOCKER_REGISTRY_PORT', 5001, '\''default'\'', true, true);"}'
 curl -X POST -u $ADMIN_USERNAME:$ADMIN_PWD --header "Content-Type: text/plain" 'http://'$NEXUS_IP':'$NEXUS_PORT'/service/rest/v1/script/docker-pure'$RANDOM_NUMBER'/run'
