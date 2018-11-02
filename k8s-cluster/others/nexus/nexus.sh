@@ -27,7 +27,7 @@ fi
 
 # read the yml template from a file and substitute the string 
 # {{NEXUS_IP_ADDRESS}} with the value of the NEXUS_IP variable
-template=`cat "$SCRIPTPATH/service.yaml" | sed "s/{{NEXUS_IP_ADDRESS}}/$NEXUS_IP/g" | sed  "s/{{NEXUS_PORT}}/$NEXUS_PORT/g"`
+template=`cat "$SCRIPTPATH/service.yaml" | sed "s/{{NEXUS_IP_ADDRESS}}/$NEXUS_IP/g" | sed "s/{{DOCKER_REGISTRY_PORT}}/$DOCKER_REGISTRY_PORT/g" | sed  "s/{{NEXUS_PORT}}/$NEXUS_PORT/g"`
 
 #echo $SCRIPTPATH
 # Install Nexus Repository Manager resources 

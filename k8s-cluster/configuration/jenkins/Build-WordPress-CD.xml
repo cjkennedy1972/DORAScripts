@@ -35,8 +35,8 @@
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>DOCKER_REPO_URL</name>
-          <description>URL of your private Docker repository where Jenkins slave and custom WordPress containers are pulled from. Enter the URL in the following format: {{NEXUS_IP_ADDRESS}}:5000</description>
-          <defaultValue>{{NEXUS_IP_ADDRESS}}:5000</defaultValue>
+          <description>URL of your private Docker repository where Jenkins slave and custom WordPress containers are pulled from. Enter the URL in the following format: {{NEXUS_IP_ADDRESS}}:{{DOCKER_REGISTRY_PORT}}</description>
+          <defaultValue>{{NEXUS_IP_ADDRESS}}:{{DOCKER_REGISTRY_PORT}}</defaultValue>
           <trim>true</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>

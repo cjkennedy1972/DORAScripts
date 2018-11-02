@@ -10,7 +10,7 @@ spec:
     protocol: TCP
     name: http
   - port: 5000
-    targetPort: 5000
+    targetPort: {{DOCKER_REGISTRY_PORT}}
     protocol: TCP
     name: docker 
   selector:
