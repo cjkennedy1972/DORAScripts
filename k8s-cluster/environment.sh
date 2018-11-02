@@ -6,22 +6,11 @@ then
     NS=$1
 fi
 
-#Set environment variables
-NEXUS_IP="10.21.236.108"
-JENKINS_IP="10.21.236.110"
-GITLAB_IP="10.21.236.109"
-
 NEXUS_PORT="90"
 JENKINS_PORT="8082"
 GITLAB_PORT="8083"
 
 DOCKER_REGISTRY_PORT="5000"
-
-#Create and paste below your GitLab API Access Token (with 'api' scope) generated from http://<GITLAB_IP>:<GITLAB_PORT>/profile/personal_access_tokens
-GITLAB_TOKEN="7uJHVHETcNnuM6nsKQE9"
-
-#Create and paste below your Jenkins API  Token generated from http://<JENKINS_IP>:<JENKINS_PORT>/user/admin/configure
-JENKINS_TOKEN="11241e9d140c949f33f7d1727c2e2bcf52"
 
 #
 SECRET_TOKEN="{AQAAABAAAAAQockYoJutL7ZGpK6oePv79oGf7TaXymyHJ6CrQJLYBrk=}"
@@ -39,6 +28,17 @@ VM_TEMPLATE="pure-wp-vm"
 VM_MEMORY="512"
 VM_CPU="1"
 
-NEXUS_IP="10.21.236.86"
-JENKINS_IP="10.21.236.89"
-GITLAB_IP="10.21.236.87"
+#Set  IP addresses of the Sonatype Nexus, Jenkins and GitLab services in Kubernetes
+NEXUS_IP="10.21.236.108"
+JENKINS_IP="10.21.236.110"
+GITLAB_IP="10.21.236.109"
+
+#Create and paste below your GitLab API Access Token (with 'api' scope) generated from http://<GITLAB_IP>:<GITLAB_PORT>/profile/personal_access_tokens
+GITLAB_TOKEN="vQWTRjFu_hSzaE57g-By"
+
+#Create and paste below your Jenkins API  Token generated from http://<JENKINS_IP>:<JENKINS_PORT>/user/admin/configure
+JENKINS_TOKEN="11be5214e0c29732b4a8f7e4938ec4f0bb"
+
+#NEXUS_IP="10.21.236.87"
+#JENKINS_IP="10.21.236.89"
+#GITLAB_IP="10.21.236.88"

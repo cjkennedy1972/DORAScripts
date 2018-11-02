@@ -1,7 +1,7 @@
 <?xml version='1.1' encoding='UTF-8'?>
 <flow-definition plugin="workflow-job@2.25">
   <actions/>
-  <description></description>
+  <description>A job that builds the WordPress source code from a local GitLab repository and publishes the resulting build to a Nexus repository</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <com.dabsquared.gitlabjenkins.connection.GitLabConnectionProperty plugin="gitlab-plugin@1.5.9">
@@ -11,13 +11,13 @@
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
           <name>DOCKER_REPO_URL</name>
-          <description>Private Docker Repository URL on Nexus. For e.g. {{NEXUS_IP_ADDRESS}}:{{DOCKER_REGISTRY_PORT}}</description>
+          <description>URL of your private Docker repository where Jenkins slave and custom WordPress containers are pulled from. Enter the URL in the following format: {{NEXUS_IP_ADDRESS}}:{{DOCKER_REGISTRY_PORT}}</description>
           <defaultValue>{{NEXUS_IP_ADDRESS}}:{{DOCKER_REGISTRY_PORT}}</defaultValue>
           <trim>true</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>GITLAB_URL</name>
-          <description>Please enter the Gitlab URL in the format like this http://{{GITLAB_IP_ADDRESS}}:{{GITLAB_PORT}}</description>
+          <description>Enter the URL of your GitLab server in the following format: http://{{GITLAB_IP_ADDRESS}}:{{GITLAB_PORT}}</description>
           <defaultValue>http://{{GITLAB_IP_ADDRESS}}:{{GITLAB_PORT}}</defaultValue>
           <trim>true</trim>
         </hudson.model.StringParameterDefinition>
@@ -66,9 +66,10 @@ def NEXUS_URL = &quot;${params.NEXUS_URL}&quot;
 podTemplate(label: label, containers: [
         containerTemplate(name: &apos;jnlp&apos;, image: DOCKER_REPO_URL + &apos;/jnlp-slave-sudo&apos;, alwaysPullImage: true, args: &apos;${computer.jnlpmac} ${computer.name}&apos;, workingDir: &apos;/home/jenkins/dev-jenkins&apos;),
         containerTemplate(name: &apos;buildwordpress&apos;, image: DOCKER_REPO_URL + &apos;/build-wordpress&apos;, workingDir: &apos;/home/jenkins/dev-jenkins&apos;, ttyEnabled: true, command: &apos;cat&apos;)],
+    //mounting the Pure Storage FlashBlade volume on pod
     volumes: [
-        //persistentVolumeClaim(mountPath: &apos;/home/jenkins/dev-jenkins/workspace/&apos; + env.JOB_NAME, claimName: &apos;fb-jenkins-slave&apos;, readOnly: false)],
-        persistentVolumeClaim(mountPath: &apos;/home/jenkins/dev-jenkins&apos;  + env.JOB_NAME, claimName: &apos;fb-jenkins-slave&apos;, readOnly: false)],
+        persistentVolumeClaim(mountPath: &apos;/home/jenkins/dev-jenkins/workspace/&apos; + env.JOB_NAME, claimName: &apos;fb-jenkins-slave&apos;, readOnly: false)],
+        //persistentVolumeClaim(mountPath: &apos;/home/jenkins/dev-jenkins&apos;  + env.JOB_NAME, claimName: &apos;fb-jenkins-slave&apos;, readOnly: false)],
     imagePullSecrets: [ &apos;jenkins-pull&apos; ]) 
     
     {

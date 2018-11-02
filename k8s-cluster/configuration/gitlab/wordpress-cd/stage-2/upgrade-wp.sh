@@ -4,7 +4,7 @@ echo $SCRIPTPATH
 
 #download WordPress
 echo 'Downloading WordPress'
-curl -O http://@@NEXUS_URL@@/repository/builds-store/wordpress-package/1.0.0.@@WP_BUILD_NUMBER@@/wordpress-package-1.0.0.@@WP_BUILD_NUMBER@@.tar.gz
+curl -O @@NEXUS_URL@@/repository/builds-store/wordpress-package/1.0.0.@@WP_BUILD_NUMBER@@/wordpress-package-1.0.0.@@WP_BUILD_NUMBER@@.tar.gz
 #unzip WordPress
 tar -zxvf wordpress-package-1.0.0.@@WP_BUILD_NUMBER@@.tar.gz
 

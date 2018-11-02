@@ -64,7 +64,7 @@ rp "s/{{GITLAB_PORT}}/${GITLAB_PORT}/g" "$SCRIPTPATH/temp.xml"
 rp "s/{{SECRET_TOKEN}}/${SECRET_TOKEN}/g" "$SCRIPTPATH/temp.xml"
 rp "s/{{DOCKER_REGISTRY_PORT}}/${DOCKER_REGISTRY_PORT}/g" "$SCRIPTPATH/temp.xml"
 
-java -jar "$SCRIPTPATH/jenkins-cli.jar" -s http://$JENKINS_IP:$JENKINS_PORT -auth admin:$JENKINS_TOKEN create-job Build-WordPress-Job < "$SCRIPTPATH/temp.xml"
+java -jar "$SCRIPTPATH/jenkins-cli.jar" -s http://$JENKINS_IP:$JENKINS_PORT -auth admin:$JENKINS_TOKEN create-job WordPress-CI-Job < "$SCRIPTPATH/temp.xml"
 
 rm "$SCRIPTPATH/temp.xml"
 
@@ -84,7 +84,7 @@ rp "s/{{VSPHERE_RESOURCE}}/${VSPHERE_RESOURCE}/g" "$SCRIPTPATH/temp.xml"
 rp "s/{{VM_MEMORY}}/${VM_MEMORY}/g" "$SCRIPTPATH/temp.xml"
 rp "s/{{VM_CPU}}/${VM_CPU}/g" "$SCRIPTPATH/temp.xml"
 
-java -jar "$SCRIPTPATH/jenkins-cli.jar" -s http://$JENKINS_IP:$JENKINS_PORT -auth admin:$JENKINS_TOKEN create-job Build-WordPress-CD-Job < "$SCRIPTPATH/temp.xml"
+java -jar "$SCRIPTPATH/jenkins-cli.jar" -s http://$JENKINS_IP:$JENKINS_PORT -auth admin:$JENKINS_TOKEN create-job WordPress-CD-Job < "$SCRIPTPATH/temp.xml"
 
 rm "$SCRIPTPATH/temp.xml"
 

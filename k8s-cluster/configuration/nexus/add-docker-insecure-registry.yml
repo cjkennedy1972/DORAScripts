@@ -11,6 +11,10 @@
       file:
         path: "/etc/docker/daemon.json"
         state: touch
+    - name: Back up exist daemon.json file
+      copy:
+        src: "/etc/docker/daemon.json"
+        dest: "/etc/docker/daemon-backup-pure.json"
     - name: Add Nexus insecure registry entry
       copy:
         content: '{"insecure-registries": ["{{ docker_insecure_registry }}"]}'
