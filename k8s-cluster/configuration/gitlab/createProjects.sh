@@ -34,6 +34,6 @@ cp -rf "$SCRIPTPATH"/wordpress-cd/pkey wordpress-cd/.
 cp "$SCRIPTPATH"/../../../vm-cluster/configuration/wordpress/files/blog.php wordpress-cd/stage-3/.
 cd wordpress-cd
 git add .
-git add pkey -f
+git add sshkey -f
 git commit -m "Checking in files"
 git push

@@ -10,7 +10,7 @@ Vagrant.configure("2") do |config|
     
     $script = <<-SCRIPT
     echo Running performance scripts
-    ls la /vagrant
+    ls -la /vagrant
     cp /vagrant/blog.php .
     php blog.php &
     SCRIPT
