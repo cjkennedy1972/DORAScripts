@@ -78,7 +78,7 @@ podTemplate(label: label, containers: [
             // Git clone source code.
             stage(&apos;Clone Repository&apos;) {
                 dir(env.BUILD_NUMBER + &apos;/build&apos;) {
-                git branch: &apos;master&apos;, credentialsId: &apos;gitlab&apos;, url: GITLAB_URL + &apos;/root/wordpress-develop.git&apos;
+                git branch: &apos;4.9&apos;, credentialsId: &apos;gitlab&apos;, url: GITLAB_URL + &apos;/root/wordpress-develop.git&apos;
                 }
                     
             }
