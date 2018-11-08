@@ -14,6 +14,9 @@ bash ./helm/jenkins/jenkins.sh ${JENKINS_IP} ${JENKINS_PORT} ${NS}
 sleep 2
 bash wait-for.sh pod -lapp=pure-jenkins -n ${NS}
 
+DOCKER_REGISTRY=${NEXUS_IP}:${DOCKER_REGISTRY_PORT}
+kubectl create -n ${NS} secret docker-registry jenkins-pull --docker-server=$DOCKER_REGISTRY --docker-username=admin --docker-password=admin123 --docker-email=pure@pure.pure
+
 #Install GitLab
 bash ./helm/gitlab/gitlab.sh ${GITLAB_IP} ${GITLAB_PORT} ${NS}
 sleep 2

@@ -28,4 +28,4 @@ docker push "$docker_repo_url"/purestorage/vagrant
 docker build -f "$SCRIPTPATH/dockerfile-wordpress" -t "$docker_repo_url"/build-wordpress .
 docker push "$docker_repo_url"/build-wordpress
 
-kubectl create -n ${NS} secret docker-registry jenkins-pull --docker-server=$docker_repo_url --docker-username=admin --docker-password=admin123 --docker-email=pure@pure.pure
+#kubectl create -n ${NS} secret docker-registry jenkins-pull --docker-server=$docker_repo_url --docker-username=admin --docker-password=admin123 --docker-email=pure@pure.pure
