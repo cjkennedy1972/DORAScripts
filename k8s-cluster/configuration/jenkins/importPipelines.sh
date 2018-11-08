@@ -34,10 +34,23 @@ curl -H $CRUMB -X POST 'http://admin:'${JENKINS_TOKEN}'@'${JENKINS_IP}':'${JENKI
   "": "0",
   "credentials": {
     "scope": "GLOBAL",
-    "id": "gitlab",
+    "id": "git-user",
     "username": "root",
     "password": "admin123",
-    "description": "GitLab credentials",
+    "description": "Git user credentials",
+    "$class": "com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl"
+  }
+}'
+
+curl -H $CRUMB -X POST 'http://admin:'${JENKINS_TOKEN}'@'${JENKINS_IP}':'${JENKINS_PORT}'/credentials/store/system/domain/_/createCredentials' \
+--data-urlencode 'json={
+  "": "0",
+  "credentials": {
+    "scope": "GLOBAL",
+    "id": "git-user-aws",
+    "username": "<AWS_CODE_COMMIT_HTTPS_USERNAME>",
+    "password": "<AWS_CODE_COMMIT_HTTPS_PASSWORD>",
+    "description": "AWS CodeCommit credentials",
     "$class": "com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl"
   }
 }'
@@ -55,7 +68,7 @@ curl -H $CRUMB -X POST 'http://admin:'${JENKINS_TOKEN}'@'${JENKINS_IP}':'${JENKI
   }
 }'
 
-## Import WordPress pipeline definition
+## Import WordPress CI pipeline job definition
 cp "$SCRIPTPATH/Build-Wordpress.xml" "$SCRIPTPATH/temp.xml"
 rp "s/{{NEXUS_IP_ADDRESS}}/${NEXUS_IP}/g" "$SCRIPTPATH/temp.xml"
 rp "s/{{NEXUS_PORT}}/${NEXUS_PORT}/g" "$SCRIPTPATH/temp.xml"
@@ -68,7 +81,7 @@ java -jar "$SCRIPTPATH/jenkins-cli.jar" -s http://$JENKINS_IP:$JENKINS_PORT -aut
 
 rm "$SCRIPTPATH/temp.xml"
 
-## Import WordPress CD Job
+## Import WordPress CD pipeline job definition
 cp "$SCRIPTPATH/Build-WordPress-CD.xml" "$SCRIPTPATH/temp.xml"
 rp "s/{{NEXUS_IP_ADDRESS}}/${NEXUS_IP}/g" "$SCRIPTPATH/temp.xml"
 rp "s/{{NEXUS_PORT}}/${NEXUS_PORT}/g" "$SCRIPTPATH/temp.xml"
