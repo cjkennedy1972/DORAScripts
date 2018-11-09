@@ -1,23 +1,13 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: fb-nexus
+  name: pure-nexus
+  annotations:
+    import.volume.beta.purestorage.com/name: cicd-nexus
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 500Gi
-  storageClassName: pure-file
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: fa-nexus
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 500Gi
-  storageClassName: pure-block
+      storage: 50Gi
+  storageClassName: {{STORAGE_CLASS_NAME}}
