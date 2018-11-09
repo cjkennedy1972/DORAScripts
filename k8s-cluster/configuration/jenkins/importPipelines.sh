@@ -69,7 +69,7 @@ curl -H $CRUMB -X POST 'http://admin:'${JENKINS_TOKEN}'@'${JENKINS_IP}':'${JENKI
 }'
 
 ## Import WordPress CI pipeline job definition
-cp "$SCRIPTPATH/Build-Wordpress.xml" "$SCRIPTPATH/temp.xml"
+cp "$SCRIPTPATH/WordPress-CI-Job.xml" "$SCRIPTPATH/temp.xml"
 rp "s/{{NEXUS_IP_ADDRESS}}/${NEXUS_IP}/g" "$SCRIPTPATH/temp.xml"
 rp "s/{{NEXUS_PORT}}/${NEXUS_PORT}/g" "$SCRIPTPATH/temp.xml"
 rp "s/{{GITLAB_IP_ADDRESS}}/${GITLAB_IP}/g" "$SCRIPTPATH/temp.xml"
