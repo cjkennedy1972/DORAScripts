@@ -22,4 +22,4 @@ spec:
       volumes:
         - name: nexus-data-volume
           persistentVolumeClaim:
-            claimName: fb-nexus
+            claimName: {{NEXUS_CLAIM_NAME}}
