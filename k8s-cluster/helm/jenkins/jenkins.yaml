@@ -27,6 +27,8 @@ Master:
     - gitlab-merge-request-jenkins:2.0.0
     - nexus-artifact-uploader:2.10
     - blueocean
+    - codecommit-url-helper:0.0.3
+    - aws-codecommit-jobs:0.3.0
 
 Agent:
   Enabled: true
@@ -35,8 +37,8 @@ Agent:
 # ImagePullSecret: jenkins
   Component: "jenkins-slave"
   Privileged: false
-  Cpu: "2000m"
-  Memory: "10240Mi"
+  Cpu: "1000m"
+  Memory: "1024Mi"
 
 Persistence:
   Enabled: true
