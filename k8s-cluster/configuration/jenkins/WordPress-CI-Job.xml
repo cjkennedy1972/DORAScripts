@@ -128,14 +128,16 @@ podTemplate(label: label, yaml: yamlPodDefinition) {
     container(&apos;buildwordpress&apos;) {
             // Git clone source code.
             stage(&apos;Clone Repository&apos;) {
-                echo &apos;creating sub-directories&apos;
                 dir(env.BUILD_NUMBER + &apos;/build&apos;) {
+                sh &quot;git config --global core.preloadindex true&quot;
+                //sh &quot;git config --global core.fscache true&quot;
+                //sh &quot;git config --global gc.auto 256&quot;
                 git branch: &apos;master&apos;, credentialsId: GIT_CREDENTIALS_USER, url: GIT_REPO_URL
                 }
                     
             }
             // Install dependencies and build project.
-            stage(&apos;Build project&apos;) {
+            stage(&apos;Build Project&apos;) {
                 dir(env.BUILD_NUMBER + &apos;/build&apos;) {
                     sh &quot;npm install&quot;
                     sh &quot;grunt build&quot;
@@ -148,14 +150,14 @@ podTemplate(label: label, yaml: yamlPodDefinition) {
                 }
             }
             // Create tar.gz package
-            stage(&apos;Create Package&apos;) {
+            stage(&apos;Create Build Package&apos;) {
                 dir(env.BUILD_NUMBER + &apos;/build&apos;) {
                     sh &quot;mkdir wordpress&quot; 
                     sh &quot;cp -rf build/* wordpress/&quot;
                     sh &quot;tar -czvf wordpress.tar.gz wordpress/&quot;
                 }
             }
-            stage(&apos;Add to Nexus artifacts&apos;) {
+            stage(&apos;Add to Artifacts Repository&apos;) {
                 dir(env.BUILD_NUMBER + &apos;/build&apos;) {
                     nexusArtifactUploader artifacts: [[artifactId: &apos;wordpress-package&apos;, classifier: &apos;&apos;, file: &apos;wordpress.tar.gz&apos;, type: &apos;tar.gz&apos;]], credentialsId: &apos;nexus&apos;, groupId: &apos;&apos;, nexusUrl: NEXUS_URL, nexusVersion: &apos;nexus3&apos;, protocol: &apos;http&apos;, repository: &apos;builds-store&apos;, version: &apos;1.0.0.&apos;+env.BUILD_NUMBER
                 }
