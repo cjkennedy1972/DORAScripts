@@ -1,28 +1,8 @@
 #!/bin/bash
-#Set the default namespace to which we'll deploy our Kubernetes resources
-NS="pure"
-GITLAB_IP="1.1.1.1"
-GITLAB_PORT="8080"
+
 SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 
-if [ ! -z $1 ]
-then
-    GITLAB_IP=$1
-else
-    echo "Aborting, the GITLAB_IP parameter is missing"
-    exit 0
-fi
-#echo $JENKINS_IP
-
-if [ ! -z $2 ]
-then
-    GITLAB_PORT=$2
-fi
-
-if [ ! -z $3 ]
-then
-    NS=$3
-fi
+. "$SCRIPTPATH"/../../environment.sh
 
 # read the yml template from a file and substitute the string 
 # {{GITLAB_IP_ADDRESS}} with the value of the NEXUS_IP variable

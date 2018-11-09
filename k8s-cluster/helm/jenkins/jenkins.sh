@@ -1,28 +1,8 @@
 #!/bin/bash
-#Set the default namespace to which we'll deploy our Kubernetes resources
-NS="pure"
-JENKINS_IP="1.1.1.1"
-JENKINS_PORT=8081
 
 SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 
-if [ ! -z $1 ]
-then
-    JENKINS_IP=$1
-else
-    echo "Aborting, the JENKINS_IP parameter is missing"
-    exit 0
-fi
-#echo $JENKINS_IP
-if [ ! -z $2 ]
-then
-    JENKINS_PORT=$2
-fi
-
-if [ ! -z $3 ]
-then
-    NS=$3
-fi
+. "$SCRIPTPATH"/../../environment.sh
 
 # reads the yml template from a file and substitutes: 
 # {{JENKINS_IP_ADDRESS}} with the value of the JENKINS_IP variable
