@@ -20,5 +20,17 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 500Gi
+      storage: 10Gi
   storageClassName: pure-file
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: fa-jenkins-slave
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: pure-block
