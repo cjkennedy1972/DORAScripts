@@ -13,22 +13,22 @@ GITLAB_PORT="8083"
 DOCKER_REGISTRY_PORT="5000"
 
 SECRET_TOKEN="{AQAAABAAAAAQockYoJutL7ZGpK6oePv79oGf7TaXymyHJ6CrQJLYBrk=}"
+STORAGE_CLASS_NAME="pure-file" #FlashBlade storage class by default
+TARGET_DEPLOYMENT="fb" #"fa" for on-prem FlashArray deployment, "fb" for on-prem FlashBlade deployment
 
-#Change to 'fa-nexus' if you want to provision Nexus data on FlashArray
-TARGET_STORAGE="fa"
-STORAGE_CLASS_NAME="pure-file"
-
-if [[ $TARGET_STORAGE == "fa" ]]
+if [[ $TARGET_DEPLOYMENT == "fa" ]]
 then
     STORAGE_CLASS_NAME="pure-block"
+else
+    STORAGE_CLASS_NAME="pure-file"
 fi
 
-IMPORT_VOLUMES_COMMENT=
+IMPORT_VOLUMES_COMMENT="#"
 IMPORT_VOLUMES=0
 
 if [[ $IMPORT_VOLUMES == 1 ]]
 then
-    IMPORT_VOLUMES_COMMENT="#"
+    IMPORT_VOLUMES_COMMENT=""
 fi
 
 ## Environment variables/ Params for CD jobs - Build No, vSphere creds

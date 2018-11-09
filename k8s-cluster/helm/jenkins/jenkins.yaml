@@ -45,7 +45,7 @@ Persistence:
   ## A manually managed Persistent Volume and Claim
   ## Requires Persistence.Enabled: true
   ## If defined, PVC must be created manually before volume will be bound
-  ExistingClaim: fb-jenkins
+  ExistingClaim: pure-jenkins
 
 ## Install Default RBAC roles and bindings
 rbac:

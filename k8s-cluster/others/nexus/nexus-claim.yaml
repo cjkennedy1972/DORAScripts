@@ -3,7 +3,7 @@ apiVersion: v1
 metadata:
   name: pure-nexus
   annotations:
-    import.volume.beta.purestorage.com/name: cicd-nexus
+{{IMPORT_VOLUMES_COMMENT}}    import.volume.beta.purestorage.com/name: cicd-nexus
 spec:
   accessModes:
     - ReadWriteOnce

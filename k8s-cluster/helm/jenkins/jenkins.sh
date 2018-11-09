@@ -9,6 +9,9 @@ SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 # {{JENKINS_PORT}} with the value of the JENKINS_PORT variable
 template=`cat "$SCRIPTPATH/jenkins.yaml" | sed "s/{{JENKINS_IP_ADDRESS}}/$JENKINS_IP/g" | sed "s/{{JENKINS_PORT}}/$JENKINS_PORT/g"`
 
+claim=`cat "$SCRIPTPATH/jenkins-claim.yaml" | sed "s/{{STORAGE_CLASS_NAME}}/$STORAGE_CLASS_NAME/g" | sed "s/{{IMPORT_VOLUMES_COMMENT}}/$IMPORT_VOLUMES_COMMENT/g" `
+echo "$claim" | kubectl create -n ${NS} -f -
+
 # Install jenkins component 
 kubectl create -f "$SCRIPTPATH/jenkins-claim.yaml" -n ${NS}
 echo "$template" | helm install --name pure-jenkins "$SCRIPTPATH/jenkins" --namespace ${NS} -f -

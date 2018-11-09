@@ -11,8 +11,6 @@ deploy=`cat "$SCRIPTPATH/deployment.yaml" | sed "s/{{NEXUS_CLAIM_NAME}}/$NEXUS_C
 
 claim=`cat "$SCRIPTPATH/nexus-claim.yaml" | sed "s/{{STORAGE_CLASS_NAME}}/$STORAGE_CLASS_NAME/g" | sed "s/{{IMPORT_VOLUMES_COMMENT}}/$IMPORT_VOLUMES_COMMENT/g" `
 
-echo "$claim"
-
 echo "$claim" | kubectl create -n ${NS} -f -
 #echo $SCRIPTPATH
 # Install Nexus Repository Manager resources 

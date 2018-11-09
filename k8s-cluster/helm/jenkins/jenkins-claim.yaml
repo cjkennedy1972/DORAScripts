@@ -1,14 +1,16 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: fb-jenkins
+  name: pure-jenkins
+  annotations:
+{{IMPORT_VOLUMES_COMMENT}}    import.volume.beta.purestorage.com/name: cicd-jenkins
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 500Gi
-  storageClassName: pure-file
+      storage: 50Gi
+  storageClassName: {{STORAGE_CLASS_NAME}}
 ---
 #used in Jenkins pipelines as the persistent storage for the build containers
 kind: PersistentVolumeClaim
