@@ -12,8 +12,10 @@ GITLAB_PORT="8083"
 
 DOCKER_REGISTRY_PORT="5000"
 
-#
 SECRET_TOKEN="{AQAAABAAAAAQockYoJutL7ZGpK6oePv79oGf7TaXymyHJ6CrQJLYBrk=}"
+
+#Change to 'fa-nexus' if you want to provision Nexus data on FlashArray
+NEXUS_CLAIM_NAME="fb-nexus"
 
 ## Environment variables/ Params for CD jobs - Build No, vSphere creds
 ## All build  which satsify (build number % MASTER_BUILD_NO == 0 ) will launch Stage 2 + 3 VMs
@@ -34,11 +36,11 @@ JENKINS_IP="10.21.236.110"
 GITLAB_IP="10.21.236.109"
 
 #Create and paste below your GitLab API Access Token (with 'api' scope) generated from http://<GITLAB_IP>:<GITLAB_PORT>/profile/personal_access_tokens
-GITLAB_TOKEN="vQWTRjFu_hSzaE57g-By"
+GITLAB_TOKEN="xw9uv738zjfSAknDbxsy"
 
 #Create and paste below your Jenkins API  Token generated from http://<JENKINS_IP>:<JENKINS_PORT>/user/admin/configure
-JENKINS_TOKEN="11be5214e0c29732b4a8f7e4938ec4f0bb"
+JENKINS_TOKEN="1153a29f846f730118b3baced5c5fb867d"
 
-#NEXUS_IP="10.21.236.87"
-#JENKINS_IP="10.21.236.89"
-#GITLAB_IP="10.21.236.88"
+NEXUS_IP="10.21.236.87"
+JENKINS_IP="10.21.236.89"
+GITLAB_IP="10.21.236.88"
