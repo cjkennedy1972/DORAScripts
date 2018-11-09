@@ -8,8 +8,8 @@ Master:
   UseSecurity: true
   AdminUser: admin
   AdminPassword: admin123
-  Cpu: "8000m"
-  Memory: "51200Mi"
+  Cpu: "2000m"
+  Memory: "8Gi"
   ServicePort: {{JENKINS_PORT}}
   ServiceType: ClusterIP
   ExternalIP: {{JENKINS_IP_ADDRESS}}

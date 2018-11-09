@@ -29,8 +29,8 @@ resources:
   ## redis, which helps some. Refer to the guidelines for larger installs.
   ## ref: https://docs.gitlab.com/ce/install/requirements.html#hardware-requirements
   requests:
-    memory: 40Gi
-    cpu: 4000m
+    memory: 10Gi
+    cpu: 2000m
   limits:
     memory: 60Gi
     cpu: 6
@@ -60,7 +60,7 @@ postgresql:
   # 9.6 is the newest supported version for the GitLab container
   imageTag: "9.6"
   cpu: 2000m
-  memory: 20Gi
+  memory: 8Gi
 
   postgresUser: gitlab
   postgresPassword: gitlab
@@ -78,7 +78,7 @@ redis:
 
   resources:
     requests:
-      memory: 20Gi
+      memory: 8Gi
 
   persistence:
     enabled: true
