@@ -28,7 +28,7 @@ metadata:
   name: pure-gitlab-redis
 spec:
   accessModes:
-    - ReadWriteMany
+    - {{PV_ACCESS_MODE}}
   resources:
     requests:
       storage: 300Gi

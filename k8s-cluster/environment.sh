@@ -16,10 +16,12 @@ SECRET_TOKEN="{AQAAABAAAAAQockYoJutL7ZGpK6oePv79oGf7TaXymyHJ6CrQJLYBrk=}"
 STORAGE_CLASS_NAME="pure-file" #FlashBlade storage class by default
 TARGET_STORAGE="fb" #"fa" for on-prem FlashArray deployment, "fb" for on-prem FlashBlade deployment
 TARGET_DEPLOYMENT="onprem"
+PV_ACCESS_MODE="ReadWriteMany"
 
 if [[ $TARGET_STORAGE == "fa" ]]
 then
     STORAGE_CLASS_NAME="pure-block"
+    PV_ACCESS_MODE="ReadWriteOnce"
 else
     STORAGE_CLASS_NAME="pure-file"
 fi

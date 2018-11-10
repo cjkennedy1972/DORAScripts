@@ -7,7 +7,7 @@ SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 
 # Install GitLab component 
 # Create persistent value claims for PostgreSQL, Redis, ETC and GitLab Data
-claim=`cat "$SCRIPTPATH/pvc.yaml" | sed "s/{{STORAGE_CLASS_NAME}}/$STORAGE_CLASS_NAME/g" | sed "s/{{IMPORT_VOLUMES_COMMENT}}/$IMPORT_VOLUMES_COMMENT/g" `
+claim=`cat "$SCRIPTPATH/pvc.yaml" | sed "s/{{STORAGE_CLASS_NAME}}/$STORAGE_CLASS_NAME/g" | sed "s/{{PV_ACCESS_MODE}}/$PV_ACCESS_MODE/g" | sed "s/{{IMPORT_VOLUMES_COMMENT}}/$IMPORT_VOLUMES_COMMENT/g" `
 echo "$claim" | kubectl create -n ${NS} -f -
 
 # Install GitLab's Helm chart
