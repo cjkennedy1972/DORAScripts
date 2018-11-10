@@ -44,14 +44,14 @@ persistence:
   ##
   gitlabEtc:
     enabled: true
-    claimName: fb-gitlab-etc
+    claimName: pure-gitlab-etc
 
   ## This volume is used to store git data and other project files.
   ## ref: https://docs.gitlab.com/omnibus/settings/configuration.html#storing-git-data-in-an-alternative-directory
   ##
   gitlabData:
     enabled: true
-    claimName: fb-gitlab-data
+    claimName: pure-gitlab-data
 
 ## Configuration values for the postgresql dependency.
 ## ref: https://github.com/kubernetes/charts/blob/master/stable/postgresql/README.md
@@ -68,7 +68,7 @@ postgresql:
 
   persistence:
     enabled: true
-    existingClaim: fb-gitlab-postgres
+    existingClaim: pure-gitlab-postgres
 
 ## Configuration values for the redis dependency.
 ## ref: https://github.com/kubernetes/charts/blob/master/stable/redis/README.md
@@ -82,4 +82,4 @@ redis:
 
   persistence:
     enabled: true
-    existingClaim: fb-gitlab-redis
+    existingClaim: pure-gitlab-redis

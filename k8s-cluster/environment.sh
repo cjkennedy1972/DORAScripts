@@ -14,9 +14,10 @@ DOCKER_REGISTRY_PORT="5000"
 
 SECRET_TOKEN="{AQAAABAAAAAQockYoJutL7ZGpK6oePv79oGf7TaXymyHJ6CrQJLYBrk=}"
 STORAGE_CLASS_NAME="pure-file" #FlashBlade storage class by default
-TARGET_DEPLOYMENT="fb" #"fa" for on-prem FlashArray deployment, "fb" for on-prem FlashBlade deployment
+TARGET_STORAGE="fb" #"fa" for on-prem FlashArray deployment, "fb" for on-prem FlashBlade deployment
+TARGET_DEPLOYMENT="onprem"
 
-if [[ $TARGET_DEPLOYMENT == "fa" ]]
+if [[ $TARGET_STORAGE == "fa" ]]
 then
     STORAGE_CLASS_NAME="pure-block"
 else

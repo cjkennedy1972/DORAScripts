@@ -15,7 +15,7 @@ sleep 2
 bash wait-for.sh pod -lapp=pure-jenkins -n ${NS}
 
 #Install only GitLab on FlashBlade
-if [[ $TARGET_DEPLOYMENT == "fb" ]]
+if [[ $TARGET_DEPLOYMENT == "onprem" ]]
 then
     bash ./helm/gitlab/gitlab.sh
     sleep 2
