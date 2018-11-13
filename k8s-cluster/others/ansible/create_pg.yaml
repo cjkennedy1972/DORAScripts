@@ -1,0 +1,12 @@
+- name: Create protection group for Nexus and Jenkins volumes
+  hosts: local
+  gather_facts: no
+  tasks:
+  - name: Create protection group for Nexus and Jenkins volumes
+    purefa_pg:
+      pgroup: cicd-stack
+      volume:
+        - "{{nexus_pso_vol}}"
+        - "{{jenkins_pso_vol}}"
+      fa_url: "{{flasharray_url}}"
+      api_token: "{{flasharray_api_token}}"

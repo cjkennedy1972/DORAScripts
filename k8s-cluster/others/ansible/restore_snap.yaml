@@ -1,0 +1,21 @@
+- name: Restoring snapshots for Nexus and Jenkins volumes
+  hosts: local
+  gather_facts: no
+  tasks:
+    - name: Create cicd-nexus volume from Nexus snapshot
+      purefa_snap:
+        name: "{{nexus_snap}}"
+        target: "cicd-nexus"
+        overwrite: true
+        suffix: ""
+        fa_url: "{{flasharray_url}}"
+        api_token: "{{flasharray_api_token}}"
+        state: copy
+    - name: Create cicd-jenkins volume from Jenkins snapshot
+      purefa_snap:
+        name: "{{jenkins_snap}}"
+        target: "cicd-jenkins"
+        suffix: ""
+        fa_url: "{{flasharray_url}}"
+        api_token: "{{flasharray_api_token}}"
+        state: copy
