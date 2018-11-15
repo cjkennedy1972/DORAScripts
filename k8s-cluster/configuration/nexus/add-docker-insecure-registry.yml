@@ -5,19 +5,55 @@
   become_user: root
   become_method: sudo
   tasks:
-    - name: Include vars of all.yaml
-      include_vars: 'docker-insecure-registries.yml'
+    - name: Check that the daemon.json exists
+      stat:
+        path: "/etc/docker/daemon.json"
+      register: stat_result
+
     - name: Create daemon.json file if it doesn't exist
       file:
         path: "/etc/docker/daemon.json"
         state: touch
-    - name: Back up exist daemon.json file
-      copy:
-        src: "/etc/docker/daemon.json"
-        dest: "/etc/docker/daemon-backup-pure.json"
+      when: stat_result.stat.exists == False
+
     - name: Add Nexus insecure registry entry
       copy:
-        content: '{"insecure-registries": ["{{ docker_insecure_registry }}"]}'
+          content: '{"insecure-registries": ["{{ docker_insecure_registry }}"]}'
+          dest: "/etc/docker/daemon.json"
+      when: stat_result.stat.exists == False
+
+    - name: Load var from daemon.json file
+      slurp:
+        src: "/etc/docker/daemon.json"
+      register: imported_var
+      when: stat_result.stat.exists == True
+
+    - debug:
+        msg: "{{ imported_var.content|b64decode|from_json }}"
+      when: stat_result.stat.exists == True
+
+    - name: Install jsonpointer to update daemon.json file
+      command: "{{item}}"
+      with_items:
+      - apt install python3-pip -y
+      - pip3 install jsonpointer
+      when: stat_result.stat.exists == True
+
+    - name: Update daemon.json file
+      json_modify:
+        data: "{{ imported_var.content|b64decode|from_json }}"
+        pointer: "/insecure-registries"
+        action: extend
+        extend:
+          - "{{ docker_insecure_registry }}"
+      register: result
+      when: stat_result.stat.exists == True
+
+    - name: write "{{ docker_insecure_registry }}" entry to daemon.json file
+      copy:
+        content: "{{ result.result }}"
         dest: "/etc/docker/daemon.json"
-    - name: Restart docker
+      when: stat_result.stat.exists == True
+
+    - name: Restart docker sevice
       service: name=docker state=restarted
