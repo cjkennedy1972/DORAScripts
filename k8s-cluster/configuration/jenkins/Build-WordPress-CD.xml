@@ -22,21 +22,27 @@
           <trim>true</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
-          <name>GITLAB_URL</name>
-          <description>Enter the URL of your GitLab server in the following format: http://{{GITLAB_IP_ADDRESS}}:{{GITLAB_PORT}}</description>
-          <defaultValue>http://{{GITLAB_IP_ADDRESS}}:{{GITLAB_PORT}}</defaultValue>
+          <name>GIT_REPO_URL</name>
+          <description>Enter the URL of your Git repository in the following format: http://{{GITLAB_IP_ADDRESS}}:{{GITLAB_PORT}}/root/wordpress-cd.git</description>
+          <defaultValue>http://{{GITLAB_IP_ADDRESS}}:{{GITLAB_PORT}}/root/wordpress-cd.git</defaultValue>
           <trim>true</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>NEXUS_URL</name>
           <description>Enter the URL of your Sonatype Nexus server in the following format: {{NEXUS_IP_ADDRESS}}:{{NEXUS_PORT}}</description>
-          <defaultValue>http://{{NEXUS_IP_ADDRESS}}:{{NEXUS_PORT}}</defaultValue>
+          <defaultValue>{{NEXUS_IP_ADDRESS}}:{{NEXUS_PORT}}</defaultValue>
           <trim>true</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>DOCKER_REPO_URL</name>
           <description>URL of your private Docker repository where Jenkins slave and custom WordPress containers are pulled from. Enter the URL in the following format: {{NEXUS_IP_ADDRESS}}:{{DOCKER_REGISTRY_PORT}}</description>
           <defaultValue>{{NEXUS_IP_ADDRESS}}:{{DOCKER_REGISTRY_PORT}}</defaultValue>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>GIT_CREDENTIALS_USER</name>
+          <description>Name of the credentials user to use to authenticate with the Git repository</description>
+          <defaultValue>git-user</defaultValue>
           <trim>true</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
@@ -61,6 +67,7 @@
 def DOCKER_URL = &quot;${params.DOCKER_REPO_URL}&quot;
 def GITLAB_URL = &quot;${params.GITLAB_URL}&quot;
 def NEXUS_URL = &quot;${params.NEXUS_URL}&quot;
+def GIT_CREDENTIALS_USER = &quot;${params.GIT_CREDENTIALS_USER}&quot;
 def WP_BUILD_NUMBER = &quot;${params.WP_BUILD_NUMBER}&quot;
 
 def VSPHERE_HOST = &apos;{{VSPHERE_HOST}}&apos;
@@ -72,17 +79,73 @@ def VM_MEMORY = {{VM_MEMORY}}
 def VM_CPU = {{VM_CPU}}
 def VM_COUNT = &quot;${params.NO_OF_VMS}&quot;
 
+
+def yamlPodDefinition = &quot;&quot;&quot;
+apiVersion: v1
+kind: Pod
+metadata:
+  generateName: agent-k8s-
+  labels:
+    name: jnlp
+    label: jnlp
+spec:
+  securityContext:
+    runAsUser: 1000
+  containers:
+  - name: jnlp
+    #image: &quot;&quot;&quot; + DOCKER_REPO_URL + &quot;&quot;&quot;/jnlp-slave-sudo 
+    image: jenkins/jnlp-slave
+    workingDir: /home/jenkins
+    tty: true
+    securityContext:
+      runAsUser: 0
+      privileged: true
+      #runAsUser: 2000
+      #allowPrivilegeEscalation: false
+    volumeMounts:
+      - 
+        mountPath: /home/jenkins
+        name: pure-volume
+        readOnly: false
+  - name: wordpress-cd
+    image: &quot;&quot;&quot; + DOCKER_REPO_URL + &quot;&quot;&quot;/purestorage/vagrant:latest
+    imagePullPolicy: IfNotPresent
+    #workingDir: /home/jenkins/workspace/&quot;&quot;&quot; + env.JOB_NAME + &quot;&quot;&quot;
+    workingDir: /home/jenkins
+    command: 
+    - cat
+    volumeMounts:
+      - 
+        mountPath: /home/jenkins
+        name: pure-volume
+        readOnly: false
+    tty: true
+    securityContext:
+      runAsUser: 0
+      privileged: true
+  volumes:
+    - name: pure-volume
+      persistentVolumeClaim:
+        claimName: fb-jenkins-slave
+  imagePullSecrets:
+  - name: jenkins-pull
+&quot;&quot;&quot;
+
 // Create pod template using desired image.
-podTemplate(label: label, containers: [
-    containerTemplate(name: &apos;jnlp&apos;, image: DOCKER_URL + &apos;/jnlp-slave-sudo&apos;, alwaysPullImage: true, args: &apos;${computer.jnlpmac} ${computer.name}&apos;, workingDir: &apos;/home/jenkins/dev-jenkins&apos;),
-    containerTemplate(name: &apos;wordpress-cd&apos;, image: DOCKER_URL + &apos;/purestorage/vagrant:latest&apos;, alwaysPullImage: true, workingDir: &apos;/home/jenkins/dev-jenkins&apos;,  ttyEnabled: true, command: &apos;cat&apos;)
-    ], 
-    
+
+
+podTemplate(label: label, yaml: yamlPodDefinition) {
+// Create pod template using desired image.
+//podTemplate(label: label, containers: [
+//    containerTemplate(name: &apos;jnlp&apos;, image: DOCKER_URL + &apos;/jnlp-slave-sudo&apos;, alwaysPullImage: true, args: &apos;${computer.jnlpmac} ${computer.name}&apos;, workingDir: &apos;/home/jenkins/dev-jenkins&apos;),
+//    containerTemplate(name: &apos;wordpress-cd&apos;, image: DOCKER_URL + &apos;/purestorage/vagrant:latest&apos;, alwaysPullImage: true, workingDir: &apos;/home/jenkins/dev-jenkins&apos;,  ttyEnabled: true, command: &apos;cat&apos;)
+//    ], 
+//    
     //mounting the Pure Storage FlashBlade volume on pod
-    volumes: [
-    persistentVolumeClaim(mountPath: &apos;/home/jenkins/dev-jenkins/workspace/&apos; + env.JOB_NAME, claimName: &apos;fb-jenkins-slave&apos;, readOnly: false)
-    ],
-    imagePullSecrets: [ &apos;jenkins-pull&apos; ]) {
+//    volumes: [
+//    persistentVolumeClaim(mountPath: &apos;/home/jenkins/dev-jenkins/workspace/&apos; + env.JOB_NAME, claimName: &apos;fb-jenkins-slave&apos;, readOnly: false)
+//    ],
+//    imagePullSecrets: [ &apos;jenkins-pull&apos; ]) {
     node(label) {
         //Installing the vagrant plugin on container
         container(&apos;wordpress-cd&apos;){
@@ -92,7 +155,7 @@ podTemplate(label: label, containers: [
                 if ((env.BUILD_ID.toInteger() % {{MASTER_BUILD_NO}}) == 0) {
                     //cloning the stage-cd repo having vagrantfile and bootstrap script                
                     stage(&apos;Clone Repository&apos;) {
-                       git branch: &apos;master&apos;, credentialsId: &apos;gitlab&apos; , url: GITLAB_URL + &apos;/root/wordpress-cd.git&apos;
+                       git branch: &apos;master&apos;, credentialsId: GIT_CREDENTIALS_USER , url: GIT_REPO_URL
                     }
                     
                    

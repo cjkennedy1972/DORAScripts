@@ -53,11 +53,11 @@ JENKINS_IP="10.21.236.110"
 GITLAB_IP="10.21.236.109"
 
 #Create and paste below your GitLab API Access Token (with 'api' scope) generated from http://<GITLAB_IP>:<GITLAB_PORT>/profile/personal_access_tokens
-GITLAB_TOKEN="xw9uv738zjfSAknDbxsy"
+GITLAB_TOKEN="nULJkR1aK7ssMHmtSjqS"
 
 #Create and paste below your Jenkins API  Token generated from http://<JENKINS_IP>:<JENKINS_PORT>/user/admin/configure
-JENKINS_TOKEN="1153a29f846f730118b3baced5c5fb867d"
+JENKINS_TOKEN="113da1adb6e2cead6d586b7b95fefc8b9a"
 
-NEXUS_IP="10.21.236.87"
-JENKINS_IP="10.21.236.89"
-GITLAB_IP="10.21.236.88"
+#NEXUS_IP="10.21.236.87"
+#JENKINS_IP="10.21.236.89"
+#GITLAB_IP="10.21.236.88"

@@ -2,7 +2,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: pure-jenkins
-  annotations:
+{{IMPORT_VOLUMES_COMMENT}}  annotations:
 {{IMPORT_VOLUMES_COMMENT}}    import.volume.beta.purestorage.com/name: cicd-jenkins
 spec:
   accessModes:
