@@ -8,27 +8,27 @@ Master:
   UseSecurity: true
   AdminUser: admin
   AdminPassword: admin123
-  Cpu: "2000m"
-  Memory: "8Gi"
+  Cpu: "8000m"
+  Memory: "20Gi"
   ServicePort: {{JENKINS_PORT}}
   ServiceType: ClusterIP
   ExternalIP: {{JENKINS_IP_ADDRESS}}
   ContainerPort: 8080
   # List of plugins to be install during Jenkins master start
   InstallPlugins:
-    - kubernetes:1.12.6
-    - workflow-aggregator:2.6
-    - workflow-job:2.25
-    - credentials-binding:1.16
-    - git:3.9.1
-    - gitlab-plugin:1.5.10
-    - gitlab-oauth:1.4
-    - gitlab-hook:1.4.2
-    - gitlab-merge-request-jenkins:2.0.0
-    - nexus-artifact-uploader:2.10
+    - kubernetes #:1.12.6
+    - workflow-aggregator #:2.6
+    - workflow-job #:2.25
+    - credentials-binding #:1.16
+    - git #:3.9.1
+    - gitlab-plugin #:1.5.10
+    - gitlab-oauth #:1.4
+    - gitlab-hook #:1.4.2
+    - gitlab-merge-request-jenkins #:2.0.0
+    - nexus-artifact-uploader #:2.10
     - blueocean
-    - codecommit-url-helper:0.0.3
-    - aws-codecommit-jobs:0.3.0
+    - codecommit-url-helper #:0.0.3
+    - aws-codecommit-jobs #:0.3.0
 
 Agent:
   Enabled: true
