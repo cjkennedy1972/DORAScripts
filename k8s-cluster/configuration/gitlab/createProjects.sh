@@ -21,7 +21,7 @@ curl -H "PRIVATE-TOKEN: $GITLAB_TOKEN" -H 'Content-Type: application/json' -X PO
 echo -e "\nDone setting up web hook in wordpress-develop repository"
 
 # Setting up new project for storing WordPress CD files
-curl --header "PRIVATE-TOKEN: $GITLAB_TOKEN" -X POST "http://$GITLAB_IP:$GITLAB_PORT/api/v3/projects?name=wordpress-cd&issues_enabled=false"
+curl --header "PRIVATE-TOKEN: $GITLAB_TOKEN" -X POST "http://$GITLAB_IP:$GITLAB_PORT/api/v3/projects?name=wordpress-cd&issues_enabled=false&default_branch=4.9"
 
 ## Git init and check-in files
 cd /tmp
