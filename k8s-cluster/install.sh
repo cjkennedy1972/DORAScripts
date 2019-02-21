@@ -23,3 +23,13 @@ then
     bash wait-for.sh pod -lapp=pure-gitlab-postgresql -n ${NS}
     bash wait-for.sh pod -lapp=pure-gitlab-gitlab-ce -n ${NS}
 fi
+
+#Install metal-LB
+bash ./others/metal-lb/metal-lb.sh
+sleep 2
+bash wait-for.sh pod -lapp=metallb -n ${METAL_LB_NS}
+
+#Install Nginx Ingress
+bash ./others/nginx-ingress/nginx-ingress.sh
+sleep 2
+bash wait-for.sh pod -lapp=ingress-nginx -n ${NGINX_INGRESS_NS}
