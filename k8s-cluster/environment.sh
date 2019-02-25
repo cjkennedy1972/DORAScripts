@@ -53,6 +53,8 @@ VM_CPU="1"
 NEXUS_IP="10.21.236.108"
 JENKINS_IP="10.21.236.110"
 GITLAB_IP="10.21.236.109"
+
+## CIDR Block for the IPs available for LoadBalancer use
 METAL_LB_IP_CIDR="10.21.236.91/32"
 
 #Create and paste below your GitLab API Access Token (with 'api' scope) generated from http://<GITLAB_IP>:<GITLAB_PORT>/profile/personal_access_tokens
