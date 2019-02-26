@@ -10,3 +10,5 @@ bash ./configuration/jenkins/importPipelines.sh
 
 bash ./configuration/nexus/create-and-push-docker-images.sh
 
+ bash ./configuration/nginx-ingress/nginx-ingress.sh
+

@@ -6,7 +6,7 @@ metadata:
 data:
   config: |
     address-pools:
-    - name: my-ip-space
+    - name: metallb-ip-space
       protocol: layer2
       addresses:
       - {{METAL_LB_IP_CIDR}}

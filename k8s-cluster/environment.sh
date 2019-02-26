@@ -54,6 +54,12 @@ NEXUS_IP="10.21.236.108"
 JENKINS_IP="10.21.236.110"
 GITLAB_IP="10.21.236.109"
 
+#Set Fully Qualified Domain Names of the Sonatype Nexus, Jenkins and GitLab services in Kubernetes
+NEXUS_FQDN="nexus.puretec.purestorage.com"
+JENKINS_FQDN="jenkins.puretec.purestorage.com"
+GITLAB_FQDN="git.puretec.purestorage.com"
+DOCKER_FQDN="git.puretec.purestorage.com"
+
 ## CIDR Block for the IPs available for LoadBalancer use
 METAL_LB_IP_CIDR="10.21.236.91/32"
 
@@ -66,3 +72,4 @@ JENKINS_TOKEN="113da1adb6e2cead6d586b7b95fefc8b9a"
 #NEXUS_IP="10.21.236.87"
 #JENKINS_IP="10.21.236.89"
 #GITLAB_IP="10.21.236.88"
+
