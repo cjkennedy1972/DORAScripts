@@ -9,7 +9,7 @@ spec:
   rules:
   - host: {{JENKINS_FQDN}}
     http:
-      paths: 
+      paths:
       - path: /
         backend:
           serviceName: pure-jenkins
@@ -33,5 +33,5 @@ spec:
       paths:
       - path: /
         backend:
-          serviceName: ps-gitlab-gitlab-ce
+          serviceName: pure-gitlab-gitlab-ce
           servicePort: {{GITLAB_PORT}}

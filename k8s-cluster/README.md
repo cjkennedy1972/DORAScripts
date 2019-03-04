@@ -13,7 +13,7 @@ To set up these, we first need to setup [environment.sh] file
 MetalLB needs an available IP range/ CIDR block which it can consume and allocate IPs to load balancer services in Kubernetes. Before we start the installation, we need set the IP range in environment.sh file for variable ` METAL_LB_IP_CIDR`. For example
 ```shell
 ## CIDR Block for the IPs available for LoadBalancer use
-METAL_LB_IP_CIDR="10.21.236.91/32" # or "10.21.236.91-95"
+METAL_LB_IP_CIDR="10.21.236.91/32" # or "10.21.236.91-10.21.236.95"
 ```
 
 ## Nginx-Ingress setup
