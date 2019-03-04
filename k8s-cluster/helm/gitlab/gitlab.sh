@@ -14,4 +14,4 @@ echo "$claim" | kubectl create -n ${NS} -f -
 # read the yml template from a file and substitute the string 
 # {{GITLAB_IP_ADDRESS}} with the value of the GITLAB_IP variable
 template=`cat "$SCRIPTPATH/gitlab.yaml" | sed "s/{{GITLAB_IP_ADDRESS}}/$GITLAB_IP/g" | sed "s/{{GITLAB_PORT}}/$GITLAB_PORT/g"`
-echo "$template" | helm install --name pure-gitlab "$SCRIPTPATH/gitlab-ce" --namespace ${NS} -f -
+echo "$template" | helm install --name pure-gitlab-${NS} "$SCRIPTPATH/gitlab-ce" --namespace ${NS} -f -
