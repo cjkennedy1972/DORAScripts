@@ -2,7 +2,7 @@
 - [x] Enter information for MetalLB and Nginx-Ingress setup
 - [ ] Provide details of how to setup environment.sh for Install Phase
 - [ ] Provide details of setting up Gitlab and Jenkins Tokens for Configure Phase
-- [ ] Provide details if we want to utilize local storage for the CI job
+- [ ] Provide details if we want to utilize local storage (Kontena Storage which internally uses Rook + Ceph) for the CI job
 
 
 # Setup
