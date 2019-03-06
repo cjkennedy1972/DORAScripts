@@ -12,7 +12,7 @@ spec:
       paths:
       - path: /
         backend:
-          serviceName: pure-jenkins
+          serviceName: pure-jenkins-{{NS}}
           servicePort:  {{JENKINS_PORT}}
   - host: {{DOCKER_FQDN}}
     http:
@@ -33,5 +33,5 @@ spec:
       paths:
       - path: /
         backend:
-          serviceName: pure-gitlab-gitlab-ce
+          serviceName: pure-gitlab-{{NS}}-gitlab-ce
           servicePort: {{GITLAB_PORT}}

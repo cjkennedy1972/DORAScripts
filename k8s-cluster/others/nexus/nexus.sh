@@ -14,7 +14,6 @@ echo "$claim" | kubectl create -n ${NS} -f -
 
 echo "$template" | kubectl create -n ${NS} -f -
 echo "$deploy" | kubectl create -n ${NS} -f -
-#kubectl create -f "$SCRIPTPATH/deployment.yaml" -n ${NS}
 
 DOCKER_REGISTRY=${NEXUS_IP}:${DOCKER_REGISTRY_PORT}
 kubectl create -n ${NS} secret docker-registry jenkins-pull --docker-server=$DOCKER_REGISTRY --docker-username=admin --docker-password=admin123 --docker-email=pure@purestorage.com
