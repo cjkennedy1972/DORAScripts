@@ -3,13 +3,16 @@
 NS="no-pure"
 METAL_LB_NS="metallb-system"
 NGINX_INGRESS_NS="ingress-nginx"
+MONITORING_NS="monitoring"
+
 if [ ! -z $1 ]
 then
     NS=$1
 fi
 
 NEXUS_PORT="9090"
-JENKINS_PORT="9082"
+#JENKINS_PORT="9082"
+JENKINS_PORT="8082"
 GITLAB_PORT="9083"
 
 DOCKER_REGISTRY_PORT="5000"
@@ -72,14 +75,15 @@ METAL_LB_IP_CIDR="10.21.236.95-10.21.236.96"
 GITLAB_TOKEN="ynsD_sQthQYN-ZUMydja"
 
 #Create and paste below your Jenkins API  Token generated from http://<JENKINS_IP>:<JENKINS_PORT>/user/admin/configure
-JENKINS_TOKEN="11a1a721d38e63428d5a9733e96361acf8"
+#JENKINS_TOKEN="11a1a721d38e63428d5a9733e96361acf8"
+JENKINS_TOKEN="111f9715834bf0377ccde813617bccf24a"
 
 #NEXUS_IP="10.21.236.87"
 #JENKINS_IP="10.21.236.89"
 #GITLAB_IP="10.21.236.88"
 
 ## Enable this if you want to install Prometheus/ Grafana
-ENABLE_MONITORING="false"
+ENABLE_MONITORING="true"
 
 ## Enable this if you want to install MetalLB + Nginx-Ingress
 METAL_LB_NGINX_INGRESS="false"

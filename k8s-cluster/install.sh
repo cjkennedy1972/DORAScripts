@@ -38,3 +38,12 @@ then
     sleep 2
     bash wait-for.sh pod -lapp=ingress-nginx -n ${NGINX_INGRESS_NS}
 fi
+
+if [[ $ENABLE_MONITORING == "true" ]]
+then
+    bash ./helm/prometheus/prometheus.sh
+    bash ./helm/grafana/grafana.sh
+    sleep 2
+    bash wait-for.sh pod -lapp=prometheus -n ${MONITORING_NS}
+    bash wait-for.sh pod -lapp=grafana -n ${MONITORING_NS}
+fi
