@@ -81,6 +81,9 @@ global:
     internal:
       names: ['default']
     external: []
+    persistence:
+      storageClass: pure-file
+      size: 50Gi
 
   ## doc/charts/globals.md#configure-minio-settings
   minio:
@@ -297,10 +300,10 @@ global:
 ## End of global
 
 ## Settings to for the Let's Encrypt ACME Issuer
-# certmanager-issuer:
+ certmanager-issuer:
   ## The email address to register certificates requested from Let's Encrypt.
   ## Required if using Let's Encrypt.
-  # email: email@example.com
+   email: marketing@purestorage.com
 
 ## Installation & configuration of stable/cert-manager
 ## See requirements.yaml for current version
@@ -461,7 +464,7 @@ gitlab:
   postgresql:
     persistence:
       storageClass: pure-file
-      size: 8Gi
+      size: 10Gi
   minio:
     persistence:
       storageClass: pure-file
