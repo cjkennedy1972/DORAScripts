@@ -1,6 +1,6 @@
 #!/bin/bash
 #Set Kubernetes namespace
-NS="no-pure"
+NS="pure"
 METAL_LB_NS="metallb-system"
 NGINX_INGRESS_NS="ingress-nginx"
 MONITORING_NS="monitoring"
@@ -10,16 +10,15 @@ then
     NS=$1
 fi
 
-NEXUS_PORT="9090"
-#JENKINS_PORT="9082"
+NEXUS_PORT="90"
 JENKINS_PORT="8082"
-GITLAB_PORT="9083"
+GITLAB_PORT="8083"
 
 DOCKER_REGISTRY_PORT="5000"
 
 SECRET_TOKEN="{AQAAABAAAAAQockYoJutL7ZGpK6oePv79oGf7TaXymyHJ6CrQJLYBrk=}"
 STORAGE_CLASS_NAME="pure-file" #FlashBlade storage class by default
-TARGET_STORAGE="kontena" #"fa" for on-prem FlashArray deployment, "fb" for on-prem FlashBlade deployment, "kontena" for local storages
+TARGET_STORAGE="fb" #"fa" for on-prem FlashArray deployment, "fb" for on-prem FlashBlade deployment, "kontena" for local storages
 TARGET_DEPLOYMENT="onprem"
 PV_ACCESS_MODE="ReadWriteMany"
 
@@ -58,24 +57,24 @@ VM_MEMORY="512"
 VM_CPU="1"
 
 #Set  IP addresses of the Sonatype Nexus, Jenkins and GitLab services in Kubernetes
-NEXUS_IP="10.21.236.81"
+NEXUS_IP="10.21.236.87"
 JENKINS_IP="10.21.236.81"
-GITLAB_IP="10.21.236.81"
+GITLAB_IP="10.21.236.88"
 
 #Set Fully Qualified Domain Names of the Sonatype Nexus, Jenkins and GitLab services in Kubernetes
-NEXUS_FQDN="nexus2.puretec.purestorage.com"
-JENKINS_FQDN="jenkins2.puretec.purestorage.com"
-GITLAB_FQDN="git2.puretec.purestorage.com"
-DOCKER_FQDN="docker2.puretec.purestorage.com"
+NEXUS_FQDN="nexus.puretec.purestorage.com"
+JENKINS_FQDN="jenkins.puretec.purestorage.com"
+GITLAB_FQDN="git.puretec.purestorage.com"
+DOCKER_FQDN="docker.puretec.purestorage.com"
+GITLAB_NEW_FQDN="gitlab.puretec.purestorage.com"
 
 ## CIDR Block for the IPs available for LoadBalancer use
 METAL_LB_IP_CIDR="10.21.236.95-10.21.236.96"
 
 #Create and paste below your GitLab API Access Token (with 'api' scope) generated from http://<GITLAB_IP>:<GITLAB_PORT>/profile/personal_access_tokens
-GITLAB_TOKEN="ynsD_sQthQYN-ZUMydja"
+GITLAB_TOKEN="Qw6j_t-ExApy8Sj3iKcJ"
 
 #Create and paste below your Jenkins API  Token generated from http://<JENKINS_IP>:<JENKINS_PORT>/user/admin/configure
-#JENKINS_TOKEN="11a1a721d38e63428d5a9733e96361acf8"
 JENKINS_TOKEN="111f9715834bf0377ccde813617bccf24a"
 
 #NEXUS_IP="10.21.236.87"
@@ -83,7 +82,7 @@ JENKINS_TOKEN="111f9715834bf0377ccde813617bccf24a"
 #GITLAB_IP="10.21.236.88"
 
 ## Enable this if you want to install Prometheus/ Grafana
-ENABLE_MONITORING="true"
+ENABLE_MONITORING="false"
 
 ## Enable this if you want to install MetalLB + Nginx-Ingress
 METAL_LB_NGINX_INGRESS="false"

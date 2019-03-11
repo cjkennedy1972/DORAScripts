@@ -1,0 +1,15 @@
+dependencies:
+- name: cert-manager
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  version: v0.4.0
+- name: prometheus
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  version: 5.5.3
+- name: postgresql
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  version: 0.12.0
+- name: gitlab-runner
+  repository: https://charts.gitlab.io/
+  version: 0.2.0
+digest: sha256:df6f56f2cd9c15f1c5b024d0849e186c52a7db67bf0bdbeeba16dc79d1dbad9d
+generated: 2019-03-11T23:38:36.411993+05:30

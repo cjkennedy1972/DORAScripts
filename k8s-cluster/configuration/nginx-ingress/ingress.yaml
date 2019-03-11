@@ -35,3 +35,10 @@ spec:
         backend:
           serviceName: pure-gitlab-{{NS}}-gitlab-ce
           servicePort: {{GITLAB_PORT}}
+  - host: {{GITLAB_NEW_FQDN}}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: pure-gitlab-new-{{NS}}-unicorn
+          servicePort: 8181
