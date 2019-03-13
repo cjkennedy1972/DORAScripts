@@ -1,0 +1,127 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@2.31">
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <com.dabsquared.gitlabjenkins.connection.GitLabConnectionProperty plugin="gitlab-plugin@1.5.11">
+      <gitLabConnection></gitLabConnection>
+    </com.dabsquared.gitlabjenkins.connection.GitLabConnectionProperty>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>WP_CD_BUILD_NUMBER</name>
+          <description>Enter the stable wordpress CD Job build number </description>
+          <defaultValue>1</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>GIT_REPO_URL</name>
+          <description>URL of your private Docker repository where Jenkins slave and custom WordPress containers are pulled from. Enter the URL in the following format: 10.21.236.87:5000</description>
+          <defaultValue>http://{{GITLAB_IP_ADDRESS}}:{{GITLAB_PORT}}/root/ha-proxy.git</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>GIT_CREDENTIALS_USER</name>
+          <description>Name of the credentials user to use to authenticate with the Git repository</description>
+          <defaultValue>git-user</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.63">
+    <script>def label = &quot;mypod-${UUID.randomUUID().toString()}&quot;
+def WP_BUILD_NUMBER = &quot;${params.WP_CD_BUILD_NUMBER}&quot;
+def GIT_REPO_URL = &quot;${params.GIT_REPO_URL}&quot;
+def GIT_CREDENTIALS_USER = &quot;${params.GIT_CREDENTIALS_USER}&quot;
+def VM_IPS = &quot;&quot;
+
+def yamlPodDefinition = &quot;&quot;&quot;
+apiVersion: v1
+kind: Pod
+metadata:
+  generateName: agent-k8s-
+  labels:
+    name: jnlp
+    label: jnlp
+spec:
+  securityContext:
+    runAsUser: 1000
+  containers:
+  - name: jnlp
+    image: jenkins/jnlp-slave
+    workingDir: /home/jenkins
+    tty: true
+    securityContext:
+      runAsUser: 0
+      privileged: true
+      #runAsUser: 2000
+      #allowPrivilegeEscalation: false
+    volumeMounts:
+      - 
+        mountPath: /home/jenkins
+        name: slave-volume
+        readOnly: false
+      - 
+        mountPath: /home/master
+        name: master-volume
+        readOnly: false
+  volumes:
+    - name: master-volume
+      persistentVolumeClaim:
+        claimName: pure-jenkins
+    - name: slave-volume
+      persistentVolumeClaim:
+        claimName: fb-jenkins-slave
+&quot;&quot;&quot;
+
+// Create pod template using desired image.
+podTemplate(label: label, yaml: yamlPodDefinition) {
+    node(label) {
+        container(&apos;jnlp&apos;){
+            dir(&quot;/home/master/jobs/WordPress-CD-Job/builds/${WP_BUILD_NUMBER}/&quot;) {
+                    stage(&apos;get-VM-IPs&apos;){
+                    VM_IPS = sh(
+                        script: &quot;cat log| grep &apos; pure-wp-vm&apos;| grep &apos;: IP:&apos;| sed -e &apos;s/pure-wp-vm-//&apos; -e &apos;s/^.*IP://&apos;&quot;,
+                        returnStdout: true,
+                        )
+                    println &apos;Parsed VM IPS&apos; 
+                    echo VM_IPS
+                }   
+            }
+            dir(env.BUILD_NUMBER + &apos;/build&apos;) {
+                stage(&apos;Clone Repository&apos;) {
+                   git branch: &apos;master&apos;, credentialsId: GIT_CREDENTIALS_USER , url: GIT_REPO_URL
+                }
+                stage(&apos;Create Ha-Proxy config&apos;){
+                    def arr = VM_IPS.tokenize(&apos;\n&apos;)
+                    def SERVERS = &quot;&quot;
+                    for (int i = 0; i &lt; arr.size(); i++) {
+                        SERVERS = &quot;${SERVERS}server wp&quot;+i+&quot; ${arr[i]}\\n\\t&quot;
+                    }
+                    sh &quot;sed -i &apos;s/@@BACK_END_IPS@@/${SERVERS}/g&apos; haproxy.cfg&quot;
+                    // sh &quot;cat haproxy.cfg&quot;
+                }
+                def remote = [:]
+                remote.name = &apos;Pure-HA-Proxy&apos;
+                remote.host = &apos;{{HA_PROXY_VM_IP}}&apos;
+                remote.allowAnyHosts = true
+                withCredentials([sshUserPrivateKey(credentialsId: &apos;HA-Proxy-VM-Key&apos;, keyFileVariable: &apos;identity&apos;, passphraseVariable: &apos;&apos;, usernameVariable: &apos;userName&apos;)]) {
+                  remote.user = userName
+                  remote.identityFile = identity
+                  stage(&apos;Transfer the Config file &amp; restart haproxy&apos;) {
+                    sshPut remote: remote, from: &apos;haproxy.cfg&apos;, into: &apos;/etc/haproxy/&apos;
+                    sshCommand remote: remote, command: &apos;systemctl restart haproxy.service&apos;
+                  }
+                }
+            }
+        }
+    }
+}
+</script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>

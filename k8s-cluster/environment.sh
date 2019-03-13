@@ -48,6 +48,7 @@ VM_MEMORY="512"
 VM_CPU="1"
 
 #Set  IP addresses of the Sonatype Nexus, Jenkins and GitLab services in Kubernetes
+HA_PROXY_VM_IP="192.168.8.56"
 NEXUS_IP="10.21.236.108"
 JENKINS_IP="10.21.236.110"
 GITLAB_IP="10.21.236.109"
