@@ -8,8 +8,8 @@ fi
 
 . environment.sh
 
-helm delete pure-jenkins --purge
-helm delete pure-gitlab --purge
+helm delete pure-jenkins-${NS} --purge
+helm delete pure-gitlab-${NS} --purge
 kubectl -n ${NS} delete deployment,svc,pod,secret --all
 
 #only delete the persistent volumes if we specify "all" as a parameter
@@ -18,6 +18,13 @@ then
     echo "Deleting persistent storage volumes from namespace" ${NS}
     kubectl -n ${NS} delete pvc --all
     kubectl delete ns ${NS}
+
+    echo "Deleting Nginx-Ingress"
+    bash ./configuration/nginx-ingress/nginx-ingress-del.sh
+    bash ./others/nginx-ingress/nginx-ingress-del.sh
+
+    echo "Deleting MetalLB"
+    bash ./others/metal-lb/metal-lb-del.sh
 else
     echo "Leaving persistent storage volumes alive in namespace" ${NS}
 fi

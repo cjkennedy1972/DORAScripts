@@ -14,5 +14,5 @@ echo "$claim" | kubectl create -n ${NS} -f -
 
 # Install jenkins component 
 kubectl create -f "$SCRIPTPATH/jenkins-claim.yaml" -n ${NS}
-echo "$template" | helm install --name pure-jenkins "$SCRIPTPATH/jenkins" --namespace ${NS} -f -
+echo "$template" | helm install --name pure-jenkins-${NS} "$SCRIPTPATH/jenkins" --namespace ${NS} -f -
 #helm install --name pure-jenkins -f "$SCRIPTPATH/jenkins.yaml" stable/jenkins --namespace ${NS} 

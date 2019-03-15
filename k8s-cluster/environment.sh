@@ -1,6 +1,7 @@
 #!/bin/bash
 #Set Kubernetes namespace
 NS="pure"
+
 if [ ! -z $1 ]
 then
     NS=$1
@@ -48,9 +49,18 @@ VM_MEMORY="512"
 VM_CPU="1"
 
 #Set  IP addresses of the Sonatype Nexus, Jenkins and GitLab services in Kubernetes
-NEXUS_IP="10.21.236.108"
-JENKINS_IP="10.21.236.110"
-GITLAB_IP="10.21.236.109"
+NEXUS_IP="10.21.236.87"
+JENKINS_IP="10.21.236.81"
+GITLAB_IP="10.21.236.88"
+
+#Set Fully Qualified Domain Names of the Sonatype Nexus, Jenkins and GitLab services in Kubernetes
+NEXUS_FQDN="nexus.puretec.purestorage.com"
+JENKINS_FQDN="jenkins.puretec.purestorage.com"
+GITLAB_FQDN="git.puretec.purestorage.com"
+DOCKER_FQDN="docker.puretec.purestorage.com"
+
+## CIDR Block for the IPs available for LoadBalancer use
+METAL_LB_IP_CIDR="10.21.236.96-10.21.236.107"
 
 #Create and paste below your GitLab API Access Token (with 'api' scope) generated from http://<GITLAB_IP>:<GITLAB_PORT>/profile/personal_access_tokens
 GITLAB_TOKEN="nULJkR1aK7ssMHmtSjqS"
@@ -58,6 +68,3 @@ GITLAB_TOKEN="nULJkR1aK7ssMHmtSjqS"
 #Create and paste below your Jenkins API  Token generated from http://<JENKINS_IP>:<JENKINS_PORT>/user/admin/configure
 JENKINS_TOKEN="113da1adb6e2cead6d586b7b95fefc8b9a"
 
-#NEXUS_IP="10.21.236.87"
-#JENKINS_IP="10.21.236.89"
-#GITLAB_IP="10.21.236.88"
