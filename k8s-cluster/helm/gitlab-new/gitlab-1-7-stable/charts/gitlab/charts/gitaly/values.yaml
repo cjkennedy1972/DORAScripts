@@ -92,8 +92,8 @@ resources:
   #  cpu: 100m
   #  memory: 128Mi
   requests:
-    cpu: 100m
-    memory: 200Mi
+    cpu: 5000m
+    memory: 40000Mi
 
 ## For PodDisruptionBudget, how many pods can be unavailable at one time
 maxUnavailable: 1
