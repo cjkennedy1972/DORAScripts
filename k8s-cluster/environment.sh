@@ -1,6 +1,6 @@
 #!/bin/bash
 #Set Kubernetes namespace
-NS="pure"
+NS="ashutosh"
 METAL_LB_NS="metallb-system"
 NGINX_INGRESS_NS="ingress-nginx"
 MONITORING_NS="monitoring"
@@ -10,9 +10,9 @@ then
     NS=$1
 fi
 
-NEXUS_PORT="90"
-JENKINS_PORT="8082"
-GITLAB_PORT="8083"
+NEXUS_PORT="9090"
+JENKINS_PORT="9082"
+GITLAB_PORT="9083"
 
 DOCKER_REGISTRY_PORT="5000"
 
@@ -57,25 +57,25 @@ VM_MEMORY="512"
 VM_CPU="1"
 
 #Set  IP addresses of the Sonatype Nexus, Jenkins and GitLab services in Kubernetes
-NEXUS_IP="10.21.236.87"
-JENKINS_IP="10.21.236.81"
-GITLAB_IP="10.21.236.88"
+NEXUS_IP="10.21.236.89"
+JENKINS_IP="10.21.236.89"
+GITLAB_IP="10.21.236.89"
 
 #Set Fully Qualified Domain Names of the Sonatype Nexus, Jenkins and GitLab services in Kubernetes
-NEXUS_FQDN="nexus.puretec.purestorage.com"
-JENKINS_FQDN="jenkins.puretec.purestorage.com"
-GITLAB_FQDN="git.puretec.purestorage.com"
-DOCKER_FQDN="docker.puretec.purestorage.com"
-GITLAB_NEW_FQDN="gitlab.puretec.purestorage.com"
+NEXUS_FQDN="nexus3.puretec.purestorage.com"
+JENKINS_FQDN="jenkins3.puretec.purestorage.com"
+GITLAB_FQDN="git3.puretec.purestorage.com"
+DOCKER_FQDN="docker3.puretec.purestorage.com"
+GITLAB_NEW_FQDN="gitlab3.puretec.purestorage.com"
 
 ## CIDR Block for the IPs available for LoadBalancer use
 METAL_LB_IP_CIDR="10.21.236.95-10.21.236.96"
 
 #Create and paste below your GitLab API Access Token (with 'api' scope) generated from http://<GITLAB_IP>:<GITLAB_PORT>/profile/personal_access_tokens
-GITLAB_TOKEN="Qw6j_t-ExApy8Sj3iKcJ"
+GITLAB_TOKEN="yVNmKZaSWNBrTm2Yi2sY"
 
 #Create and paste below your Jenkins API  Token generated from http://<JENKINS_IP>:<JENKINS_PORT>/user/admin/configure
-JENKINS_TOKEN="111f9715834bf0377ccde813617bccf24a"
+JENKINS_TOKEN="114bf3b1b94f8685deecc9ef6334c0814c"
 
 #NEXUS_IP="10.21.236.87"
 #JENKINS_IP="10.21.236.89"
