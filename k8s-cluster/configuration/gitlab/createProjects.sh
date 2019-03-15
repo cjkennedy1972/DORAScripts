@@ -30,7 +30,7 @@ mkdir wordpress-cd
 cd wordpress-cd
 git clone "http://oauth2:$GITLAB_TOKEN@$GITLAB_IP:$GITLAB_PORT/root/wordpress-cd.git"
 cp -rf "$SCRIPTPATH"/wordpress-cd/* wordpress-cd/.
-cp -rf "$SCRIPTPATH"/wordpress-cd/pkey wordpress-cd/.
+cp -rf "$SCRIPTPATH"/wordpress-cd/sshkey wordpress-cd/.
 cp "$SCRIPTPATH"/../../../vm-cluster/configuration/wordpress/files/blog.php wordpress-cd/stage-3/.
 cd wordpress-cd
 git add .

@@ -18,6 +18,10 @@ then
     echo "Deleting persistent storage volumes from namespace" ${NS}
     kubectl -n ${NS} delete pvc --all
     kubectl delete ns ${NS}
+    
+    echo "Deleting Prometheus/ Grafana helm charts" ${NS}
+    helm delete pure-prometheus-${NS} --purge
+    helm delete pure-grafana-${NS} --purge
 
     echo "Deleting Nginx-Ingress"
     bash ./configuration/nginx-ingress/nginx-ingress-del.sh
