@@ -37,7 +37,7 @@ global:
     domain: pure.storage
     # hostSuffix:
     https: true
-    externalIP: 10.21.236.87
+    externalIP: 10.21.236.97
     ssh: ~
 
   ## doc/charts/globals.md#configure-ingress-settings
@@ -68,6 +68,7 @@ global:
   ## doc/charts/globals.md#configure-redis-settings
   redis:
     password: {}
+
       # secret:
       # key:
     # host: redis.hostedsomewhere.else
@@ -81,9 +82,6 @@ global:
     internal:
       names: ['default']
     external: []
-    persistence:
-      storageClass: pure-file
-      size: 50Gi
 
   ## doc/charts/globals.md#configure-minio-settings
   minio:
@@ -300,7 +298,7 @@ global:
 ## End of global
 
 ## Settings to for the Let's Encrypt ACME Issuer
- certmanager-issuer:
+certmanager-issuer:
   ## The email address to register certificates requested from Let's Encrypt.
   ## Required if using Let's Encrypt.
    email: marketing@purestorage.com
@@ -368,7 +366,7 @@ nginx-ingress:
 ## Installation & configuration of stable/prometheus
 ## See requirements.yaml for current version
 prometheus:
-  install: true
+  install: false
   rbac:
     create: true
   alertmanager:
@@ -397,6 +395,9 @@ redis-ha:
 ## See requirements.yaml for current version
 postgresql:
   install: true
+  persistence:
+    storageClass: pure-file
+    size: 20Gi
   postgresUser: gitlab
   postgresDatabase: gitlabhq_production
   imageTag: 9.6.8
@@ -460,22 +461,19 @@ gitlab:
   gitaly:
     persistence:
       storageClass: pure-file
-      size: 50Gi
-  postgresql:
-    persistence:
-      storageClass: pure-file
-      size: 10Gi
-  minio:
-    persistence:
-      storageClass: pure-file
-      size: 10Gi
-  redis:
-    persistence:
-      storageClass: pure-file
-      size: 5Gi
+      size: 20Gi
   unicorn:
-    enabled: false
+    enabled: true
   sidekiq:
-    enabled: false
+    enabled: true
   gitlab-shell:
-    enabled: false
+    enabled: true
+
+redis:
+  persistence:
+    storageClass: pure-file
+    size: 20Gi
+minio:
+  persistence:
+    storageClass: pure-file
+    size: 25Gi
