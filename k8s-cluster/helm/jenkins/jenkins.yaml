@@ -29,6 +29,7 @@ Master:
     - blueocean
     - codecommit-url-helper #:0.0.3
     - aws-codecommit-jobs #:0.3.0
+    - ssh-steps #1.2.1
 
 Agent:
   Enabled: true

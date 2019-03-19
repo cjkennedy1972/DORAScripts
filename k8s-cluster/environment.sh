@@ -53,11 +53,11 @@ VM_TEMPLATE="pure-wp-vm"
 VM_MEMORY="512"
 VM_CPU="1"
 
-#Set  IP addresses of the Sonatype Nexus, Jenkins and GitLab services in Kubernetes
-
+#Set  IP addresses of the Sonatype Nexus, Jenkins, GitLab and HA-Proxy services in Kubernetes
 NEXUS_IP="10.21.236.87"
 JENKINS_IP="10.21.236.81"
 GITLAB_IP="10.21.236.88"
+HA_PROXY_VM_IP="192.168.8.56"
 
 #Set Fully Qualified Domain Names of the Sonatype Nexus, Jenkins and GitLab services in Kubernetes
 NEXUS_FQDN="nexus.puretec.purestorage.com"
@@ -65,7 +65,7 @@ JENKINS_FQDN="jenkins.puretec.purestorage.com"
 GITLAB_FQDN="git.puretec.purestorage.com"
 DOCKER_FQDN="docker.puretec.purestorage.com"
 
-## CIDR Block for the IPs available for LoadBalancer use
+## CIDR Block for the IPs available for MetalLB LoadBalancer use
 METAL_LB_IP_CIDR="10.21.236.96-10.21.236.107"
 
 #Create and paste below your GitLab API Access Token (with 'api' scope) generated from http://<GITLAB_IP>:<GITLAB_PORT>/profile/personal_access_tokens
