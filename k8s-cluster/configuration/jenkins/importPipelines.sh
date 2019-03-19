@@ -121,7 +121,7 @@ rp "s/{{VM_CPU}}/${VM_CPU}/g" "$SCRIPTPATH/temp.xml"
 
 rm "$SCRIPTPATH/temp.xml"
 
-# Create credentials for SSH plugin used by HA-proxy-Deploy job
+# Create credentials for SSH plugin used by the HA-Proxy-Deploy job
 curl -H $CRUMB -X POST 'http://admin:'${JENKINS_TOKEN}'@'${JENKINS_IP}':'${JENKINS_PORT}'/credentials/store/system/domain/_/createCredentials' \
 --data-urlencode 'json={
   "": "0",
@@ -139,7 +139,7 @@ curl -H $CRUMB -X POST 'http://admin:'${JENKINS_TOKEN}'@'${JENKINS_IP}':'${JENKI
   }
 }'
 
-## Import Ha-Proxy-Deployment pipeline job definition
+## Import HA-Proxy-Deploy pipeline job definition
 cp "$SCRIPTPATH/HA-Proxy-Deploy-Job.xml" "$SCRIPTPATH/temp.xml"
 rp "s/{{GITLAB_IP_ADDRESS}}/${GITLAB_IP}/g" "$SCRIPTPATH/temp.xml"
 rp "s/{{GITLAB_PORT}}/${GITLAB_PORT}/g" "$SCRIPTPATH/temp.xml"
