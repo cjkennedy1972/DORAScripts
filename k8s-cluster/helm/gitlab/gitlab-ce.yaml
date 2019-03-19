@@ -25,7 +25,7 @@ global:
     edition: ce
 
   ## doc/charts/globals.md#gitlab-version
-  # gitlabVersion: master
+  gitlabVersion: 11.8.2
 
   ## doc/charts/globals.md#application-resource
   application:
@@ -37,7 +37,7 @@ global:
     domain: pure.storage
     # hostSuffix:
     https: true
-    externalIP: 10.21.236.97
+    externalIP: 10.21.236.87
     ssh: ~
 
   ## doc/charts/globals.md#configure-ingress-settings
@@ -45,8 +45,8 @@ global:
     configureCertmanager: false
     annotations: {}
     enabled: true
-    # tls:
-    #   enabled: true
+    tls:
+      enabled: true
 
   ## Initial root password for this GitLab installation
   ## Secret created according to doc/installation/secrets.md#initial-root-password
@@ -168,6 +168,7 @@ global:
         # secret:
         # key:
     backups:
+      enabled: false
       bucket: gitlab-backups
       tmpBucket: tmp
 
@@ -296,12 +297,6 @@ global:
     # - secret: custom-CA
     # - secret: more-custom-CAs
 ## End of global
-
-## Settings to for the Let's Encrypt ACME Issuer
-certmanager-issuer:
-  ## The email address to register certificates requested from Let's Encrypt.
-  ## Required if using Let's Encrypt.
-   email: marketing@purestorage.com
 
 ## Installation & configuration of stable/cert-manager
 ## See requirements.yaml for current version
@@ -470,6 +465,7 @@ gitlab:
     enabled: true
 
 redis:
+  enabled: true
   persistence:
     storageClass: pure-file
     size: 20Gi
@@ -477,3 +473,9 @@ minio:
   persistence:
     storageClass: pure-file
     size: 25Gi
+    
+## Settings to for the Let's Encrypt ACME Issuer
+certmanager-issuer:
+  email: marketing@purestorage.com
+  ## The email address to register certificates requested from Let's Encrypt.
+  ## Required if using Let's Encrypt.
