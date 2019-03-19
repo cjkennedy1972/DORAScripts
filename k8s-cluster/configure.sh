@@ -9,4 +9,3 @@ bash ./configuration/gitlab/createProjects.sh
 bash ./configuration/jenkins/importPipelines.sh 
 
 bash ./configuration/nexus/create-and-push-docker-images.sh
-

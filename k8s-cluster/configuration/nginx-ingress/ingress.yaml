@@ -1,0 +1,37 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: pure-ingress
+  namespace: {{NS}}
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: {{JENKINS_FQDN}}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: pure-jenkins-{{NS}}
+          servicePort:  {{JENKINS_PORT}}
+  - host: {{DOCKER_FQDN}}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: pure-nexus
+          servicePort: {{DOCKER_REGISTRY_PORT}}
+  - host: {{NEXUS_FQDN}}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: pure-nexus
+          servicePort: {{NEXUS_PORT}}
+  - host: {{GITLAB_FQDN}}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: pure-gitlab-{{NS}}-gitlab-ce
+          servicePort: {{GITLAB_PORT}}
