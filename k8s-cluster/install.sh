@@ -26,18 +26,20 @@ fi
 
 if [[ $METAL_LB_NGINX_INGRESS == "true" ]]
 then
-    #Install metal-LB
+    #Install MetalLB
     kubectl create ns metallb-system
     bash ./others/metal-lb/metal-lb.sh
     sleep 2
     bash wait-for.sh pod -lapp=metallb -n metallb-system
 
-    #Install Nginx Ingress
+    #Install NGINX Ingress
     kubectl create ns ingress-nginx
     bash ./others/nginx-ingress/nginx-ingress.sh
     sleep 2
     bash wait-for.sh pod -lapp=ingress-nginx -n ingress-nginx
 fi
+
+bash ./configuration/nginx-ingress/nginx-ingress.sh ${NS}
 
 if [[ $ENABLE_MONITORING == "true" ]]
 then

@@ -12,25 +12,32 @@ helm delete pure-jenkins-${NS} --purge
 helm delete pure-gitlab-${NS} --purge
 kubectl -n ${NS} delete deployment,svc,pod,secret --all
 
+if [[ $ENABLE_MONITORING == "true" ]]
+then
+    echo "Deleting Prometheus/Grafana helm charts for namespace " ${NS}
+    helm delete pure-prometheus-${NS} --purge
+    helm delete pure-grafana-${NS} --purge
+fi
+
+if [[ $METAL_LB_NGINX_INGRESS == "true" ]]
+then
+    echo "Deleting MetalLB" 
+    bash ./others/metal-lb/metal-lb-del.sh
+fi
+
+
 #only delete the persistent volumes if we specify "all" as a parameter
 if [[ $UNINSTALL_ALL == "all" ]]
-then
+then    
     echo "Deleting persistent storage volumes from namespace" ${NS}
     kubectl -n ${NS} delete pvc --all
     kubectl delete ns ${NS}
-    
-    echo "Deleting Prometheus/ Grafana helm charts" ${NS}
-    helm delete pure-prometheus-${NS} --purge
-    helm delete pure-grafana-${NS} --purge
 
     echo "Deleting Nginx-Ingress"
-    bash ./configuration/nginx-ingress/nginx-ingress-del.sh
-    bash ./others/nginx-ingress/nginx-ingress-del.sh
-
-    echo "Deleting MetalLB"
-    bash ./others/metal-lb/metal-lb-del.sh
+    bash ./configuration/nginx-ingress/nginx-ingress-del.sh ${NS}
+    #bash ./others/nginx-ingress/nginx-ingress-del.sh
 else
-    echo "Leaving persistent storage volumes alive in namespace" ${NS}
+    echo "Leaving persistent storage volumes and ingresses alive in namespace" ${NS}
 fi
 
 #Uninstall Sonatype Nexus
