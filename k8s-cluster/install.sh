@@ -14,7 +14,6 @@ bash ./helm/jenkins/jenkins.sh
 sleep 2
 bash wait-for.sh pod -lapp=pure-jenkins-${NS} -n ${NS}
 
-NEW_GITLAB="true"
 #Install only GitLab on FlashBlade
 if [[ $TARGET_DEPLOYMENT == "onprem" ]]
 then
@@ -53,6 +52,9 @@ then
     sleep 2
     bash wait-for.sh pod -lapp=ingress-nginx -n ${NGINX_INGRESS_NS}
 fi
+
+# Add Ingress entry for all Services - Nexus, GitLab, Jenkins
+bash ./others/nginx-ingress/nginx-ingress.sh
 
 if [[ $ENABLE_MONITORING == "true" ]]
 then

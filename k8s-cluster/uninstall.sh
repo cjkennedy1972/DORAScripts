@@ -9,8 +9,17 @@ fi
 . environment.sh
 
 helm delete pure-jenkins-${NS} --purge
-helm delete pure-gitlab-${NS} --purge
-kubectl -n ${NS} delete deployment,svc,pod,secret --all
+
+if [[ $NEW_GITLAB == "false" ]]
+then
+    helm delete pure-gitlab-${NS} --purge
+fi
+
+if [[ $NEW_GITLAB == "true" ]]
+then
+    helm delete pure-gitlab-new-${NS} --purge
+fi
+kubectl -n ${NS} delete deployment,svc,pod,secret,ingress --all
 
 #only delete the persistent volumes if we specify "all" as a parameter
 if [[ $UNINSTALL_ALL == "all" ]]
