@@ -36,7 +36,7 @@ then
     kubectl create ns ingress-nginx
     bash ./others/nginx-ingress/nginx-ingress.sh
     sleep 2
-    bash wait-for.sh pod -lapp=ingress-nginx -n ingress-nginx
+    bash wait-for.sh pod -lapp.kubernetes.io/name=ingress-nginx -n ingress-nginx
 fi
 
 bash ./configuration/nginx-ingress/nginx-ingress.sh ${NS}

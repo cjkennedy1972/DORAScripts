@@ -43,7 +43,7 @@ global:
 
   ## doc/charts/globals.md#configure-ingress-settings
   ingress:
-    configureCertmanager: false
+    configureCertmanager: true
     annotations: {}
     enabled: true
     tls:
@@ -52,9 +52,9 @@ global:
   ## Initial root password for this GitLab installation
   ## Secret created according to doc/installation/secrets.md#initial-root-password
   ## If allowing shared-secrets generation, this is OPTIONAL.
-  initialRootPassword:
-    secret: dev-gitlab-initial-root-password
-    key: password=admin123
+  #initialRootPassword:
+  #  secret: dev-gitlab-initial-root-password
+  #  key: password=admin123
 
   ## doc/charts/globals.md#configure-postgresql-settings
   psql:
