@@ -50,11 +50,11 @@ then
     kubectl create ns ${NGINX_INGRESS_NS}
     bash ./others/nginx-ingress/nginx-ingress.sh
     sleep 2
-    bash wait-for.sh pod -lapp=ingress-nginx -n ${NGINX_INGRESS_NS}
+    bash wait-for.sh pod -lapp.kubernetes.io/name=ingress-nginx -n ${NGINX_INGRESS_NS}
 fi
 
 # Add Ingress entry for all Services - Nexus, GitLab, Jenkins
-bash ./others/nginx-ingress/nginx-ingress.sh
+bash ./configuration/nginx-ingress/nginx-ingress.sh
 
 if [[ $ENABLE_MONITORING == "true" ]]
 then

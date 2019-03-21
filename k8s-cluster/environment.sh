@@ -69,10 +69,10 @@ DOCKER_FQDN="docker3.puretec.purestorage.com"
 GITLAB_NEW_FQDN="gitlab3.puretec.purestorage.com"
 
 ## CIDR Block for the IPs available for LoadBalancer use
-METAL_LB_IP_CIDR="10.21.236.95-10.21.236.96"
+METAL_LB_IP_CIDR="10.21.236.95-10.21.236.110"
 
 #Create and paste below your GitLab API Access Token (with 'api' scope) generated from http://<GITLAB_IP>:<GITLAB_PORT>/profile/personal_access_tokens
-GITLAB_TOKEN="yVNmKZaSWNBrTm2Yi2sY"
+GITLAB_TOKEN="GWA1aCkTBhwtwJiJXy29"
 
 #Create and paste below your Jenkins API  Token generated from http://<JENKINS_IP>:<JENKINS_PORT>/user/admin/configure
 JENKINS_TOKEN="114bf3b1b94f8685deecc9ef6334c0814c"
@@ -85,4 +85,7 @@ JENKINS_TOKEN="114bf3b1b94f8685deecc9ef6334c0814c"
 ENABLE_MONITORING="false"
 
 ## Enable this if you want to install MetalLB + Nginx-Ingress
-METAL_LB_NGINX_INGRESS="false"
+METAL_LB_NGINX_INGRESS="true"
+
+## Set to true if you want to use New GitLab chart
+NEW_GITLAB="true"
