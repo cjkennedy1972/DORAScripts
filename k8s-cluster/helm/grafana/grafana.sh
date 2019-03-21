@@ -11,4 +11,4 @@ SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 kubectl create -n ${MONITORING_NS} secret generic grafana-creds  --from-literal=admin.userKey=admin  --from-literal=admin.passwordKey=admin
 
 template=`cat "$SCRIPTPATH/values.yaml"`
-echo "$template" | helm install --name pure-grafana stable/grafana --namespace ${MONITORING_NS} -f -
+echo "$template" | helm install --name pure-grafana-${NS} stable/grafana --namespace ${MONITORING_NS} -f -

@@ -5,12 +5,12 @@
 kubectl create ns ${NS}
 
 #Install Sonatype Nexus
-bash ./others/nexus/nexus.sh
+bash ./others/nexus/nexus.sh ${NS}
 sleep 2
 bash wait-for.sh pod -lapp=nexus -n ${NS}
 
 #Install Jenkins
-bash ./helm/jenkins/jenkins.sh
+bash ./helm/jenkins/jenkins.sh ${NS}
 sleep 2
 bash wait-for.sh pod -lapp=pure-jenkins-${NS} -n ${NS}
 
@@ -40,17 +40,17 @@ fi
 
 if [[ $METAL_LB_NGINX_INGRESS == "true" ]]
 then
-    #Install metal-LB
-    kubectl create ns ${METAL_LB_NS}
+    #Install MetalLB
+    kubectl create ns metallb-system
     bash ./others/metal-lb/metal-lb.sh
     sleep 2
-    bash wait-for.sh pod -lapp=metallb -n ${METAL_LB_NS}
+    bash wait-for.sh pod -lapp=metallb -n metallb-system
 
-    #Install Nginx Ingress
-    kubectl create ns ${NGINX_INGRESS_NS}
+    #Install NGINX Ingress
+    kubectl create ns ingress-nginx
     bash ./others/nginx-ingress/nginx-ingress.sh
     sleep 2
-    bash wait-for.sh pod -lapp.kubernetes.io/name=ingress-nginx -n ${NGINX_INGRESS_NS}
+    bash wait-for.sh pod -lapp.kubernetes.io/name=ingress-nginx -n ingress-nginx
 fi
 
 # Add Ingress entry for all Services - Nexus, GitLab, Jenkins

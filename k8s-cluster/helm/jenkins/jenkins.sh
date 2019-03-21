@@ -18,6 +18,5 @@ then
     echo "$slaveclaim" | kubectl create -n ${NS} -f -
 fi
 
-
 # Install jenkins component 
 echo "$template" | helm install --name pure-jenkins-${NS} "$SCRIPTPATH/jenkins" --namespace ${NS} -f -

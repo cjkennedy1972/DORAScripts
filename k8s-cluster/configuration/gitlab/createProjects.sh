@@ -37,3 +37,18 @@ git add .
 git add sshkey -f
 git commit -m "Checking in files"
 git push
+
+# Setting up new project for storing HA-Proxy files
+curl --header "PRIVATE-TOKEN: $GITLAB_TOKEN" -X POST "http://$GITLAB_IP:$GITLAB_PORT/api/v3/projects?name=ha-proxy&issues_enabled=false&default_branch=master"
+
+## Git init and check-in files
+cd /tmp
+rm -rf /tmp/ha-proxy
+mkdir ha-proxy
+cd ha-proxy
+git clone "http://oauth2:$GITLAB_TOKEN@$GITLAB_IP:$GITLAB_PORT/root/ha-proxy.git"
+cp -rf "$SCRIPTPATH"/ha-proxy/haproxy.cfg ha-proxy/
+cd ha-proxy
+git add haproxy.cfg -f
+git commit -m "Checking in files"
+git push
