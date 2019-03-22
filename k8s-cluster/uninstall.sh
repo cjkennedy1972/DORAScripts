@@ -9,8 +9,18 @@ fi
 . environment.sh
 
 helm delete pure-jenkins-${NS} --purge
-helm delete pure-gitlab-${NS} --purge
-kubectl -n ${NS} delete deployment,svc,pod,secret --all
+
+if [[ $NEW_GITLAB == "false" ]]
+then
+    helm delete pure-gitlab-${NS} --purge
+fi
+
+if [[ $NEW_GITLAB == "true" ]]
+then
+    helm delete pure-gitlab-new-${NS} --purge
+fi
+
+kubectl -n ${NS} delete deployment,svc,pod,secret,ingress --all
 
 if [[ $ENABLE_MONITORING == "true" ]]
 then
@@ -18,6 +28,9 @@ then
     helm delete pure-prometheus-${NS} --purge
     helm delete pure-grafana-${NS} --purge
 fi
+
+echo "Deleting Nginx-Ingress Ingress record"
+bash ./configuration/nginx-ingress/nginx-ingress-del.sh
 
 #only delete the persistent volumes and ingresses if we specify "all" as a parameter
 if [[ $UNINSTALL_ALL == "all" ]]
@@ -39,6 +52,13 @@ then
 
     echo "NGINX Ingress" 
     bash ./others/nginx-ingress/nginx-ingress-del.sh
+    
+    if [[ $ENABLE_MONITORING == "true" ]]
+    then
+        echo "Deleting Prometheus/Grafana helm charts for namespace " ${NS}
+        helm delete pure-prometheus-${NS} --purge
+        helm delete pure-grafana-${NS} --purge
+    fi
 fi
 
 #Uninstall Sonatype Nexus

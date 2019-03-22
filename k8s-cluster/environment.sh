@@ -1,6 +1,7 @@
 #!/bin/bash
 #Set Kubernetes namespace
 NS="pure"
+MONITORING_NS="monitoring"
 
 if [ ! -z $1 ]
 then
@@ -15,7 +16,8 @@ DOCKER_REGISTRY_PORT="5000"
 
 SECRET_TOKEN="{AQAAABAAAAAQockYoJutL7ZGpK6oePv79oGf7TaXymyHJ6CrQJLYBrk=}"
 STORAGE_CLASS_NAME="pure-file" #FlashBlade storage class by default
-TARGET_STORAGE="kontena" #"fa" for on-prem FlashArray deployment, "fb" for on-prem FlashBlade deployment, "kontena" for local storages
+TARGET_STORAGE="fb" #"fa" for on-prem FlashArray deployment, "fb" for on-prem FlashBlade deployment, "kontena" for local storages
+
 TARGET_DEPLOYMENT="onprem"
 PV_ACCESS_MODE="ReadWriteMany"
 
@@ -64,6 +66,7 @@ NEXUS_FQDN="nexus.puretec.purestorage.com"
 JENKINS_FQDN="jenkins.puretec.purestorage.com"
 GITLAB_FQDN="git.puretec.purestorage.com"
 DOCKER_FQDN="docker.puretec.purestorage.com"
+GITLAB_NEW_FQDN="gitlab.puretec.purestorage.com"
 
 ## CIDR Block for the IPs available for MetalLB LoadBalancer use
 METAL_LB_IP_CIDR="10.21.236.96-10.21.236.107"
@@ -79,6 +82,9 @@ ENABLE_MONITORING="false"
 
 ## Enable this if you want to install MetalLB + NGINX Ingress
 METAL_LB_NGINX_INGRESS="false"
+
+## Set to true if you want to use New GitLab chart
+NEW_GITLAB="true"
 
 ## If set to true, will delete MetalLB (from metallb-system namespace) and NGINX Ingress (from ingress-nginx namespace)
 UNINSTALL_PREREQUISITES="false"

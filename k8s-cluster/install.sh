@@ -17,11 +17,25 @@ bash wait-for.sh pod -lapp=pure-jenkins-${NS} -n ${NS}
 #Install only GitLab on FlashBlade
 if [[ $TARGET_DEPLOYMENT == "onprem" ]]
 then
-    bash ./helm/gitlab/gitlab.sh ${NS}
-    sleep 2
-    bash wait-for.sh pod -lapp=pure-gitlab-${NS}-redis -n ${NS}
-    bash wait-for.sh pod -lapp=pure-gitlab-${NS}-postgresql -n ${NS}
-    bash wait-for.sh pod -lapp=pure-gitlab-${NS}-gitlab-ce -n ${NS}
+    if [[ $NEW_GITLAB == "false" ]]
+    then
+        bash ./helm/gitlab/gitlab.sh
+        sleep 2
+        bash wait-for.sh pod -lapp=pure-gitlab-${NS}-redis -n ${NS}
+        bash wait-for.sh pod -lapp=pure-gitlab-${NS}-postgresql -n ${NS}
+        bash wait-for.sh pod -lapp=pure-gitlab-${NS}-gitlab-ce -n ${NS}
+    fi
+
+    if [[ $NEW_GITLAB == "true" ]]
+    then
+        bash ./helm/gitlab-new/gitlab.sh
+        sleep 5
+        bash wait-for.sh pod -lapp=postgresql,release=pure-gitlab-new-${NS} -n ${NS}
+        bash wait-for.sh pod -lapp=redis,release=pure-gitlab-new-${NS} -n ${NS}
+        bash wait-for.sh pod -lapp=minio,release=pure-gitlab-new-${NS} -n ${NS}
+        bash wait-for.sh pod -lapp=gitaly,release=pure-gitlab-new-${NS} -n ${NS}
+        bash wait-for.sh pod -lapp=unicorn,release=pure-gitlab-new-${NS} -n ${NS}
+    fi
 fi
 
 if [[ $METAL_LB_NGINX_INGRESS == "true" ]]
@@ -39,7 +53,8 @@ then
     bash wait-for.sh pod -lapp.kubernetes.io/name=ingress-nginx -n ingress-nginx
 fi
 
-bash ./configuration/nginx-ingress/nginx-ingress.sh ${NS}
+# Add Ingress entry for all Services - Nexus, GitLab, Jenkins
+bash ./configuration/nginx-ingress/nginx-ingress.sh
 
 if [[ $ENABLE_MONITORING == "true" ]]
 then
