@@ -38,7 +38,7 @@ global:
     domain: pure.storage
     # hostSuffix:
     https: true
-    externalIP: 10.21.236.87
+    externalIP: 10.21.236.95
     ssh: ~
 
   ## doc/charts/globals.md#configure-ingress-settings
