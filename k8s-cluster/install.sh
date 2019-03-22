@@ -58,8 +58,8 @@ bash ./configuration/nginx-ingress/nginx-ingress.sh
 
 if [[ $ENABLE_MONITORING == "true" ]]
 then
-    bash ./helm/prometheus/prometheus.sh
-    bash ./helm/grafana/grafana.sh
+    bash ./helm/prometheus/prometheus.sh ${NS}
+    bash ./helm/grafana/grafana.sh ${NS}
     sleep 2
     bash wait-for.sh pod -lapp=prometheus -n ${MONITORING_NS}
     bash wait-for.sh pod -lapp=grafana -n ${MONITORING_NS}

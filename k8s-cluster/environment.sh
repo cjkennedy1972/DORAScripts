@@ -80,8 +80,11 @@ JENKINS_TOKEN="11a1a721d38e63428d5a9733e96361acf8"
 ## Enable this if you want to install Prometheus/ Grafana
 ENABLE_MONITORING="false"
 
-## Enable this if you want to install MetalLB + Nginx-Ingress
+## Enable this if you want to install MetalLB + NGINX Ingress
 METAL_LB_NGINX_INGRESS="false"
 
 ## Set to true if you want to use New GitLab chart
 NEW_GITLAB="true"
+
+## If set to true, will delete MetalLB (from metallb-system namespace) and NGINX Ingress (from ingress-nginx namespace)
+UNINSTALL_PREREQUISITES="false"
