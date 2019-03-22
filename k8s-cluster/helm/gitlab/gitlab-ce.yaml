@@ -52,9 +52,9 @@ global:
   ## Initial root password for this GitLab installation
   ## Secret created according to doc/installation/secrets.md#initial-root-password
   ## If allowing shared-secrets generation, this is OPTIONAL.
-  #initialRootPassword:
-  #  secret: dev-gitlab-initial-root-password
-  #  key: password=admin123
+  initialRootPassword:
+    secret: easy-gitlab-initial-root-password
+    key: password
 
   ## doc/charts/globals.md#configure-postgresql-settings
   psql:
@@ -314,7 +314,7 @@ certmanager:
 ## doc/architecture/decisions.md#nginx-ingress
 ## Installation & configuration of charts/nginx
 nginx-ingress:
-  enabled: false
+  enabled: true
   tcpExternalConfig: "true"
   controller:
     config:
