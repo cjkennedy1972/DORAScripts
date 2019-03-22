@@ -19,25 +19,26 @@ then
     helm delete pure-grafana-${NS} --purge
 fi
 
-if [[ $METAL_LB_NGINX_INGRESS == "true" ]]
-then
-    echo "Deleting MetalLB" 
-    bash ./others/metal-lb/metal-lb-del.sh
-fi
-
-
-#only delete the persistent volumes if we specify "all" as a parameter
+#only delete the persistent volumes and ingresses if we specify "all" as a parameter
 if [[ $UNINSTALL_ALL == "all" ]]
 then    
-    echo "Deleting persistent storage volumes from namespace" ${NS}
+    echo "Deleting persistent storage volumes from namespace " ${NS}
     kubectl -n ${NS} delete pvc --all
     kubectl delete ns ${NS}
 
-    echo "Deleting Nginx-Ingress"
+    echo "Deleting Ingresses"
     bash ./configuration/nginx-ingress/nginx-ingress-del.sh ${NS}
-    #bash ./others/nginx-ingress/nginx-ingress-del.sh
 else
-    echo "Leaving persistent storage volumes and ingresses alive in namespace" ${NS}
+    echo "Leaving persistent storage volumes and ingresses alive in namespace " ${NS}
+fi
+
+if [[ $UNINSTALL_PREREQUISITES == "true" ]]
+then
+    echo "Delete MetalLB" 
+    bash ./others/metal-lb/metal-lb-del.sh
+
+    echo "NGINX Ingress" 
+    bash ./others/nginx-ingress/nginx-ingress-del.sh
 fi
 
 #Uninstall Sonatype Nexus
