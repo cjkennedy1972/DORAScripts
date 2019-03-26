@@ -1,0 +1,43 @@
+VAGRANT_INSTANCE_NAME = "pure-wp-vm-clone-@@BUILD_NUMBER@@"
+NODE_COUNT = @@VM_COUNT@@
+
+Vagrant.configure("2") do |config|
+    
+    config.vm.box               = "atlas_shrugged/vsphere_dummy"
+    config.vm.box_version       = "1.0.0"
+    config.ssh.username         = "root"
+    config.ssh.private_key_path = "../sshkey"
+    
+    $script = <<-SCRIPT
+    echo Running performance scripts
+    ls -la /vagrant
+    cp /vagrant/blog.php .
+    nohup php blog.php &> /tmp/log1.out&
+    nohup php blog.php &> /tmp/log2.out&
+    nohup php blog.php &> /tmp/log3.out&
+    nohup php blog.php &> /tmp/log4.out&
+    nohup php blog.php &> /tmp/log5.out&
+    SCRIPT
+
+    config.vm.provision :shell, inline: $script, privileged: false
+    
+    (1..NODE_COUNT).each do |i|
+        config.vm.define VAGRANT_INSTANCE_NAME+"#{i}" do |d|
+            d.vm.hostname = VAGRANT_INSTANCE_NAME+"#{i}"
+        end
+    end
+ 
+    config.vm.provider :vsphere do |vsphere|
+        vsphere.host                  = '@@VSPHERE_HOST@@'
+        vsphere.compute_resource_name = '@@VSPHERE_RESOURCE@@'
+        vsphere.clone_from_vm         = true
+        vsphere.template_name         = 'wordpress/pure-wp-vm-@@BUILD_NUMBER@@'
+        vsphere.vm_base_path          = "wordpress"
+        vsphere.user                  = '@@VSPHERE_USER@@'
+        vsphere.password              = '@@VSPHERE_PASSWORD@@'
+        vsphere.insecure              = true
+        vsphere.memory_mb             = @@VM_MEMORY@@
+        vsphere.cpu_count             =  @@VM_CPU@@
+    end
+    
+end
