@@ -13,5 +13,5 @@ helm install --name pure-gitlab-${NS} gitlab/gitlab -f "${SCRIPTPATH}"/gitlab-ce
 --set postgresql.persistence.storageClass=${STORAGE_CLASS_NAME} \
 --set redis.persistence.storageClass=${STORAGE_CLASS_NAME} \
 --set minio.persistence.storageClass=${STORAGE_CLASS_NAME} \
---set gitlab.gitaly.persistence.storageClass=k${STORAGE_CLASS_NAME}
+--set gitlab.gitaly.persistence.storageClass=${STORAGE_CLASS_NAME}
 #--set hosts.externalIP=${GITLAB_IP} \
