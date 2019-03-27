@@ -48,18 +48,7 @@
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
     <org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
-      <triggers>
-        <jenkins.triggers.ReverseBuildTrigger>
-          <spec></spec>
-          <upstreamProjects>WordPress-CI-Job,</upstreamProjects>
-          <threshold>
-            <name>SUCCESS</name>
-            <ordinal>0</ordinal>
-            <color>BLUE</color>
-            <completeBuild>true</completeBuild>
-          </threshold>
-        </jenkins.triggers.ReverseBuildTrigger>
-      </triggers>
+      <triggers/>
     </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
   </properties>
   <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.57">
@@ -197,6 +186,9 @@ podTemplate(label: label, yaml: yamlPodDefinition) {
 
                             sh &apos;vagrant up --provider=vsphere&apos;
                         }
+                    }
+                    stage (&apos;Trigger HA-Proxy-Deployment job&apos;) {
+                        build job: &apos;HA-Proxy-Deployment&apos;, parameters: [[$class: &apos;StringParameterValue&apos;, name: &apos;WP_CD_BUILD_NUMBER&apos;, value: env.BUILD_NUMBER]],  wait: false
                     }
                     
         

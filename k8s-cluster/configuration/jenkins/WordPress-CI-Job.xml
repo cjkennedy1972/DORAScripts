@@ -162,6 +162,9 @@ podTemplate(label: label, yaml: yamlPodDefinition) {
                     nexusArtifactUploader artifacts: [[artifactId: &apos;wordpress-package&apos;, classifier: &apos;&apos;, file: &apos;wordpress.tar.gz&apos;, type: &apos;tar.gz&apos;]], credentialsId: &apos;nexus&apos;, groupId: &apos;&apos;, nexusUrl: NEXUS_URL, nexusVersion: &apos;nexus3&apos;, protocol: &apos;http&apos;, repository: &apos;builds-store&apos;, version: &apos;1.0.0.&apos;+env.BUILD_NUMBER
                 }
             }
+            stage (&apos;Trigger CD job&apos;) {
+                build job: &apos;WordPress-CD-Job&apos;, parameters: [[$class: &apos;StringParameterValue&apos;, name: &apos;WP_BUILD_NUMBER&apos;, value: env.BUILD_NUMBER]],  wait: false
+            }
         }
     }
 }
