@@ -35,7 +35,7 @@ echo -e "\ncreated wordpress-cd folder"
 cd wordpress-cd
 echo -e "\ncloning"
 git config --global http.sslVerify false
-git clone "$HTTP_PREFIX://oauth2:$GITLAB_TOKEN@$GITLAB_HOST/root/wordpress-cd.git"
+git clone "$GITLAB_HTTP_PREFIX://oauth2:$GITLAB_TOKEN@$GITLAB_HOST/root/wordpress-cd.git"
 echo -e "\nafter cloning"
 cp -Rf "$SCRIPTPATH"/wordpress-cd/* wordpress-cd/.
 cp -Rf "$SCRIPTPATH"/wordpress-cd/sshkey wordpress-cd/.
@@ -58,7 +58,7 @@ mkdir ha-proxy
 echo -e "\ncreated ha-proxy folder"
 cd ha-proxy
 git config --global http.sslVerify false
-git clone "$HTTP_PREFIX://oauth2:$GITLAB_TOKEN@$GITLAB_HOST/root/ha-proxy.git"
+git clone "$GITLAB_HTTP_PREFIX://oauth2:$GITLAB_TOKEN@$GITLAB_HOST/root/ha-proxy.git"
 cp -rf "$SCRIPTPATH"/ha-proxy/haproxy.cfg ha-proxy/
 cd ha-proxy
 git add haproxy.cfg -f

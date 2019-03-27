@@ -9,7 +9,7 @@ kubectl create secret generic easy-gitlab-initial-root-password --from-literal=p
 #helm install --name ${NS} -f gitlab-ce.yaml gitlab/gitlab --namespace ${NS} --wait --timeout 1000
 helm install --name pure-gitlab-${NS} gitlab/gitlab -f "${SCRIPTPATH}"/gitlab-ce.yaml --namespace ${NS} --wait --timeout 1000 \
 --set hosts.domain=${GITLAB_DOMAIN} \
---set hosts.suffix=${GITLAB_SUFFIX} \
+--set hosts.hostSuffix=${GITLAB_SUFFIX} \
 --set postgresql.persistence.storageClass=${STORAGE_CLASS_NAME} \
 --set redis.persistence.storageClass=${STORAGE_CLASS_NAME} \
 --set minio.persistence.storageClass=${STORAGE_CLASS_NAME} \
