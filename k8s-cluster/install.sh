@@ -17,11 +17,11 @@ bash wait-for.sh pod -lapp=pure-jenkins-${NS} -n ${NS}
 #Install only GitLab on FlashBlade
 if [[ $TARGET_DEPLOYMENT == "onprem" ]]
 then
-    bash ./helm/gitlab/gitlab.sh ${NS}
+    bash ./helm/gitlab/gitlab-ce.sh ${NS}
     sleep 2
-    bash wait-for.sh pod -lapp=pure-gitlab-${NS}-redis -n ${NS}
-    bash wait-for.sh pod -lapp=pure-gitlab-${NS}-postgresql -n ${NS}
-    bash wait-for.sh pod -lapp=pure-gitlab-${NS}-gitlab-ce -n ${NS}
+    #bash wait-for.sh pod -lapp=pure-gitlab-${NS}-redis -n ${NS}
+    #bash wait-for.sh pod -lapp=pure-gitlab-${NS}-postgresql -n ${NS}
+    #bash wait-for.sh pod -lapp=pure-gitlab-${NS}-gitlab-ce -n ${NS}
 fi
 
 if [[ $METAL_LB_NGINX_INGRESS == "true" ]]

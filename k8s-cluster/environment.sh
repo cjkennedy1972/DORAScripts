@@ -7,10 +7,6 @@ then
     NS=$1
 fi
 
-NEXUS_PORT="9090"
-JENKINS_PORT="9082"
-GITLAB_PORT="9083"
-
 DOCKER_REGISTRY_PORT="5000"
 
 SECRET_TOKEN="{AQAAABAAAAAQockYoJutL7ZGpK6oePv79oGf7TaXymyHJ6CrQJLYBrk=}"
@@ -53,26 +49,37 @@ VM_TEMPLATE="pure-wp-vm"
 VM_MEMORY="512"
 VM_CPU="1"
 
-#Set  IP addresses of the Sonatype Nexus, Jenkins, GitLab and HA-Proxy services in Kubernetes
-NEXUS_IP="10.21.236.87"
-JENKINS_IP="10.21.236.81"
-GITLAB_IP="10.21.236.88"
+
 HA_PROXY_VM_IP="192.168.8.56"
 
-#Set Fully Qualified Domain Names of the Sonatype Nexus, Jenkins and GitLab services in Kubernetes
-NEXUS_FQDN="nexus.puretec.purestorage.com"
-JENKINS_FQDN="jenkins.puretec.purestorage.com"
-GITLAB_FQDN="git.puretec.purestorage.com"
-DOCKER_FQDN="docker.puretec.purestorage.com"
+#Sonatype Nexus Settings
+NEXUS_FQDN="nexus4.puretec.purestorage.com"
+NEXUS_IP="10.21.236.88"
+NEXUS_PORT="9090"
+
+#Jenkins Settings
+JENKINS_IP="10.21.236.86"
+JENKINS_PORT="9081"
+JENKINS_FQDN="jenkins4.puretec.purestorage.com"
+
+DOCKER_FQDN="docker4.puretec.purestorage.com"
 
 ## CIDR Block for the IPs available for MetalLB LoadBalancer use
 METAL_LB_IP_CIDR="10.21.236.96-10.21.236.107"
 
+## GitLab settings
+# If using MetalLB, update after running install.sh and before running configure.sh
+GITLAB_IP="10.21.236.81"
+GITLAB_PORT="8181"
+GITLAB_DOMAIN="puretec.purestorage.com"
+GITLAB_HTTP_PREFIX="https" #replace with "http" if using HTTP
+GITLAB_SUFFIX="staging" #creates a GitLab instance accessible at http://gitlab-GITLAB_SUFFIX.GITLAB_DOMAIN (for instance, http://gitlab-staging.puretec.purestorage.com)
+#GITLAB_FQDN="git.puretec.purestorage.com"
 #Create and paste below your GitLab API Access Token (with 'api' scope) generated from http://<GITLAB_IP>:<GITLAB_PORT>/profile/personal_access_tokens
-GITLAB_TOKEN="ynsD_sQthQYN-ZUMydja"
+GITLAB_TOKEN="UAJbYsxNM1iYN68dpsdY"
 
 #Create and paste below your Jenkins API  Token generated from http://<JENKINS_IP>:<JENKINS_PORT>/user/admin/configure
-JENKINS_TOKEN="11a1a721d38e63428d5a9733e96361acf8"
+JENKINS_TOKEN="11af76688a08eea8b19b231741423ac057"
 
 ## Enable this if you want to install Prometheus/ Grafana
 ENABLE_MONITORING="false"

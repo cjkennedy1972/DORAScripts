@@ -22,12 +22,13 @@ fi
 #only delete the persistent volumes and ingresses if we specify "all" as a parameter
 if [[ $UNINSTALL_ALL == "all" ]]
 then    
+    echo "Deleting Ingresses"
+    bash ./configuration/nginx-ingress/nginx-ingress-del.sh ${NS}
+
     echo "Deleting persistent storage volumes from namespace " ${NS}
     kubectl -n ${NS} delete pvc --all
     kubectl delete ns ${NS}
 
-    echo "Deleting Ingresses"
-    bash ./configuration/nginx-ingress/nginx-ingress-del.sh ${NS}
 else
     echo "Leaving persistent storage volumes and ingresses alive in namespace " ${NS}
 fi
