@@ -98,7 +98,15 @@ podTemplate(label: label, yaml: yamlPodDefinition) {
                     def arr = VM_IPS.tokenize(&apos;\n&apos;)
                     def SERVERS = &quot;&quot;
                     for (int i = 0; i &lt; arr.size(); i++) {
-                        SERVERS = &quot;${SERVERS}server wp&quot;+i+&quot; ${arr[i]}\\n\\t&quot;
+                      //check whether the VM is up and rinning
+                      STATUS_CODE = sh(
+                        script: "curl --write-out %{http_code} --silent --output /dev/null http://${arr[i]}",
+                        returnStdout: true,
+                      )
+                      // echo STATUS_CODE
+                      if(STATUS_CODE.endsWith("401")) {
+                        SERVERS = "${SERVERS}server wp"+i+" ${arr[i]}\\n\\t"
+                      }
                     }
                     sh &quot;sed -i &apos;s/@@BACK_END_IPS@@/${SERVERS}/g&apos; haproxy.cfg&quot;
                     // sh &quot;cat haproxy.cfg&quot;
