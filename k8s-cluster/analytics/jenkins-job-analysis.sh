@@ -36,7 +36,7 @@ function get_formatted_time(){
     then
         SUMMERY=$SUMMERY$SECONDS"Sec "
     fi
-    if (( $MILI_SECONDS > 0 ))
+    if (( $MINS <= 0 && $SECONDS <= 0 && $MILI_SECONDS > 0 ))
     then
         SUMMERY=$SUMMERY$MILI_SECONDS"Milis "
     fi
@@ -51,17 +51,20 @@ LAST_JOB_RUN_ID=$(curl -sS $BASE_URL'?limit=1'| jq '.[0].id'|bc)
 
 echo "JOB COUNT = $LAST_JOB_RUN_ID"
 CREATE_HEADER_ROW=true;
+SUCCESS_COUNT=0
+TOTAL_EXECUTION_TIME=0
+NO_OF_STAGES=0
 for ((i=$LAST_JOB_RUN_ID;i>$LAST_JOB_RUN_ID-$FETCH_LAST_X_JOBS;i--)); 
 do 
     # echo "JOB ID = $i"
     STATUS_RESPONSE=$(curl -sS $BASE_URL$i'/')
     STATUS=$(echo $STATUS_RESPONSE| jq '.result'|bc)
-    EXECUTION_TIME=$(echo $STATUS_RESPONSE| jq '.durationInMillis'|bc)
-    EXECUTION_TIME=$(get_formatted_time ${EXECUTION_TIME}) 
+    EXECUTION_TIME_IN_MILIS=$(echo $STATUS_RESPONSE| jq '.durationInMillis'|bc)
+    EXECUTION_TIME=$(get_formatted_time ${EXECUTION_TIME_IN_MILIS}) 
     # echo "STATUS = $STATUS"
     STAGES_RESPONSE=$(curl -sS $BASE_URL$i'/nodes/')
     # echo "STAGES = $STAGES_RESPONSE"
-    
+    declare -a STAGES_EXECUTION_TIME
     if $CREATE_HEADER_ROW
     then
         NO_OF_STAGES=$(echo $STAGES_RESPONSE| jq 'length')
@@ -75,11 +78,20 @@ do
         echo $HEADER_STRING> $FILE_NAME
         CREATE_HEADER_ROW=false;
     fi
+    if [ "$STATUS" == "SUCCESS" ]
+    then
+        ((SUCCESS_COUNT++))
+        TOTAL_EXECUTION_TIME=$(expr $TOTAL_EXECUTION_TIME + $EXECUTION_TIME_IN_MILIS)
+    fi
     DATA_ROW="$i,$STATUS,$EXECUTION_TIME"
     for ((j=0;j<$NO_OF_STAGES;j++)); 
     do
         STAGE_STATUS=$(echo $STAGES_RESPONSE| jq ".[$j].result"|bc)
         STAGE_TIME=$(echo $STAGES_RESPONSE| jq ".[$j].durationInMillis"|bc)
+        if [ "$STATUS" == "SUCCESS" ]
+        then
+            STAGES_EXECUTION_TIME[$j]=$((STAGES_EXECUTION_TIME[$j]+STAGE_TIME))
+        fi
         STAGE_TIME=$(get_formatted_time ${STAGE_TIME}) 
         if [ "$STAGE_TIME" != '' ]
         then
@@ -91,5 +103,17 @@ do
     done
     echo $DATA_ROW >> $FILE_NAME  
 done
+SUCCESS_AVERAGE=$(echo  "scale=0; $SUCCESS_COUNT*100/$FETCH_LAST_X_JOBS"| bc -l)
+AVERAGE_TIME=$((TOTAL_EXECUTION_TIME/SUCCESS_COUNT)) 
+AVERAGE_TIME=$(get_formatted_time ${AVERAGE_TIME}) 
+STAGE_AVG_ROW=''
+for ((i=0;i<$NO_OF_STAGES;i++)); 
+do
+    STAGE_AVG=$((STAGES_EXECUTION_TIME[i]/SUCCESS_COUNT))
+    STAGE_AVG=$(get_formatted_time ${STAGE_AVG})
+    STAGE_AVG_ROW="$STAGE_AVG_ROW,$STAGE_AVG"
+done
+echo "," >> $FILE_NAME
+echo "Average, $SUCCESS_AVERAGE% SUCCESS,$AVERAGE_TIME$STAGE_AVG_ROW" >> $FILE_NAME  
 # echo "Completed at $(date)"
 
