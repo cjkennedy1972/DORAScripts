@@ -53,35 +53,35 @@ VM_CPU="1"
 HA_PROXY_VM_IP="192.168.8.56"
 
 #Sonatype Nexus Settings
-NEXUS_FQDN="nexus4.puretec.purestorage.com"
+NEXUS_FQDN="nexus.puretec.purestorage.com"
 NEXUS_IP="10.21.236.88"
 NEXUS_PORT="9090"
 
 #Jenkins Settings
 JENKINS_IP="10.21.236.86"
 JENKINS_PORT="9081"
-JENKINS_FQDN="jenkins4.puretec.purestorage.com"
+JENKINS_FQDN="jenkins.puretec.purestorage.com"
 
-DOCKER_FQDN="docker4.puretec.purestorage.com"
+DOCKER_FQDN="docker.puretec.purestorage.com"
 
 ## CIDR Block for the IPs available for MetalLB LoadBalancer use
 METAL_LB_IP_CIDR="10.21.236.96-10.21.236.107"
 
 ## GitLab settings
 # If using MetalLB, update after running install.sh and before running configure.sh
-GITLAB_IP="10.21.236.81"
+GITLAB_IP="10.21.236.89"
 GITLAB_PORT="8181"
 GITLAB_DOMAIN="puretec.purestorage.com"
 GITLAB_HTTP_PREFIX="https" #replace with "http" if using HTTP
-GITLAB_SUFFIX="staging" #creates a GitLab instance accessible at http://gitlab-GITLAB_SUFFIX.GITLAB_DOMAIN (for instance, http://gitlab-staging.puretec.purestorage.com)
+GITLAB_SUFFIX="" #if non-empty, creates a GitLab instance accessible at GITLAB_HTTP_PREFIX://gitlab-GITLAB_SUFFIX.GITLAB_DOMAIN (for instance, http://gitlab-staging.puretec.purestorage.com). Otherwise, GitLab is available at GITLAB_HTTP_PREFIX://gitlab.GITLAB_DOMAIN
 #GITLAB_FQDN="git.puretec.purestorage.com"
+
 #Create and paste below your GitLab API Access Token (with 'api' scope) generated from http://<GITLAB_IP>:<GITLAB_PORT>/profile/personal_access_tokens
-GITLAB_TOKEN="UAJbYsxNM1iYN68dpsdY"
-
+GITLAB_TOKEN="jLuFaJw3NzkkfxacM5md"
 #Create and paste below your Jenkins API  Token generated from http://<JENKINS_IP>:<JENKINS_PORT>/user/admin/configure
-JENKINS_TOKEN="11af76688a08eea8b19b231741423ac057"
+JENKINS_TOKEN="11546ed26f156524be9f06618ab52dba2d"
 
-## Enable this if you want to install Prometheus/ Grafana
+## Enable this if you want to install or uninstall Prometheus/Grafana
 ENABLE_MONITORING="false"
 
 ## Enable this if you want to install MetalLB + NGINX Ingress
