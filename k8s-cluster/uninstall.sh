@@ -14,7 +14,7 @@ kubectl -n ${NS} delete deployment,svc,pod,secret --all
 
 if [[ $ENABLE_MONITORING == "true" ]]
 then
-    echo "Deleting Prometheus/Grafana helm charts for namespace " ${NS}
+    echo "Deleting Prometheus/Grafana helm charts from namespace" ${NS}
     helm delete pure-prometheus-${NS} --purge
     helm delete pure-grafana-${NS} --purge
 fi
@@ -25,20 +25,20 @@ then
     echo "Deleting Ingresses"
     bash ./configuration/nginx-ingress/nginx-ingress-del.sh ${NS}
 
-    echo "Deleting persistent storage volumes from namespace " ${NS}
+    echo "Deleting persistent storage volumes from namespace" ${NS}
     kubectl -n ${NS} delete pvc --all
     kubectl delete ns ${NS}
 
 else
-    echo "Leaving persistent storage volumes and ingresses alive in namespace " ${NS}
+    echo "Leaving persistent storage volumes and ingresses alive in namespace" ${NS}
 fi
 
 if [[ $UNINSTALL_PREREQUISITES == "true" ]]
 then
-    echo "Delete MetalLB" 
+    echo "Deleting MetalLB..." 
     bash ./others/metal-lb/metal-lb-del.sh
 
-    echo "NGINX Ingress" 
+    echo "Deleting NGINX Ingress..." 
     bash ./others/nginx-ingress/nginx-ingress-del.sh
 fi
 
