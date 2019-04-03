@@ -37,7 +37,7 @@ global:
   hosts:
     domain: puretec.purestorage.com
     hostSuffix: dev
-    https: true
+    https: false
   #  externalIP: 10.21.236.95
     ssh: ~
 
@@ -47,7 +47,7 @@ global:
     annotations: {}
     enabled: true
     tls:
-      enabled: true
+      enabled: false
 
   ## Initial root password for this GitLab installation
   ## Secret created according to doc/installation/secrets.md#initial-root-password
