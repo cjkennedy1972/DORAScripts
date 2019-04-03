@@ -5,7 +5,7 @@ SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 . "$SCRIPTPATH"/../../environment.sh
 
 GITLAB_HOST=$GITLAB_IP:$GITLAB_PORT
-GITLAB_HOST=gitlab-dev.puretec.purestorage.com
+#GITLAB_HOST=gitlab-dev.puretec.purestorage.com
 GITLAB_URL="$GITLAB_HTTP_PREFIX://$GITLAB_HOST"
 
 # Enable "Allow requests to the local network from hooks and services" (Admin Area -> Settings)
