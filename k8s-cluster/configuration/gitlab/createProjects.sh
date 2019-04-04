@@ -5,7 +5,7 @@ SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 . "$SCRIPTPATH"/../../environment.sh
 
 GITLAB_HOST=$GITLAB_IP:$GITLAB_PORT
-if [$GITLAB_SUFFIX == ""]
+if [ $GITLAB_SUFFIX == "" ]
 then
   GITLAB_HOST=gitlab.$GITLAB_DOMAIN
 else 
