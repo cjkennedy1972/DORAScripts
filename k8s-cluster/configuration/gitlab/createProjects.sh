@@ -5,8 +5,15 @@ SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 . "$SCRIPTPATH"/../../environment.sh
 
 GITLAB_HOST=$GITLAB_IP:$GITLAB_PORT
-#GITLAB_HOST=gitlab-dev.puretec.purestorage.com
+if [$GITLAB_SUFFIX == ""]
+then
+  GITLAB_HOST=gitlab.$GITLAB_DOMAIN
+else 
+  GITLAB_HOST=gitlab-$GITLAB_SUFFIX.$GITLAB_DOMAIN
+fi
 GITLAB_URL="$GITLAB_HTTP_PREFIX://$GITLAB_HOST"
+
+echo "GitLab Url" $GITLAB_URL
 
 # Enable "Allow requests to the local network from hooks and services" (Admin Area -> Settings)
 curl --insecure --request PUT -H "PRIVATE-TOKEN: $GITLAB_TOKEN" "$GITLAB_URL/api/v4/application/settings?allow_local_requests_from_hooks_and_services=true"
