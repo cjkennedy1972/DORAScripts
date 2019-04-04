@@ -1,6 +1,6 @@
 #!/usr/bin/env ansible-playbook
 - name: Add Docker Insecure Registry
-  hosts: kube-cluster:children'
+  hosts: kube-cluster:children
   become: yes
   become_user: root
   become_method: sudo
