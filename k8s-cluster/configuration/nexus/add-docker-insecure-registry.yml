@@ -55,5 +55,5 @@
         dest: "/etc/docker/daemon.json"
       when: stat_result.stat.exists == True
 
-    - name: Restart docker sevice
+    - name: Restart docker service
       service: name=docker state=restarted
