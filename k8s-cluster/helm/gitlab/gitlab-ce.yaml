@@ -37,7 +37,7 @@ global:
   hosts:
     domain: puretec.purestorage.com
     hostSuffix: dev
-    https: false
+    https: true
   #  externalIP: 10.21.236.95
     ssh: ~
 
@@ -47,7 +47,7 @@ global:
     annotations: {}
     enabled: true
     tls:
-      enabled: false
+      enabled: true
 
   ## Initial root password for this GitLab installation
   ## Secret created according to doc/installation/secrets.md#initial-root-password
@@ -304,7 +304,7 @@ global:
 certmanager:
   # Install cert-manager chart. Set to false if you already have cert-manager
   # installed or if you are not using cert-manager.
-  install: false
+  install: true
   # Other cert-manager configurations from upstream
   # See https://github.com/kubernetes/charts/tree/master/stable/cert-manager#configuration
   rbac:
