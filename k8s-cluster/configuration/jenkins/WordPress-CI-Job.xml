@@ -132,7 +132,7 @@ podTemplate(label: label, yaml: yamlPodDefinition) {
                 sh &quot;git config --global core.preloadindex true&quot;
                 //sh &quot;git config --global core.fscache true&quot;
                 //sh &quot;git config --global gc.auto 256&quot;
-                git branch: &apos;master&apos;, credentialsId: GIT_CREDENTIALS_USER, url: GIT_REPO_URL
+                git branch: &apos;4.9&apos;, credentialsId: GIT_CREDENTIALS_USER, url: GIT_REPO_URL
                 }
                     
             }
