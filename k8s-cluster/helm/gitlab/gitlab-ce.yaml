@@ -43,7 +43,7 @@ global:
 
   ## doc/charts/globals.md#configure-ingress-settings
   ingress:
-    configureCertmanager: true
+    configureCertmanager: false
     annotations: {}
     enabled: true
     tls:
@@ -304,7 +304,7 @@ global:
 certmanager:
   # Install cert-manager chart. Set to false if you already have cert-manager
   # installed or if you are not using cert-manager.
-  install: true
+  install: false
   # Other cert-manager configurations from upstream
   # See https://github.com/kubernetes/charts/tree/master/stable/cert-manager#configuration
   rbac:
@@ -460,6 +460,8 @@ gitlab:
       size: 20Gi
   unicorn:
     enabled: true
+    minReplicas: 1
+    maxReplicas: 1
   sidekiq:
     enabled: true
   gitlab-shell:
