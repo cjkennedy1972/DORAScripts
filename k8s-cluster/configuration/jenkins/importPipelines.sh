@@ -68,11 +68,13 @@ curl -H $CRUMB -X POST 'http://admin:'${JENKINS_TOKEN}'@'${JENKINS_IP}':'${JENKI
   }
 }'
 
+echo "Namespace" ${NS}
+
 ## Import WordPress CI pipeline job definition
 cp "$SCRIPTPATH/WordPress-CI-Job.xml" "$SCRIPTPATH/temp.xml"
 rp "s/{{NEXUS_IP_ADDRESS}}/${NEXUS_IP}/g" "$SCRIPTPATH/temp.xml"
 rp "s/{{NEXUS_PORT}}/${NEXUS_PORT}/g" "$SCRIPTPATH/temp.xml"
-rp "s/{{GITLAB_IP_ADDRESS}}/${GITLAB_IP}/g" "$SCRIPTPATH/temp.xml"
+rp "s/{{GITLAB_IP_ADDRESS}}/pure-gitlab-${NS}-unicorn/g" "$SCRIPTPATH/temp.xml"
 rp "s/{{GITLAB_PORT}}/${GITLAB_PORT}/g" "$SCRIPTPATH/temp.xml"
 rp "s/{{SECRET_TOKEN}}/${SECRET_TOKEN}/g" "$SCRIPTPATH/temp.xml"
 rp "s/{{DOCKER_REGISTRY_PORT}}/${DOCKER_REGISTRY_PORT}/g" "$SCRIPTPATH/temp.xml"
