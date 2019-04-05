@@ -12,11 +12,14 @@ template=`cat "$SCRIPTPATH/jenkins.yaml" | sed "s/{{JENKINS_IP_ADDRESS}}/$JENKIN
 claim=`cat "$SCRIPTPATH/jenkins-claim.yaml" | sed "s/{{STORAGE_CLASS_NAME}}/$STORAGE_CLASS_NAME/g" | sed "s/{{IMPORT_VOLUMES_COMMENT}}/$IMPORT_VOLUMES_COMMENT/g" `
 echo "$claim" | kubectl create -n ${NS} -f -
 
-if [[ $TARGET_STORAGE != "kontena"  ]]
-then
-    slaveclaim=`cat "$SCRIPTPATH/jenkins-claim-slave.yaml" | sed "s/{{STORAGE_CLASS_NAME}}/$STORAGE_CLASS_NAME/g" | sed "s/{{IMPORT_VOLUMES_COMMENT}}/$IMPORT_VOLUMES_COMMENT/g" `
-    echo "$slaveclaim" | kubectl create -n ${NS} -f -
-fi
+# if [[ $TARGET_STORAGE != "kontena"  ]]
+# then
+#     slaveclaim=`cat "$SCRIPTPATH/jenkins-claim-slave.yaml" | sed "s/{{STORAGE_CLASS_NAME}}/$STORAGE_CLASS_NAME/g" | sed "s/{{IMPORT_VOLUMES_COMMENT}}/$IMPORT_VOLUMES_COMMENT/g" `
+#     echo "$slaveclaim" | kubectl create -n ${NS} -f -
+# fi
 
 # Install jenkins component 
 echo "$template" | helm install --name pure-jenkins-${NS} "$SCRIPTPATH/jenkins" --namespace ${NS} -f -
+
+# Create Slave PVCs
+bash "$SCRIPTPATH/jenkins-slave-claim.sh" 
