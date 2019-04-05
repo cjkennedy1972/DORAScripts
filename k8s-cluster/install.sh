@@ -2,7 +2,7 @@
 
 . environment.sh
 
-kubectl create ns ${NS}
+# kubectl create ns ${NS}
 
 if [[ $METAL_LB_NGINX_INGRESS == "true" ]]
 then
@@ -36,16 +36,18 @@ if [[ $TARGET_DEPLOYMENT == "onprem" ]]
 then
     bash ./helm/gitlab/gitlab-ce.sh ${NS}
     sleep 2
-    #bash wait-for.sh pod -lapp=pure-gitlab-${NS}-redis -n ${NS}
-    #bash wait-for.sh pod -lapp=pure-gitlab-${NS}-postgresql -n ${NS}
-    #bash wait-for.sh pod -lapp=pure-gitlab-${NS}-gitlab-ce -n ${NS}
+    bash wait-for.sh pod -lapp=postgresql,release=pure-gitlab-${NS} -n ${NS}
+    bash wait-for.sh pod -lapp=redis,release=pure-gitlab-${NS} -n ${NS}
+    bash wait-for.sh pod -lapp=minio,release=pure-gitlab-${NS} -n ${NS}
+    bash wait-for.sh pod -lapp=gitaly,release=pure-gitlab-${NS} -n ${NS}
+    bash wait-for.sh pod -lapp=unicorn,release=pure-gitlab-${NS} -n ${NS}
 fi
 
 if [[ $ENABLE_MONITORING == "true" ]]
 then
-    bash ./helm/prometheus/prometheus.sh ${NS}
-    bash ./helm/grafana/grafana.sh ${NS}
+    bash ./helm/prometheus/prometheus.sh
+    bash ./helm/grafana/grafana.sh
     sleep 2
-    bash wait-for.sh pod -lapp=prometheus -n ${NS}
-    bash wait-for.sh pod -lapp=grafana -n ${NS}
+    bash wait-for.sh pod -lapp=prometheus -n ${MONITORING_NS}
+    bash wait-for.sh pod -lapp=grafana -n ${MONITORING_NS}
 fi
