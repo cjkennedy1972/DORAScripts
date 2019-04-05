@@ -77,9 +77,9 @@ GITLAB_SUFFIX="dev" #if non-empty, creates a GitLab instance accessible at GITLA
 #GITLAB_FQDN="git.puretec.purestorage.com"
 
 #Create and paste below your GitLab API Access Token (with 'api' scope) generated from http://<GITLAB_IP>:<GITLAB_PORT>/profile/personal_access_tokens
-GITLAB_TOKEN="oVvsJqeV-ybCe2uMU7bP"
+GITLAB_TOKEN="hH9zwUwN1s15g9ys8AGi"
 #Create and paste below your Jenkins API  Token generated from http://<JENKINS_IP>:<JENKINS_PORT>/user/admin/configure
-JENKINS_TOKEN="11723a39ff9d413775c52f2ba2e3dfff66"
+JENKINS_TOKEN="1178056d502ab684746dae3f8a0f5a7dd8"
 
 ## Grafana settings
 GRAFANA_HOSTNAME="grafana.puretec.purestorage.com"
