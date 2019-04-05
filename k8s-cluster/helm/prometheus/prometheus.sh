@@ -4,7 +4,7 @@ SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 
 . "$SCRIPTPATH"/../../environment.sh
 
-# Install Prometheus using Helm chart
+# Install Prometheus Compoent using Helm chart
+# No PVC is used
 template=`cat "$SCRIPTPATH/values.yaml"`
-helm install --name pure-prometheus-${NS} stable/prometheus --namespace ${NS} -f "$SCRIPTPATH"/values.yaml
-#echo "$template" | helm install --name pure-prometheus-${NS} stable/prometheus --namespace ${NS} -f -
+echo "$template" | helm install --name pure-prometheus-${NS} stable/prometheus --namespace ${MONITORING_NS} -f -
