@@ -1,4 +1,4 @@
-FROM library/node:5
+FROM library/node:9
 MAINTAINER <akumar@purestorage.com>
 
 # Install Bower & Grunt
