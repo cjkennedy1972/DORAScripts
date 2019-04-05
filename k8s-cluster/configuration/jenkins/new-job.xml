@@ -1,0 +1,176 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@2.32">
+  <actions/>
+  <description>A job that builds the WordPress source code from a local GitLab repository and publishes the resulting build to a Nexus repository</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <com.dabsquared.gitlabjenkins.connection.GitLabConnectionProperty plugin="gitlab-plugin@1.5.11">
+      <gitLabConnection></gitLabConnection>
+    </com.dabsquared.gitlabjenkins.connection.GitLabConnectionProperty>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>DOCKER_REPO_URL</name>
+          <description>URL of your private Docker repository where Jenkins slave and custom WordPress containers are pulled from. Enter the URL in the following format: 10.21.236.89:5000</description>
+          <defaultValue>10.21.236.89:5000</defaultValue>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>GIT_REPO_URL</name>
+          <description>Enter the URL of your Git repository in the following format: http://pure-gitlab-new-ashutosh-unicorn:8181/root/wordpress-develop.git</description>
+          <defaultValue>http://pure-gitlab-new-ashutosh-unicorn:8181/root/wordpress-develop.git</defaultValue>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>NEXUS_URL</name>
+          <description>Please enter the Sonatype Nexus URL. For e.g. 10.21.236.89:9090</description>
+          <defaultValue>10.21.236.89:9090</defaultValue>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>GIT_CREDENTIALS_USER</name>
+          <description>Name of the credentials user to use to authenticate with the Git repository</description>
+          <defaultValue>git-user</defaultValue>
+          <trim>true</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+      <triggers>
+        <com.dabsquared.gitlabjenkins.GitLabPushTrigger plugin="gitlab-plugin@1.5.11">
+          <spec></spec>
+          <triggerOnPush>true</triggerOnPush>
+          <triggerOnMergeRequest>true</triggerOnMergeRequest>
+          <triggerOnPipelineEvent>false</triggerOnPipelineEvent>
+          <triggerOnAcceptedMergeRequest>false</triggerOnAcceptedMergeRequest>
+          <triggerOnClosedMergeRequest>false</triggerOnClosedMergeRequest>
+          <triggerOnApprovedMergeRequest>true</triggerOnApprovedMergeRequest>
+          <triggerOpenMergeRequestOnPush>never</triggerOpenMergeRequestOnPush>
+          <triggerOnNoteRequest>true</triggerOnNoteRequest>
+          <noteRegex>Jenkins please retry a build</noteRegex>
+          <ciSkip>true</ciSkip>
+          <skipWorkInProgressMergeRequest>true</skipWorkInProgressMergeRequest>
+          <setBuildDescription>true</setBuildDescription>
+          <branchFilterType>All</branchFilterType>
+          <includeBranchesSpec></includeBranchesSpec>
+          <excludeBranchesSpec></excludeBranchesSpec>
+          <sourceBranchRegex></sourceBranchRegex>
+          <targetBranchRegex></targetBranchRegex>
+          <secretToken>{AQAAABAAAABAR9/np5C0DlZ+B/6J0ZAGlmv9yPMWx7XR39tB1O12n/CoTGWImvhEmIvLxxcjKJNU8J2xP5ez5VcvZYM5zOw/CILp7qmdwCBvmVioghff/GM=}</secretToken>
+          <pendingBuildName></pendingBuildName>
+          <cancelPendingBuildsOnUpdate>false</cancelPendingBuildsOnUpdate>
+        </com.dabsquared.gitlabjenkins.GitLabPushTrigger>
+      </triggers>
+    </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.64">
+    <script>def label = &quot;purepod-${UUID.randomUUID().toString()}&quot;
+def DOCKER_REPO_URL = &quot;${params.DOCKER_REPO_URL}&quot;
+def GIT_REPO_URL = &quot;${params.GIT_REPO_URL}&quot;
+def GIT_CREDENTIALS_USER = &quot;${params.GIT_CREDENTIALS_USER}&quot;
+def NEXUS_URL = &quot;${params.NEXUS_URL}&quot;
+def claimNo = ((env.BUILD_NUMBER as Integer) % 100) + 1
+
+def yamlPodDefinition = &quot;&quot;&quot;
+apiVersion: v1
+kind: Pod
+metadata:
+  generateName: agent-k8s-
+  labels:
+    name: jnlp
+    label: jnlp
+spec:
+  securityContext:
+    runAsUser: 1000
+  containers:
+  - name: jnlp
+    #image: &quot;&quot;&quot; + DOCKER_REPO_URL + &quot;&quot;&quot;/jnlp-slave-sudo 
+    image: jenkins/jnlp-slave
+    workingDir: /home/jenkins
+    tty: true
+    securityContext:
+      runAsUser: 0
+      privileged: true
+      #runAsUser: 2000
+      #allowPrivilegeEscalation: false
+    volumeMounts:
+      - 
+        mountPath: /home/jenkins
+        name: pure-volume
+        readOnly: false
+  - name: buildwordpress
+    image: &quot;&quot;&quot; + DOCKER_REPO_URL + &quot;&quot;&quot;/build-wordpress
+    imagePullPolicy: IfNotPresent
+    #workingDir: /home/jenkins/workspace/&quot;&quot;&quot; + env.JOB_NAME + &quot;&quot;&quot;
+    workingDir: /home/jenkins
+    command: 
+    - cat
+    volumeMounts:
+      - 
+        mountPath: /home/jenkins
+        name: pure-volume
+        readOnly: false
+    tty: true
+    securityContext:
+      runAsUser: 0
+      privileged: true
+  volumes:
+    - name: pure-volume
+      persistentVolumeClaim:
+        claimName: fb-jenkins-slave-&quot;&quot;&quot; + claimNo + &quot;&quot;&quot;
+  imagePullSecrets:
+  - name: jenkins-pull
+&quot;&quot;&quot;
+
+// Create pod template using desired image.
+
+
+podTemplate(label: label, yaml: yamlPodDefinition) {
+    node(label) {
+    container(&apos;buildwordpress&apos;) {
+            // Git clone source code.
+            stage(&apos;Clone Repository&apos;) {
+                dir(env.BUILD_NUMBER + &apos;/build&apos;) {
+                sh &quot;git config --global core.preloadindex true&quot;
+                //sh &quot;git config --global core.fscache true&quot;
+                //sh &quot;git config --global gc.auto 256&quot;
+                git branch: &apos;4.9&apos;, credentialsId: GIT_CREDENTIALS_USER, url: GIT_REPO_URL
+                }
+                    
+            }
+            // Install dependencies and build project.
+            stage(&apos;Build Project&apos;) {
+                dir(env.BUILD_NUMBER + &apos;/build&apos;) {
+                    sh &quot;npm install&quot;
+                    sh &quot;grunt build&quot;
+                }
+            }
+            // Run QUnit test cases
+            stage(&apos;Run Unit Tests&apos;) {
+                dir(env.BUILD_NUMBER + &apos;/build&apos;) {
+                    sh &quot;grunt qunit:reports --force&quot;
+                }
+            }
+            // Create tar.gz package
+            stage(&apos;Create Build Package&apos;) {
+                dir(env.BUILD_NUMBER + &apos;/build&apos;) {
+                    sh &quot;mkdir wordpress&quot; 
+                    sh &quot;cp -rf build/* wordpress/&quot;
+                    sh &quot;tar -czvf wordpress.tar.gz wordpress/&quot;
+                }
+            }
+            stage(&apos;Add to Artifacts Repository&apos;) {
+                dir(env.BUILD_NUMBER + &apos;/build&apos;) {
+                    nexusArtifactUploader artifacts: [[artifactId: &apos;wordpress-package&apos;, classifier: &apos;&apos;, file: &apos;wordpress.tar.gz&apos;, type: &apos;tar.gz&apos;]], credentialsId: &apos;nexus&apos;, groupId: &apos;&apos;, nexusUrl: NEXUS_URL, nexusVersion: &apos;nexus3&apos;, protocol: &apos;http&apos;, repository: &apos;builds-store&apos;, version: &apos;1.0.0.&apos;+env.BUILD_NUMBER
+                }
+            }
+        }
+    }
+}
+</script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <authToken>115424d811ca142053b10c17707fd1e60d</authToken>
+  <disabled>false</disabled>
+</flow-definition>
