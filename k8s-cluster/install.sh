@@ -13,7 +13,7 @@ bash wait-for.sh pod -lapp=nexus -n ${NS}
 bash ./helm/jenkins/jenkins.sh ${NS}
 sleep 2
 bash wait-for.sh pod -lapp=pure-jenkins-${NS} -n ${NS}
-
+NEW_GITLAB="true"
 #Install only GitLab on FlashBlade
 if [[ $TARGET_DEPLOYMENT == "onprem" ]]
 then
@@ -58,8 +58,8 @@ bash ./configuration/nginx-ingress/nginx-ingress.sh
 
 if [[ $ENABLE_MONITORING == "true" ]]
 then
-    bash ./helm/prometheus/prometheus.sh ${NS}
-    bash ./helm/grafana/grafana.sh ${NS}
+    bash ./helm/prometheus/prometheus.sh
+    bash ./helm/grafana/grafana.sh
     sleep 2
     bash wait-for.sh pod -lapp=prometheus -n ${MONITORING_NS}
     bash wait-for.sh pod -lapp=grafana -n ${MONITORING_NS}
