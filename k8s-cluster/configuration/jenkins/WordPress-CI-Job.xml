@@ -63,11 +63,13 @@
     </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
   </properties>
   <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.57">
-    <script>def label = &quot;purepod-${UUID.randomUUID().toString()}&quot;
+    <script>
+def label = &quot;purepod-${UUID.randomUUID().toString()}&quot;
 def DOCKER_REPO_URL = &quot;${params.DOCKER_REPO_URL}&quot;
 def GIT_REPO_URL = &quot;${params.GIT_REPO_URL}&quot;
 def GIT_CREDENTIALS_USER = &quot;${params.GIT_CREDENTIALS_USER}&quot;
 def NEXUS_URL = &quot;${params.NEXUS_URL}&quot;
+def claimNo = ((env.BUILD_NUMBER as Integer) % 100) + 1
 
 def yamlPodDefinition = &quot;&quot;&quot;
 apiVersion: v1
@@ -115,7 +117,7 @@ spec:
   volumes:
     - name: pure-volume
       persistentVolumeClaim:
-        claimName: fb-jenkins-slave
+        claimName: jenkins-slave-&quot;&quot;&quot; + claimNo + &quot;&quot;&quot;
   imagePullSecrets:
   - name: jenkins-pull
 &quot;&quot;&quot;
@@ -162,9 +164,11 @@ podTemplate(label: label, yaml: yamlPodDefinition) {
                     nexusArtifactUploader artifacts: [[artifactId: &apos;wordpress-package&apos;, classifier: &apos;&apos;, file: &apos;wordpress.tar.gz&apos;, type: &apos;tar.gz&apos;]], credentialsId: &apos;nexus&apos;, groupId: &apos;&apos;, nexusUrl: NEXUS_URL, nexusVersion: &apos;nexus3&apos;, protocol: &apos;http&apos;, repository: &apos;builds-store&apos;, version: &apos;1.0.0.&apos;+env.BUILD_NUMBER
                 }
             }
+
             stage (&apos;Trigger CD job&apos;) {
                 build job: &apos;WordPress-CD-Job&apos;, parameters: [[$class: &apos;StringParameterValue&apos;, name: &apos;WP_BUILD_NUMBER&apos;, value: env.BUILD_NUMBER]],  wait: false
             }
+
         }
     }
 }
