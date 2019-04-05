@@ -23,24 +23,27 @@ FILE_NAME=$JENKINS_JOB_NAME'@'$JENKINS_IP':'$JENKINS_PORT'.csv'
 
 
 function get_formatted_time(){
+    # TOTAL_TIME=$1
+    # MINS=$(($TOTAL_TIME/60000))
+    # SECONDS=$((($TOTAL_TIME/1000)-($MINS*60)))
+    # MILI_SECONDS=$((($TOTAL_TIME)-($SECONDS*1000)-($MINS*60000)))
+    # SUMMERY=""
+    # if (( $MINS > 0 ))
+    # then
+    #     SUMMERY=$MINS"Min "
+    # fi
+    # if (( $SECONDS > 0 ))
+    # then
+    #     SUMMERY=$SUMMERY$SECONDS"Sec "
+    # fi
+    # if (( $MINS <= 0 && $SECONDS <= 0 && $MILI_SECONDS > 0 ))
+    # then
+    #     SUMMERY=$SUMMERY$MILI_SECONDS"Milis "
+    # fi
+    # echo $SUMMERY
     TOTAL_TIME=$1
-    MINS=$(($TOTAL_TIME/60000))
-    SECONDS=$((($TOTAL_TIME/1000)-($MINS*60)))
-    MILI_SECONDS=$((($TOTAL_TIME)-($SECONDS*1000)-($MINS*60000)))
-    SUMMERY=""
-    if (( $MINS > 0 ))
-    then
-        SUMMERY=$MINS"Min "
-    fi
-    if (( $SECONDS > 0 ))
-    then
-        SUMMERY=$SUMMERY$SECONDS"Sec "
-    fi
-    if (( $MINS <= 0 && $SECONDS <= 0 && $MILI_SECONDS > 0 ))
-    then
-        SUMMERY=$SUMMERY$MILI_SECONDS"Milis "
-    fi
-    echo $SUMMERY
+    SECONDS=$(($TOTAL_TIME/1000))
+    echo $SECONDS
 }
 
 
