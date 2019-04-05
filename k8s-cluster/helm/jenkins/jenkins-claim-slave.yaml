@@ -35,4 +35,16 @@ spec:
     requests:
       storage: 100Gi
   storageClassName: kontena-storage-block
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: cephfs-jenkins-slave
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: kontena-storage-fs
 
