@@ -1,0 +1,698 @@
+{
+  "formatVersion": 3,
+  "id": "root",
+  "ideas": {
+    "1": {
+      "title": "DORAScripts",
+      "id": 1,
+      "attr": {
+        "position": [
+          -363,
+          -51,
+          1
+        ],
+        "style": {
+          "width": 108,
+          "fontMultiplier": 1.5,
+          "text": {
+            "color": "#FFFFFF"
+          },
+          "backgroundColor": "#339966"
+        }
+      }
+    },
+    "3": {
+      "title": "k8s-cluster",
+      "id": 4,
+      "attr": {
+        "position": [
+          283,
+          -227,
+          1
+        ],
+        "note": {
+          "index": 8,
+          "text": "The entire CI-CD part will be run on Kubernetes cluster"
+        },
+        "style": {
+          "text": {
+            "color": "#FFFFFF"
+          },
+          "fontMultiplier": 1.5
+        }
+      },
+      "ideas": {
+        "1": {
+          "title": "helm \nContains helm charts for Gitlab, jenkins, Prometheus, Grafana",
+          "id": 29,
+          "attr": {
+            "style": {
+              "width": 159
+            },
+            "position": [
+              139,
+              142,
+              9
+            ]
+          }
+        },
+        "11": {
+          "title": "others\nContains configuration scripts for MetalLB, Ingress and Nexus",
+          "id": 32,
+          "attr": {
+            "position": [
+              144,
+              255,
+              8
+            ],
+            "style": {
+              "width": 152
+            }
+          }
+        },
+        "21": {
+          "title": "load-test-simulation\nContains script for load testing on GitLab, etc",
+          "id": 33,
+          "attr": {
+            "position": [
+              145,
+              361,
+              7
+            ]
+          }
+        },
+        "0.5": {
+          "title": "configuration\nContains Configuration scripts for gitlab, nexus, Jenkins, Nginx-Ingress",
+          "id": 30,
+          "attr": {
+            "position": [
+              104,
+              -177,
+              6
+            ],
+            "style": {
+              "width": 161
+            }
+          }
+        }
+      }
+    },
+    "4": {
+      "title": "vm-cluster",
+      "id": 6,
+      "attr": {
+        "position": [
+          -306,
+          63,
+          1
+        ],
+        "note": {
+          "index": 9,
+          "text": "We use VMs in CD part. We do deploy a WordPress on the set of VMs configured on Vsphere."
+        },
+        "style": {
+          "fontMultiplier": 1.25,
+          "text": {
+            "color": "#FFFFFF"
+          }
+        }
+      },
+      "ideas": {
+        "1": {
+          "title": "Wordpress\n(Contains script to setup the VM for wordpress)",
+          "id": 17,
+          "attr": {
+            "style": {
+              "width": 168
+            }
+          },
+          "ideas": {
+            "1": {
+              "title": "setup-vm.sh",
+              "id": 19,
+              "ideas": {
+                "1": {
+                  "title": "Installs Mysql, PHP and other required packages",
+                  "id": 20,
+                  "attr": {
+                    "style": {
+                      "backgroundColor": "#CCFFFF",
+                      "text": {
+                        "color": "#008080"
+                      }
+                    }
+                  },
+                  "ideas": {}
+                }
+              },
+              "attr": {
+                "position": [
+                  203,
+                  -85,
+                  2
+                ]
+              }
+            },
+            "2": {
+              "title": "install-wp.sh",
+              "id": 21,
+              "attr": {
+                "position": [
+                  128,
+                  124,
+                  1
+                ]
+              },
+              "ideas": {
+                "1": {
+                  "title": "Installs wordpress and configure it through some predefined posts",
+                  "id": 23,
+                  "attr": {
+                    "style": {
+                      "backgroundColor": "#CCFFFF",
+                      "text": {
+                        "color": "#008080"
+                      }
+                    }
+                  }
+                },
+                "2": {
+                  "title": "db/create-db.sh\n(create wordpress Schema)",
+                  "id": 25,
+                  "attr": {
+                    "style": {
+                      "width": 155
+                    }
+                  }
+                },
+                "3": {
+                  "title": "db/wordpress.sql\n(Creates some dummy post on WP database)",
+                  "id": 26
+                }
+              }
+            },
+            "3": {
+              "title": "files directory",
+              "id": 27,
+              "ideas": {
+                "1": {
+                  "title": "Contains WP configuration files which we copy to VM while installing WP through install.sh",
+                  "id": 28,
+                  "attr": {
+                    "style": {
+                      "backgroundColor": "#CCFFFF",
+                      "text": {
+                        "color": "#008080"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "5": {
+      "title": "install.sh\n(Installs and configure Services on K8s cluster)",
+      "id": 34,
+      "attr": {
+        "position": [
+          649,
+          -125,
+          1
+        ]
+      },
+      "ideas": {
+        "1": {
+          "title": "1. Creates Namespace on K8s cluster",
+          "id": 38,
+          "attr": {
+            "style": {
+              "width": 158
+            }
+          }
+        },
+        "11": {
+          "title": "2. Install Sonatype Nexus\n(Script Loc: /others/nexus/)",
+          "id": 39,
+          "attr": {
+            "style": {
+              "width": 167
+            }
+          }
+        },
+        "21": {
+          "title": "3. Installs Jenkins\n(Script: /helm/jenkins)",
+          "id": 40,
+          "attr": {
+            "style": {
+              "width": 165
+            }
+          }
+        },
+        "31": {
+          "title": "4. Installs gitlab\n(Script: /helm/gitlab/)",
+          "id": 41,
+          "attr": {
+            "style": {
+              "width": 163
+            }
+          }
+        },
+        "41": {
+          "title": "5. Install metal-LB\n(Script: /others/metal-lb)",
+          "id": 42,
+          "attr": {
+            "style": {
+              "width": 164
+            },
+            "note": {
+              "index": 28,
+              "text": "MetalLB is a load-balancer implementation for bare metal Kubernetes clusters, using standard routing protocols."
+            }
+          }
+        },
+        "51": {
+          "title": "6. Install Ingress-Nginx\n(Scripts: /others/nginx-ingress)",
+          "id": 43,
+          "attr": {
+            "style": {
+              "width": 162
+            },
+            "note": {
+              "index": 29,
+              "text": "By using Nginx-ingress we can provide the FQDN to all the services like Gitlab, Nexusm Jenkins,etc. So that we could minimize the use of cluster-IP services. But for this we need to configure these FQDN on Name server otherwise we can not use it"
+            }
+          }
+        }
+      }
+    },
+    "6": {
+      "title": "environment.sh",
+      "id": 35,
+      "attr": {
+        "position": [
+          793,
+          -476,
+          1
+        ]
+      },
+      "ideas": {
+        "1": {
+          "title": "Need to setup All the variables in this file, as these variables will be used throughout all the scripts",
+          "id": 37,
+          "attr": {
+            "style": {
+              "backgroundColor": "#CCFFFF",
+              "text": {
+                "color": "#008080"
+              }
+            }
+          }
+        }
+      }
+    },
+    "7": {
+      "title": "uninstall.sh",
+      "id": 44,
+      "attr": {
+        "position": [
+          1099,
+          -408,
+          1
+        ],
+        "style": {
+          "backgroundColor": "#FF0000",
+          "text": {
+            "color": "#FFFFFF"
+          }
+        }
+      },
+      "ideas": {
+        "1": {
+          "title": "Uninstalls everything on the K8s cluster from the Namespace provided in environment.sh",
+          "id": 46,
+          "attr": {
+            "style": {
+              "backgroundColor": "#CCFFFF",
+              "text": {
+                "color": "#008080"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "title": "DORAScripts",
+  "links": [
+    {
+      "ideaIdFrom": 1,
+      "ideaIdTo": 6,
+      "attr": {
+        "style": {
+          "color": "#FF6600",
+          "lineStyle": "solid",
+          "arrow": "to"
+        }
+      }
+    },
+    {
+      "ideaIdFrom": 1,
+      "ideaIdTo": 4,
+      "attr": {
+        "style": {
+          "color": "#FF6600",
+          "lineStyle": "solid",
+          "arrow": "to"
+        }
+      }
+    },
+    {
+      "ideaIdFrom": 34,
+      "ideaIdTo": 4,
+      "attr": {
+        "style": {
+          "color": "#707070",
+          "lineStyle": "solid",
+          "arrow": "from"
+        }
+      }
+    },
+    {
+      "ideaIdFrom": 35,
+      "ideaIdTo": 4,
+      "attr": {
+        "style": {
+          "color": "#707070",
+          "lineStyle": "solid",
+          "arrow": "from"
+        }
+      }
+    },
+    {
+      "ideaIdFrom": 44,
+      "ideaIdTo": 4,
+      "attr": {
+        "style": {
+          "color": "#707070",
+          "lineStyle": "solid",
+          "arrow": "from"
+        }
+      }
+    }
+  ],
+  "attr": {
+    "previous-atlas-export": {
+      "publishedTimestamp": 1554870151905,
+      "title": "PureStorage-CI-CD",
+      "description": "MindMup for CI-CD scripts ",
+      "slug": "ci_cd_scripts",
+      "gaClientCode": false
+    }
+  },
+  "theme": {
+    "name": "MindMup Default",
+    "node": [
+      {
+        "name": "default",
+        "cornerRadius": 10,
+        "backgroundColor": "#E0E0E0",
+        "border": {
+          "type": "surround",
+          "line": {
+            "color": "#707070",
+            "width": 1,
+            "style": "solid"
+          }
+        },
+        "shadow": [
+          {
+            "color": "#070707",
+            "opacity": 0.4,
+            "offset": {
+              "width": 2,
+              "height": 2
+            },
+            "radius": 2
+          }
+        ],
+        "text": {
+          "margin": 5,
+          "alignment": "center",
+          "maxWidth": 146,
+          "color": "#4F4F4F",
+          "lightColor": "#EEEEEE",
+          "darkColor": "#000000",
+          "font": {
+            "lineSpacing": 4.5,
+            "lineSpacingPx": 6,
+            "size": 9,
+            "sizePx": 12,
+            "weight": "bold"
+          }
+        },
+        "connections": {
+          "default": {
+            "h": "center",
+            "v": "center"
+          },
+          "from": {
+            "horizontal": {
+              "h": "nearest-inset",
+              "v": "center"
+            }
+          },
+          "to": {
+            "h": "nearest",
+            "v": "center"
+          }
+        },
+        "decorations": {
+          "height": 20,
+          "edge": "top",
+          "overlap": true,
+          "position": "end",
+          "margin": 2,
+          "label": {
+            "border": 1,
+            "cornerRadius": 11,
+            "margin": 2,
+            "font": {
+              "lineSpacing": 0,
+              "lineSpacingPx": 0,
+              "size": 9,
+              "sizePx": 12,
+              "weight": "bold"
+            }
+          },
+          "cornerRadius": 12,
+          "backgroundColor": "#22aae0",
+          "opacity": 0.8,
+          "color": "#ffffff"
+        }
+      },
+      {
+        "name": "level_1",
+        "backgroundColor": "#22AAE0"
+      },
+      {
+        "name": "activated",
+        "border": {
+          "type": "surround",
+          "line": {
+            "color": "#22AAE0",
+            "width": 3,
+            "style": "dotted"
+          }
+        }
+      },
+      {
+        "name": "level_1.activated",
+        "border": {
+          "type": "surround",
+          "line": {
+            "color": "#EEEEEE",
+            "width": 3,
+            "style": "dotted"
+          }
+        }
+      },
+      {
+        "name": "selected",
+        "shadow": [
+          {
+            "color": "#000000",
+            "opacity": 0.9,
+            "offset": {
+              "width": 2,
+              "height": 2
+            },
+            "radius": 2
+          }
+        ]
+      },
+      {
+        "name": "collapsed",
+        "shadow": [
+          {
+            "color": "#888888",
+            "offset": {
+              "width": 0,
+              "height": 1
+            },
+            "radius": 0
+          },
+          {
+            "color": "#FFFFFF",
+            "offset": {
+              "width": 0,
+              "height": 3
+            },
+            "radius": 0
+          },
+          {
+            "color": "#888888",
+            "offset": {
+              "width": 0,
+              "height": 4
+            },
+            "radius": 0
+          },
+          {
+            "color": "#FFFFFF",
+            "offset": {
+              "width": 0,
+              "height": 6
+            },
+            "radius": 0
+          },
+          {
+            "color": "#888888",
+            "offset": {
+              "width": 0,
+              "height": 7
+            },
+            "radius": 0
+          }
+        ]
+      },
+      {
+        "name": "collapsed.selected",
+        "shadow": [
+          {
+            "color": "#FFFFFF",
+            "offset": {
+              "width": 0,
+              "height": 1
+            },
+            "radius": 0
+          },
+          {
+            "color": "#888888",
+            "offset": {
+              "width": 0,
+              "height": 3
+            },
+            "radius": 0
+          },
+          {
+            "color": "#FFFFFF",
+            "offset": {
+              "width": 0,
+              "height": 6
+            },
+            "radius": 0
+          },
+          {
+            "color": "#555555",
+            "offset": {
+              "width": 0,
+              "height": 7
+            },
+            "radius": 0
+          },
+          {
+            "color": "#FFFFFF",
+            "offset": {
+              "width": 0,
+              "height": 10
+            },
+            "radius": 0
+          },
+          {
+            "color": "#333333",
+            "offset": {
+              "width": 0,
+              "height": 11
+            },
+            "radius": 0
+          }
+        ]
+      }
+    ],
+    "connector": {
+      "default": {
+        "type": "quadratic",
+        "controlPoint": {
+          "above": {
+            "width": 0,
+            "height": 0.75
+          },
+          "below": {
+            "width": 0,
+            "height": 0.75
+          },
+          "horizontal": {
+            "width": 0,
+            "height": 0
+          }
+        },
+        "label": {
+          "position": {
+            "ratio": 0.5
+          },
+          "backgroundColor": "transparent",
+          "borderColor": "transparent",
+          "text": {
+            "color": "#4F4F4F",
+            "font": {
+              "size": 9,
+              "sizePx": 12,
+              "weight": "normal"
+            }
+          }
+        },
+        "line": {
+          "color": "#707070",
+          "width": 1
+        }
+      }
+    },
+    "link": {
+      "default": {
+        "line": {
+          "color": "red",
+          "lineStyle": "dashed",
+          "width": 1
+        },
+        "label": {
+          "position": {
+            "ratio": 0.5
+          },
+          "backgroundColor": "#FFFFFF",
+          "borderColor": "#FFFFFF",
+          "text": {
+            "color": "#4F4F4F",
+            "font": {
+              "size": 9,
+              "sizePx": 12,
+              "weight": "normal"
+            }
+          }
+        }
+      }
+    }
+  }
+}

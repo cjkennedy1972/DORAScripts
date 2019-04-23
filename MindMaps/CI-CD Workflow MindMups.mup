@@ -1,0 +1,603 @@
+{
+  "formatVersion": 3,
+  "id": "root",
+  "ideas": {
+    "1": {
+      "title": "WordPress CI/ CD",
+      "id": 1,
+      "attr": {
+        "position": [
+          -74,
+          80,
+          1
+        ]
+      },
+      "ideas": {
+        "10": {
+          "title": "CD",
+          "id": 6,
+          "attr": {
+            "position": [
+              190,
+              -13,
+              4
+            ]
+          },
+          "ideas": {
+            "1": {
+              "title": "Jenkins",
+              "id": 21,
+              "ideas": {
+                "1": {
+                  "title": "WordPress-CD-Job",
+                  "id": 22,
+                  "ideas": {
+                    "1": {
+                      "title": "1. Prepare the slave with Vagrant image on Nexus(purestorage/vagrant:latest)",
+                      "id": 36,
+                      "attr": {
+                        "position": [
+                          138,
+                          -197,
+                          3
+                        ]
+                      }
+                    },
+                    "2": {
+                      "title": "2. Clone the Repo from Gitlab",
+                      "id": 37,
+                      "attr": {
+                        "position": [
+                          140,
+                          -85,
+                          2
+                        ],
+                        "style": {
+                          "width": 201
+                        }
+                      }
+                    },
+                    "3": {
+                      "title": "3. Prepare the vagrant file as per parameter",
+                      "id": 42,
+                      "attr": {
+                        "style": {
+                          "width": 198
+                        }
+                      }
+                    },
+                    "4": {
+                      "title": "4. Launch the VM on VSphere through Vagrant file",
+                      "id": 44,
+                      "attr": {
+                        "style": {
+                          "width": 214
+                        }
+                      },
+                      "ideas": {}
+                    },
+                    "5": {
+                      "title": "5. Clone the VM launched in above Step and launch  them on VSphere",
+                      "id": 48,
+                      "attr": {
+                        "style": {
+                          "width": 210
+                        }
+                      },
+                      "ideas": {}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "-0.5": {
+          "title": "CI",
+          "id": 5,
+          "attr": {
+            "position": [
+              248,
+              -27,
+              3
+            ]
+          },
+          "ideas": {
+            "2": {
+              "title": "Nexus Artifactory",
+              "id": 12,
+              "attr": {
+                "position": [
+                  109,
+                  -159,
+                  8
+                ]
+              },
+              "ideas": {
+                "2": {
+                  "title": "Docker Registry",
+                  "id": 14,
+                  "attr": {
+                    "position": [
+                      22,
+                      -109,
+                      6
+                    ]
+                  }
+                },
+                "12": {
+                  "title": "Builds repository",
+                  "id": 13,
+                  "attr": {
+                    "position": [
+                      305,
+                      20,
+                      5
+                    ]
+                  }
+                }
+              }
+            },
+            "5": {
+              "title": "Gitlab",
+              "id": 11,
+              "ideas": {
+                "1": {
+                  "title": "WordPress Git repository",
+                  "id": 15,
+                  "attr": {
+                    "position": [
+                      98,
+                      -85,
+                      1
+                    ]
+                  },
+                  "ideas": {}
+                }
+              },
+              "attr": {
+                "position": [
+                  137,
+                  -31,
+                  9
+                ]
+              }
+            },
+            "15": {
+              "title": "Jenkins",
+              "id": 10,
+              "attr": {
+                "position": [
+                  119,
+                  204,
+                  6
+                ]
+              },
+              "ideas": {
+                "1": {
+                  "title": "WordPress-CI-Job",
+                  "id": 16,
+                  "ideas": {
+                    "1": {
+                      "title": "Clone Repository",
+                      "id": 23,
+                      "ideas": {},
+                      "attr": {
+                        "position": [
+                          140,
+                          -118,
+                          2
+                        ]
+                      }
+                    },
+                    "2": {
+                      "title": "Build Project",
+                      "id": 26,
+                      "attr": {}
+                    },
+                    "3": {
+                      "title": "Run Unit Tests",
+                      "id": 27,
+                      "ideas": {},
+                      "attr": {}
+                    },
+                    "4": {
+                      "title": "Build Package",
+                      "id": 30
+                    },
+                    "5": {
+                      "title": "Upload Artifact",
+                      "id": 31,
+                      "attr": {
+                        "position": [
+                          321,
+                          97,
+                          3
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "2": {
+      "title": "VSphere",
+      "id": 46,
+      "attr": {
+        "position": [
+          715,
+          24,
+          1
+        ],
+        "style": {
+          "backgroundColor": "#FF0000",
+          "text": {
+            "color": "#FFFFFF"
+          },
+          "width": 83
+        }
+      }
+    }
+  },
+  "title": "WordPress CI/ CD",
+  "links": [
+    {
+      "ideaIdFrom": 31,
+      "ideaIdTo": 13,
+      "attr": {
+        "style": {
+          "color": "#0000FF",
+          "lineStyle": "dashed",
+          "arrow": "to"
+        }
+      }
+    },
+    {
+      "ideaIdFrom": 15,
+      "ideaIdTo": 23,
+      "attr": {
+        "style": {
+          "color": "#333399",
+          "lineStyle": "dashed",
+          "arrow": "to"
+        }
+      }
+    },
+    {
+      "ideaIdFrom": 36,
+      "ideaIdTo": 14,
+      "attr": {
+        "style": {
+          "color": "#0000FF",
+          "lineStyle": "dashed",
+          "arrow": "to"
+        }
+      }
+    },
+    {
+      "ideaIdFrom": 37,
+      "ideaIdTo": 11,
+      "attr": {
+        "style": {
+          "color": "#0000FF",
+          "lineStyle": "dashed",
+          "arrow": "to"
+        }
+      }
+    },
+    {
+      "ideaIdFrom": 44,
+      "ideaIdTo": 46,
+      "attr": {
+        "style": {
+          "color": "#008000",
+          "lineStyle": "dashed",
+          "arrow": "to",
+          "width": 2
+        }
+      }
+    },
+    {
+      "ideaIdFrom": 48,
+      "ideaIdTo": 46,
+      "attr": {
+        "style": {
+          "color": "#707070",
+          "lineStyle": "dashed",
+          "arrow": "to",
+          "width": 2
+        }
+      }
+    }
+  ],
+  "attr": {
+    "theme": "default"
+  },
+  "theme": {
+    "name": "MindMup Default",
+    "node": [
+      {
+        "name": "default",
+        "cornerRadius": 10,
+        "backgroundColor": "#E0E0E0",
+        "border": {
+          "type": "surround",
+          "line": {
+            "color": "#707070",
+            "width": 1,
+            "style": "solid"
+          }
+        },
+        "shadow": [
+          {
+            "color": "#070707",
+            "opacity": 0.4,
+            "offset": {
+              "width": 2,
+              "height": 2
+            },
+            "radius": 2
+          }
+        ],
+        "text": {
+          "margin": 5,
+          "alignment": "center",
+          "maxWidth": 146,
+          "color": "#4F4F4F",
+          "lightColor": "#EEEEEE",
+          "darkColor": "#000000",
+          "font": {
+            "lineSpacing": 4.5,
+            "lineSpacingPx": 6,
+            "size": 9,
+            "sizePx": 12,
+            "weight": "bold"
+          }
+        },
+        "connections": {
+          "default": {
+            "h": "center",
+            "v": "center"
+          },
+          "from": {
+            "horizontal": {
+              "h": "nearest-inset",
+              "v": "center"
+            }
+          },
+          "to": {
+            "h": "nearest",
+            "v": "center"
+          }
+        },
+        "decorations": {
+          "height": 20,
+          "edge": "top",
+          "overlap": true,
+          "position": "end",
+          "margin": 2,
+          "label": {
+            "border": 1,
+            "cornerRadius": 11,
+            "margin": 2,
+            "font": {
+              "lineSpacing": 0,
+              "lineSpacingPx": 0,
+              "size": 9,
+              "sizePx": 12,
+              "weight": "bold"
+            }
+          },
+          "cornerRadius": 12,
+          "backgroundColor": "#22aae0",
+          "opacity": 0.8,
+          "color": "#ffffff"
+        }
+      },
+      {
+        "name": "level_1",
+        "backgroundColor": "#22AAE0"
+      },
+      {
+        "name": "activated",
+        "border": {
+          "type": "surround",
+          "line": {
+            "color": "#22AAE0",
+            "width": 3,
+            "style": "dotted"
+          }
+        }
+      },
+      {
+        "name": "level_1.activated",
+        "border": {
+          "type": "surround",
+          "line": {
+            "color": "#EEEEEE",
+            "width": 3,
+            "style": "dotted"
+          }
+        }
+      },
+      {
+        "name": "selected",
+        "shadow": [
+          {
+            "color": "#000000",
+            "opacity": 0.9,
+            "offset": {
+              "width": 2,
+              "height": 2
+            },
+            "radius": 2
+          }
+        ]
+      },
+      {
+        "name": "collapsed",
+        "shadow": [
+          {
+            "color": "#888888",
+            "offset": {
+              "width": 0,
+              "height": 1
+            },
+            "radius": 0
+          },
+          {
+            "color": "#FFFFFF",
+            "offset": {
+              "width": 0,
+              "height": 3
+            },
+            "radius": 0
+          },
+          {
+            "color": "#888888",
+            "offset": {
+              "width": 0,
+              "height": 4
+            },
+            "radius": 0
+          },
+          {
+            "color": "#FFFFFF",
+            "offset": {
+              "width": 0,
+              "height": 6
+            },
+            "radius": 0
+          },
+          {
+            "color": "#888888",
+            "offset": {
+              "width": 0,
+              "height": 7
+            },
+            "radius": 0
+          }
+        ]
+      },
+      {
+        "name": "collapsed.selected",
+        "shadow": [
+          {
+            "color": "#FFFFFF",
+            "offset": {
+              "width": 0,
+              "height": 1
+            },
+            "radius": 0
+          },
+          {
+            "color": "#888888",
+            "offset": {
+              "width": 0,
+              "height": 3
+            },
+            "radius": 0
+          },
+          {
+            "color": "#FFFFFF",
+            "offset": {
+              "width": 0,
+              "height": 6
+            },
+            "radius": 0
+          },
+          {
+            "color": "#555555",
+            "offset": {
+              "width": 0,
+              "height": 7
+            },
+            "radius": 0
+          },
+          {
+            "color": "#FFFFFF",
+            "offset": {
+              "width": 0,
+              "height": 10
+            },
+            "radius": 0
+          },
+          {
+            "color": "#333333",
+            "offset": {
+              "width": 0,
+              "height": 11
+            },
+            "radius": 0
+          }
+        ]
+      }
+    ],
+    "connector": {
+      "default": {
+        "type": "quadratic",
+        "controlPoint": {
+          "above": {
+            "width": 0,
+            "height": 0.75
+          },
+          "below": {
+            "width": 0,
+            "height": 0.75
+          },
+          "horizontal": {
+            "width": 0,
+            "height": 0
+          }
+        },
+        "label": {
+          "position": {
+            "ratio": 0.5
+          },
+          "backgroundColor": "transparent",
+          "borderColor": "transparent",
+          "text": {
+            "color": "#4F4F4F",
+            "font": {
+              "size": 9,
+              "sizePx": 12,
+              "weight": "normal"
+            }
+          }
+        },
+        "line": {
+          "color": "#707070",
+          "width": 1
+        }
+      }
+    },
+    "link": {
+      "default": {
+        "line": {
+          "color": "red",
+          "lineStyle": "dashed",
+          "width": 1
+        },
+        "label": {
+          "position": {
+            "ratio": 0.5
+          },
+          "backgroundColor": "#FFFFFF",
+          "borderColor": "#FFFFFF",
+          "text": {
+            "color": "#4F4F4F",
+            "font": {
+              "size": 9,
+              "sizePx": 12,
+              "weight": "normal"
+            }
+          }
+        }
+      }
+    }
+  }
+}
