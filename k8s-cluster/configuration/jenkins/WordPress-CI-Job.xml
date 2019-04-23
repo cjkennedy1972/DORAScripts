@@ -70,6 +70,7 @@ def GIT_REPO_URL = &quot;${params.GIT_REPO_URL}&quot;
 def GIT_CREDENTIALS_USER = &quot;${params.GIT_CREDENTIALS_USER}&quot;
 def NEXUS_URL = &quot;${params.NEXUS_URL}&quot;
 def claimNo = ((env.BUILD_NUMBER as Integer) % 100) + 1
+def applicable_for_cd = ((env.BUILD_NUMBER as Integer) % 20)
 
 def yamlPodDefinition = &quot;&quot;&quot;
 apiVersion: v1
@@ -166,7 +167,9 @@ podTemplate(label: label, yaml: yamlPodDefinition) {
             }
 
             stage (&apos;Trigger CD job&apos;) {
+              if(applicable_for_cd==0){
                 build job: &apos;WordPress-CD-Job&apos;, parameters: [[$class: &apos;StringParameterValue&apos;, name: &apos;WP_BUILD_NUMBER&apos;, value: env.BUILD_NUMBER]],  wait: false
+              }
             }
 
         }
