@@ -1,7 +1,7 @@
 # Tasks
 - [x] Enter information for MetalLB and Nginx-Ingress setup
-- [ ] Provide details of how to setup `environment.sh` for Install Phase
-- [ ] Provide details of setting up GitLab and Jenkins Tokens for Configure Phase
+- [x] Provide details of how to setup `environment.sh` for Install Phase
+- [x] Provide details of setting up GitLab and Jenkins Tokens for Configure Phase
 - [ ] Provide details if it is required utilize local storage (Kontena Storage which internally uses Rook + Ceph) for the CI job
 
 
@@ -75,3 +75,47 @@ Once the above setup is done, simply run
 bash configure.sh
 ```
 
+# Setting up `environment.sh`
+Navigate to the k8s-cluster folder and open the environment.sh file
+
+Customize the following free values and make sure you specify a valid, accessible IP address and the FQDN of your Kubernetes cluster nodes:
+
+```
+- NEXUS_IP
+- NEXUS_FQDN
+- JENKINS_IP
+- JENKINS_FQDN
+- GITLAB_IP
+- GITLAB_DOMAIN
+- HA_PROXY_VM_IP
+- METAL_LB_IP_CIDR 
+```
+Note: it is possible to deploy the solution on a single-node cluster, since the default ports are distinct (see below)
+(Optional) Modify the default port values (NEXUS_PORT, JENKINS_PORT and GITLAB_PORT). 
+
+It is recommended to leave the default values but if the ports are already taken, you might want to modify them.
+(Optional) Modify the resource requirements for GitLab and Jenkins by editing the following files:
+helm/gitlab/gitlab-ce.yaml - Look for resources/requests resources/limits, postgresql/cpu,  postgresql/memory’ and redis/resources/reuests/memory and modify or comment them if you want to allocate fewer resources assigned to GitLab
+
+helm/jenkins/jenkins.yaml - Look for Master/Cpu and Master/Memory values and modify or comment it if you want to allocate less resources to Jenkins.
+
+
+# Setting up GitLab and Jenkins Tokens 
+1. Gitlab:\
+  Add a entry in your `/etc/hosts/` file on your machine with the GITLAB_DOMAIN(entered in environment.sh) and the ingress IP.You can get the host enry details through the command `kubectl get ing -n <NAME_SPACE>|grep <GITLAB_DOMAIN>`\
+  Follow the steps to configure the gitlab token: 
+    - Open the Gitlab in a web browser `http://GITLAB_DOMAIN`
+    - Sign in with the administrator credentials: `root/admin123`
+    - Select the user icon in the top right corner of the page and select Settings
+    - From the User Settings page, select Access Tokens in the left, vertical navigation bar
+    - In the Personal Access Tokens section, give your token a name (such as ImportProjects), select the api scope and press Create personal access token
+    - Copy your new Personal Access Token value to the `k8s-cluster/environment.sh` file in the `GITLAB_TOKEN` variable.
+    
+2. Jenkins:\
+  Add a entry in your `/etc/hosts/` file on your machine with the JENKINS_FQDN(entered in environment.sh) and the ingress IP.You can get the host enry details through the command `kubectl get ing -n <NAME_SPACE>|grep <JENKINS_FQDN>`\
+  Follow the steps to configure the Jenkins token: 
+    - Open Jenkins in a web browser `http;//JENKINS_FQDN`
+    - Sign with the following credentials : admin/admin123.
+    - Select the arrow next to the admin link in the top right corner of the page and select Configure
+    - In the API Token section, press the Add New Token button and give your token a name.
+    - Copy your API Token value to the `k8s-cluster/environment.sh` file in the `JENKINS_TOKEN` variable.
