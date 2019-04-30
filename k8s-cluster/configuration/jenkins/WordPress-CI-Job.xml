@@ -64,7 +64,8 @@
   </properties>
   <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.57">
     <script>
-def label = &quot;purepod-${UUID.randomUUID().toString()}&quot;
+    
+def label = &quot;ci-pod-${UUID.randomUUID().toString()}&quot;
 def DOCKER_REPO_URL = &quot;${params.DOCKER_REPO_URL}&quot;
 def GIT_REPO_URL = &quot;${params.GIT_REPO_URL}&quot;
 def GIT_CREDENTIALS_USER = &quot;${params.GIT_CREDENTIALS_USER}&quot;

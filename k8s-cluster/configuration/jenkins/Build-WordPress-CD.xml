@@ -52,7 +52,9 @@
     </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
   </properties>
   <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.57">
-    <script>def label = &quot;mypod-${UUID.randomUUID().toString()}&quot;
+    <script>
+    
+def label = &quot;cd-pod-${UUID.randomUUID().toString()}&quot;
 def DOCKER_URL = &quot;${params.DOCKER_REPO_URL}&quot;
 def GITLAB_URL = &quot;${params.GITLAB_URL}&quot;
 def NEXUS_URL = &quot;${params.NEXUS_URL}&quot;
