@@ -393,6 +393,7 @@ postgresql:
   install: true
   persistence:
     storageClass: pure-file
+    accessMode: ReadWriteMany
     size: 20Gi
   postgresUser: gitlab
   postgresDatabase: gitlabhq_production
@@ -401,6 +402,9 @@ postgresql:
   existingSecret: 'secret'
   metrics:
     enabled: false
+  resources:
+    cpu: 2000m
+    memory: 10Gi
     ## Optionally define additional custom metrics
     ## ref: https://github.com/wrouesnel/postgres_exporter#adding-new-metrics-via-a-config-file
 
@@ -457,6 +461,7 @@ gitlab:
   gitaly:
     persistence:
       storageClass: pure-file
+      accessMode: ReadWriteMany
       size: 20Gi
   unicorn:
     enabled: true
@@ -471,10 +476,12 @@ redis:
   enabled: true
   persistence:
     storageClass: pure-file
+    accessMode: ReadWriteMany
     size: 20Gi
 minio:
   persistence:
     storageClass: pure-file
+    accessMode: ReadWriteMany
     size: 20Gi
     
 ## Settings to for the Let's Encrypt ACME Issuer

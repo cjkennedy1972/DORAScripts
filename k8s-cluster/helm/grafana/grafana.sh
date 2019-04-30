@@ -6,11 +6,12 @@ SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 
 
 
-# Install Grafana Compoent using Helm chart
+# Install Grafana Component using Helm chart
 # No PVC is used
 kubectl create -n ${NS} secret generic grafana-creds  --from-literal=admin-user=admin  --from-literal=admin-password=admin
 
-#template=`cat "$SCRIPTPATH/values.yaml"`
 helm install --name pure-grafana-${NS} stable/grafana --namespace ${NS} -f "${SCRIPTPATH}"/values.yaml \
 --set ingress.hosts[0]=${GRAFANA_HOSTNAME}
-#echo "$template" | helm install --name pure-grafana-${NS} stable/grafana --namespace ${NS} -f -
+
+# Create Grafana Service
+kubectl create -n ${MONITORING_NS} -f "$SCRIPTPATH/metallb-grafana-svc.yaml"

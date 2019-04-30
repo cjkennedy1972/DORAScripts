@@ -46,6 +46,6 @@ then
     bash ./helm/prometheus/prometheus.sh ${NS}
     bash ./helm/grafana/grafana.sh ${NS}
     sleep 2
-    bash wait-for.sh pod -lapp=prometheus -n ${NS}
-    bash wait-for.sh pod -lapp=grafana -n ${NS}
+    bash wait-for.sh pod -lapp=prometheus -n ${MONITORING_NS}
+    bash wait-for.sh pod -lapp=grafana -n ${MONITORING_NS}
 fi

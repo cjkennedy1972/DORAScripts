@@ -2,7 +2,7 @@
 
 . environment.sh
 
-#bash ./configuration/nexus/config-docker-registry.sh
+bash ./configuration/nexus/config-docker-registry.sh
 
 bash ./configuration/nexus/create-repositories.sh
 

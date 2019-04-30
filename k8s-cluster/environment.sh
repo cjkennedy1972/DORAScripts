@@ -1,6 +1,7 @@
 #!/bin/bash
 #Set Kubernetes namespace
 NS="pure"
+MONITORING_NS="monitoring"
 
 if [ ! -z $1 ]
 then
