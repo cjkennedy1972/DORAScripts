@@ -20,3 +20,6 @@ fi
 
 # Install jenkins component 
 echo "$template" | helm install --name pure-jenkins-${NS} "$SCRIPTPATH/jenkins" --namespace ${NS} -f -
+
+# Create Jenkins slave PVCs
+bash "$SCRIPTPATH/jenkins-slave-claim.sh"
